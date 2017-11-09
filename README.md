@@ -24,3 +24,11 @@ https://docs.google.com/presentation/d/18OmMpJPpFe9GUOtRHT_yMa8BY8pzQoF8JHdM4jEH
 ## Issues & Milestones
 
 Checkout this project's Issue & Milestones tab for more information on key milestones and related issues.
+
+
+## Tables Connections
+
+- v5_engagements.e_type_id = v5_engagement_types.a_id
+- v5_engagements.e_object_id DEPENDS on v5_engagement_types.a_object_code to define that Object means for this engagement. IF v5_engagement_types.a_object_code = NULL THEN v5_engagements.e_object_id = NULL
+- v5_engagements.e_creator_id = v5_users.u_id
+- v5_engagements.e_b_id = v5_bootcamps.b_id
