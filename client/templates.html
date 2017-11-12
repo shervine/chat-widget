@@ -1,0 +1,47 @@
+<template name="usersTpl">
+  <h2>Users</h2>
+  {{#each users}}
+  <div class="row user-row" style="border: 1px solid #ccc; padding: 5px; margin: 5px 0;">
+    <div class="col-sm-6" user-id="{{u_id}}">
+      <div class="row">
+        <div class="col-sm-6">
+          <img style="width:40px" src="{{u_image_url}}">
+        </div>
+        <div class="col-sm-6 ml-10">
+          <p>
+            <strong user-id={{u_id}}>{{u_fname}} {{u_lname}}</strong>
+          </p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <p user-id={{u_id}}>Country: {{u_country_code}}</p>
+        </div>
+        <div class="col-sm-6 ml-10">
+          <p user-id={{u_id}}>Bcmps: </p>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="col-md-6">
+            Comments: {{#each comments}}
+            <div>{{content}}</div>
+            {{/each}}
+            <br />
+            <button class="btn btn-primary btn-sm add-comment">Add Comment</button>
+            <br />
+            <br />
+          </div> -->
+  </div>
+  {{/each}}
+</template>
+
+<template name="filtersTpl">
+  <div class="row">
+    <div class="col-sm-2 mt-2">
+      <h3>Filters:</h3>
+    </div>
+    <div class="col-sm-6 mt-2">
+      <input type="text" width="200" />
+    </div>
+  </div>
+</template>

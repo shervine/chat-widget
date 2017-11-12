@@ -1,0 +1,49 @@
+<head>
+  <title>Mench Chat</title>
+</head>
+
+<body>
+  <div class="container" id="main-div">
+    <div class="row filter border border-info">
+      <div class="col-sm-12">
+       {{> filtersTpl}}
+      </div>
+    </div>
+    <div class="row fill">
+      <div class="col-sm-3 border border-info border-right-0 border-top-0">
+        {{> usersTpl}}
+      </div>
+      <div class="col-sm-6 border border-info border-top-0">
+        <h2>Chat window</h2>
+      </div>
+      <div class="col-sm-3 border border-info border-left-0 border-top-0">
+        <h2>User Info</h2>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-3 border border-info border-right-0 border-top-0">
+        <h2>Broadcast msg</h2>
+      </div>
+      <div class="col-sm-6 border border-info border-top-0">
+        <div class="row mt-2">
+          <div class="col-sm-3">
+            <h4>Chat Input</h4>
+          </div>
+          <div class="col-sm-6">
+            <input width="200" />
+          </div>
+          <div class="col-sm-2">
+            <div style="float:right">
+              <button class="btn btn-primary btn-lg add-post">Add Post</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-3 border border-info border-left-0 border-top-0">
+        <h2></h2>
+      </div>
+    </div>
+  </div>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular.min.js"></script>
+</body>
