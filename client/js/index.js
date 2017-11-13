@@ -44,13 +44,16 @@ if (Meteor.isClient) {
         templateUrl: 'filter.html'
       }
     })
-    .directive('usersList', function ($rootScope) {
+    .directive('usersList', function ($rootScope, $timeout) {
       return {
         restrict: 'E',
         scope: {},
         link: function ($scope, iElem, iAttr) {
           console.log('directive usersList link function ');
-          $scope.users = $rootScope.users;
+          $scope.users = users.reactive();
+          $timeout(function(){
+            angular.element('.users-list').css('max-height', '600px');
+          },300);
         },
         templateUrl: 'users-list.html'
       }

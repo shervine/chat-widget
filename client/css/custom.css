@@ -14,8 +14,8 @@ body {
 }
 
 .fill {
-  min-height: 92%;
-  height: 92%;
+  min-height: 88%;
+  height: 88%;
   box-sizing: border-box;
 }
 
@@ -27,4 +27,9 @@ body {
 }
 .user-row p {
   cursor: pointer;
+}
+
+.users-list {
+	/* max-height: 600px; */
+	overflow: scroll;
 }
