@@ -1,0 +1,27 @@
+<div class="users-list">
+<div class="row user-row" 
+    ng-repeat="user in users"    
+    style="border: 1px solid #ccc; padding: 5px; margin: 5px 0;">
+    <div class="col-sm-6" user-id="{{user.u_id}}">
+      <div class="row">
+        <div class="col-sm-6">
+          <img style="width:40px" src="{{user.u_image_url}}">
+        </div>
+        <div class="col-sm-6 ml-10">
+          <p>
+            <strong user-id={{u_id}}>{{user.u_fname}} {{user.u_lname}}</strong>
+          </p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <p user-id={{user.u_id}}>Country: {{user.u_country_code}}</p>
+        </div>
+        <div class="col-sm-6 ml-10">
+          <p user-id={{user.u_id}}>Bcmps: </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

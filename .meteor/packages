@@ -8,7 +8,6 @@ ecmascript
 standard-minifiers
 meteor-base
 mobile-experience
-blaze-html-templates
 tracker
 reload
 check
@@ -16,3 +15,7 @@ check
 #simple:pg
 twbs:bootstrap
 numtel:pg
+static-html
+angular:angular@1.5.0
+angularui:angular-ui-bootstrap
+rgnevashev:angular-ui-select
