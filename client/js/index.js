@@ -1,27 +1,4 @@
-if (Meteor.isClient) {
-  users = new PgSubscription('allUsers');
-  // Template.usersTpl.helpers({
-  //   bootcamps() {
-  //     return Bootcamps.select();
-  //   },
-  //   users() {
-  //     return users.reactive();
-  //   }
-  // });
-  // Template.usersTpl.events({
-  //   "click .user-row" (ev, a) {
-  //     console.log('Clicked user ', ev.target.attributes["user-id"]);
-  //     var selUserId = ev.target.attributes["user-id"];
-  //     //Meteor.call("/selectedUser/" + selUserId, (err) => { err && alert(err) });
-  //   }
-  // });
-
-
-  // setTimeout(function () {
-
-  // }, 300);
-
-}
+users = new PgSubscription('allUsers');
 
 (function () {
   angular.module('menChat', ['ui.bootstrap'])
@@ -38,7 +15,7 @@ if (Meteor.isClient) {
         scope: {},
         link: function ($scope) {
           console.log('directive filter link function ');
-          $scope.checkModel = {'left': false , 'right': false};
+          $scope.checkModel = {'cohort': false , 'students': false};
 
         },
         templateUrl: 'filter.html'
