@@ -1,6 +1,5 @@
 <head>
   <title>Mench Chat</title>
-  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular.min.js"></script> -->
 </head>
 
 <body>
@@ -11,22 +10,23 @@
         <filter></filter>
       </div>
     </div>
-    <div class="row fill">
+    <div class="row">
       <div class="col-sm-3 border border-info border-right-0 border-top-0">
         <!-- {{> usersTpl}} -->
         <users-list></users-list>
       </div>
       <div class="col-sm-6 border border-info border-top-0">
-        <h2>Chat window</h2>
+        <h5>Chat window</h5>
+        <user-messages></user-messages>
       </div>
       <div class="col-sm-3 border border-info border-left-0 border-top-0">
-        <h2>User Info</h2>
+        <h5>User Info</h5>
         <user-info user="selectedUser"></user-info>
       </div>
     </div>
     <div class="row">
       <div class="col-sm-3 border border-info border-right-0 border-top-0">
-        <h2>Broadcast msg</h2>
+        <h5>Broadcast msg</h5>
       </div>
       <div class="col-sm-6 border border-info border-top-0">
         <div class="row mt-2">
@@ -38,13 +38,13 @@
           </div>
           <div class="col-sm-2">
             <div style="float:right">
-              <button class="btn btn-primary btn-lg add-post">Add Post</button>
+              <button class="btn btn-primary btn-lg ">Send</button>
             </div>
           </div>
         </div>
       </div>
       <div class="col-sm-3 border border-info border-left-0 border-top-0">
-        <h2></h2>
+        <h5></h5>
       </div>
     </div>
   </div>

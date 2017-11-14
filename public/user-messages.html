@@ -1,0 +1,12 @@
+<div class="user-messages fill">
+  <div class="row" ng-show="msgs && msgs.length == 0">
+    <div class="col-sm-12">
+      No Messages
+    </div>
+  </div>
+  <div class="row" ng-repeat="message in msgs">
+    <div class="col-sm-12">
+      <p>[{{message.e_type_id == 6 ? 'Received' : 'Sent'}}] {{message.e_message}}</p>
+    </div>
+  </div>
+</div>

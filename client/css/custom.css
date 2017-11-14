@@ -17,6 +17,7 @@ body {
   min-height: 88%;
   height: 88%;
   box-sizing: border-box;
+  overflow: scroll;
 }
 
 .bottom-line {
@@ -32,4 +33,8 @@ body {
 .users-list {
 	/* max-height: 600px; */
 	overflow: scroll;
+}
+
+.user-messages {
+  max-height: 600px;
 }
