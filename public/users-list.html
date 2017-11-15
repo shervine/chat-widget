@@ -1,25 +1,28 @@
 <div class="users-list">
-<div class="row user-row" 
-    ng-repeat="user in users"    
-    style="border: 1px solid #ccc; padding: 5px; margin: 5px 0;">
+  <div class="row">
+    <div class="col-sm-12">
+      <input type="text" ng-model="searchTerm" ng-keyup="search(searchTerm)" placeholder="Search .." class="form-control" name="search">
+    </div>
+  </div>
+  <div class="row user-row" ng-repeat="user in users" style="border: 1px solid #ccc; padding: 5px; margin: 5px 0;">
     <div class="col-sm-6" user-id="{{user.u_id}}">
       <div class="row">
         <div class="col-sm-6">
-            {{user.u_id}}
+          {{user.u_id}}
           <img style="width:40px;cursor:pointer" src="{{user.u_image_url}}" ng-click="userSelected(user)">
         </div>
         <div class="col-sm-6 ml-10">
           <p>
-            <strong  ng-click="userSelected(user)">{{user.u_fname}} {{user.u_lname}}</strong>
+            <strong ng-click="userSelected(user)">{{user.u_fname}} {{user.u_lname}}</strong>
           </p>
         </div>
       </div>
       <div class="row">
         <div class="col-sm-6">
-          <p >Country: {{user.u_country_code}}</p>
+          <p>Country: {{user.u_country_code}}</p>
         </div>
         <div class="col-sm-6 ml-10">
-           
+
         </div>
       </div>
     </div>

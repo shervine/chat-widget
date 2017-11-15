@@ -3,10 +3,10 @@ messages = new PgSubscription('userMessages');
 
 liveDb = new LivePg(process.env.POSTGRESQL_URL, process.env.CHANNEL);
 Meteor.publish('allUsers', function () {
-  var res = liveDb.select('SELECT v5_users.*, b.*  FROM v5_users \
-                            LEFT JOIN v5_bootcamps b ON b.b_creator_id = v5_users.u_id\
+  var res = liveDb.select('SELECT v5_users.*  FROM v5_users \
                             ORDER BY v5_users.u_id DESC limit 1000');
   return res;
+  //LEFT JOIN v5_bootcamps b ON b.b_creator_id = v5_users.u_id\
 });
 Meteor.publish('userMessages', function (userId) {
   if (!userId) {
