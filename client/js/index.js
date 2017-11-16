@@ -66,18 +66,13 @@ const bootcampId = 10;
         scope: {selectedUser: '='},
         link: function ($scope, iElem, iAttr) {
           $scope.msgs = [];
-          $scope.$on('selected_user_messages', function (ev, messages) {
-            $scope.msgs = messages;
-            console.log('Got messages ', $scope.msgs);
-          });
-
           $scope.$watch('selectedUser', function(newVal){
                if(!newVal) {
                   return;
                }
 
-               $scope.messages = new PgSubscription('userMessages', $scope.selectedUser.u_id);
-               $scope.msgs = $scope.messages.reactive(); 
+               messages = new PgSubscription('userMessages', $scope.selectedUser.u_id);
+               $scope.msgs = messages.reactive(); 
                console.log('Selected user messages : ', $scope.msgs); 
           });
         },
@@ -89,17 +84,18 @@ const bootcampId = 10;
         restrict: 'E',
         scope: {selectedUser: '='},
         link: function ($scope, iElem, iAttr) {
+          $scope.userDetails1 = {};
           $scope.$watch('selectedUser', function(newVal){
               if(!newVal) {
                   return;
                }
  
-            $scope.userDet = new PgSubscription('userData', $scope.selectedUser.u_id).reactive();
-          
+            userData = new PgSubscription('userData', $scope.selectedUser.u_id);
+            $scope.details = userData.reactive();
             $timeout(function(){
-              $scope.userDetails1 =  $scope.userDet[0]; 
+              $scope.userDetails1 =  typeof $scope.details[0] !== 'undefined' ? $scope.details[0] : {} ; 
               console.log('User details : ', $scope.userDetails1);
-            }, 200);
+            }, 300);
            
           });
         },
