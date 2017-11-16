@@ -1,3 +1,4 @@
+alexwine:bootstrap-4@4.0.0-beta.2
 angular:angular@1.5.3_1
 angularui:angular-ui-bootstrap@0.13.0
 autoupdate@1.2.3-rc.0
@@ -57,7 +58,6 @@ standard-minifiers@1.0.0-rc.1
 static-html@1.0.0-rc.1
 templating-tools@1.0.0-rc.0
 tracker@1.0.8-rc.0
-twbs:bootstrap@3.3.5
 ui@1.0.7-rc.0
 underscore@1.0.4-rc.0
 url@1.0.5-rc.0

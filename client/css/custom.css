@@ -38,3 +38,7 @@ body {
 .user-messages {
   max-height: 600px;
 }
+
+.selected {
+  background:rgb(216, 216, 216);
+}

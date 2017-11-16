@@ -1,15 +1,10 @@
 users = new PgSubscription('allUsers');
 
+const instructorId = 82;
+const bootcampId = 10;
 
 (function () {
   angular.module('menChat', ['ui.bootstrap'])
-    .config(function () {
-      console.log('angular menchat config triggered');
-    })
-    .run(function ($rootScope) {
-      console.log('angular menchat run triggered');
-      $rootScope.users = users.reactive();
-    })
     .directive('filter', function () {
       return {
         restrict: 'E',
@@ -17,10 +12,9 @@ users = new PgSubscription('allUsers');
         link: function ($scope) {
           console.log('directive filter link function ');
           $scope.checkModel = {
-            'cohort': false,
-            'students': false
+            'class': false,
+            'status': false
           };
-
         },
         templateUrl: 'filter.html'
       }
@@ -32,23 +26,17 @@ users = new PgSubscription('allUsers');
         link: function ($scope, iElem, iAttr) {
           $scope.searchTerm = '';
           $scope.allUsers = users.reactive();
-          $scope.users = angular.copy($scope.allUsers);
+          
           $timeout(function () {
-            angular.element('.users-list').css('max-height', '700px');
+            // angular.element('.users-list').css('max-height', '700px');
+            $scope.users = $scope.allUsers;
           }, 300);
 
           $scope.userSelected = function (user) {
             console.log('Selected user ', user);
-            var messages = new PgSubscription('userMessages', user.u_id);
 
-            $timeout(function () {
-              if (!messages.ready()) {
-                console.log('Subscription not ready');
-              }
-              $scope.messages = messages.reactive();
-              console.log('Got messages ', $scope.messages);
-              $rootScope.$broadcast('selected_user_messages', $scope.messages);
-            }, 300);
+            $rootScope.selectedUser = user;
+            $scope.selectedUser = user;
           }
 
           $scope.search = function (searchTerm) {
@@ -75,7 +63,7 @@ users = new PgSubscription('allUsers');
     .directive('userMessages', function ($rootScope, $timeout) {
       return {
         restrict: 'E',
-        scope: {},
+        scope: {selectedUser: '='},
         link: function ($scope, iElem, iAttr) {
           $scope.msgs = [];
           $scope.$on('selected_user_messages', function (ev, messages) {
@@ -83,11 +71,39 @@ users = new PgSubscription('allUsers');
             console.log('Got messages ', $scope.msgs);
           });
 
-          $timeout(function () {
+          $scope.$watch('selectedUser', function(newVal){
+               if(!newVal) {
+                  return;
+               }
 
+               $scope.messages = new PgSubscription('userMessages', $scope.selectedUser.u_id);
+               $scope.msgs = $scope.messages.reactive(); 
+               console.log('Selected user messages : ', $scope.msgs); 
           });
         },
         templateUrl: 'user-messages.html'
+      }
+    })
+    .directive('userDetails', function($rootScope, $timeout){
+      return {
+        restrict: 'E',
+        scope: {selectedUser: '='},
+        link: function ($scope, iElem, iAttr) {
+          $scope.$watch('selectedUser', function(newVal){
+              if(!newVal) {
+                  return;
+               }
+ 
+            $scope.userDet = new PgSubscription('userData', $scope.selectedUser.u_id).reactive();
+          
+            $timeout(function(){
+              $scope.userDetails1 =  $scope.userDet[0]; 
+              console.log('User details : ', $scope.userDetails1);
+            }, 200);
+           
+          });
+        },
+        templateUrl: 'user-details.html'
       }
     })
 })();
