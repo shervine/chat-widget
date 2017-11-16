@@ -73,7 +73,6 @@ const bootcampId = 10;
 
                messages = new PgSubscription('userMessages', $scope.selectedUser.u_id);
                $scope.msgs = messages.reactive(); 
-               console.log('Selected user messages : ', $scope.msgs); 
           });
         },
         templateUrl: 'user-messages.html'
