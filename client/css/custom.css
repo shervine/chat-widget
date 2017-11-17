@@ -19,7 +19,9 @@ body {
   box-sizing: border-box;
   overflow: scroll;
 }
-
+.dropdown-item {
+  cursor:pointer;
+}
 .bottom-line {
     display: flex;
     flex-direction: row;
