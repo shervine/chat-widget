@@ -1,0 +1,22 @@
+{
+  "name": "chat-widget",
+  "homepage": "https://github.com/menchco/chat-widget",
+  "authors": [
+    "Leonard <leonard.labuneti@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap4c-buttons": "^1.0.4",
+    "bootstrap4c-custom-switch": "^1.0.6"
+  }
+}

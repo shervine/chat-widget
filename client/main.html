@@ -1,18 +1,17 @@
 <head>
   <title>Mench Chat</title>
+  <link href="/components/bootstrap4c-buttons/dist/css/component-buttons.min.css" rel="stylesheet">
+  <link href="/components/bootstrap4c-custom-switch/dist/css/component-custom-switch.min.css" rel="stylesheet">
 </head>
-
 <body>
   <div class="container" id="main-div" ng-app="menChat">
     <div class="row filter border border-info">
       <div class="col-sm-12">
-        <!-- {{> filtersTpl}} -->
         <filter></filter>
       </div>
     </div>
     <div class="row">
       <div class="col-sm-3 border border-info border-right-0 border-top-0">
-        <!-- {{> usersTpl}} -->
         <users-list></users-list>
       </div>
       <div class="col-sm-6 border border-info border-top-0">
