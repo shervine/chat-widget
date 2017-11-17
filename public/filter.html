@@ -1,20 +1,34 @@
 <div class="row mb-2 mt-2">
   <div class="col-sm-2 mt-2">
-    <h5>Filter Students:</h5>
+    <h6>Filter Students:</h6>
   </div>
-  <div class="col-sm-4 btn-group mt-2">
-    <!-- <label class="btn btn-primary" ng-model="checkModel.class" uib-btn-checkbox>By Class</label>
-    <label class="btn btn-primary" ng-model="checkModel.status" uib-btn-checkbox>By Status</label> -->
-    <!-- <div class="switch">
-      <input id="cmn-toggle-4" class="cmn-toggle cmn-toggle-round-flat" type="checkbox">
-      <label for="cmn-toggle-4"></label>
-    </div> -->
-    <div class="custom-switch">
-      <input class="custom-switch-input" id="ADD_ID_HERE" type="checkbox">
-      <label class="custom-switch-btn" for="ADD_ID_HERE"></label>
+  <div class="col-lg-3">
+    <div class="input-group" ng-disabled="status">
+      <div class="input-group-btn">
+        <button type="button" class="btn btn-secondary dropdown-toggle" 
+            data-toggle="dropdown" 
+            aria-haspopup="true" 
+            aria-expanded="false">
+          By Class
+        </button>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" ng-click="class=cls" ng-repeat="cls in classes">{{cls.r_start_date}}</a>
+        </div>
+      </div>
+      <input type="text" class="form-control" ng-model="class.r_start_date" aria-label="Class start date">
     </div>
   </div>
-  <div class="col-sm-4 mt-2">
-    <!-- <pre>Selected: {{checkModel}}</pre> -->
+  <div class="col-lg-3">
+    <div class="input-group" ng-disabled="class">
+      <div class="input-group-btn">
+        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          By Status
+        </button>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="#" ng-repeat="class in classes">{{class.name}}</a>
+        </div>
+      </div>
+      <input type="text" class="form-control" aria-label="Text input with dropdown button">
+    </div>
   </div>
 </div>

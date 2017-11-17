@@ -1,20 +1,47 @@
-users = new PgSubscription('allUsers');
-
-const instructorId = 82;
-const bootcampId = 10;
+bootcampClasses = new PgSubscription('bootcampClasses');
+messages = new PgSubscription('userMessages');
 
 (function () {
   angular.module('menChat', ['ui.bootstrap'])
-    .directive('filter', function () {
+    .run(function($location, $rootScope){
+      users = new PgSubscription('allUsers');
+      $rootScope.instructorId = 82;
+      $rootScope.bootcampId = 14;
+      console.log($location.search());
+      var bId = $location.search().bootcampId;
+      var instrId = $location.search().instructorId;
+      if(bId){
+        $rootScope.bootcampId = bId; 
+      }
+      if(instrId){
+        $rootScope.instructorId = instrId; 
+      }
+      console.log('Using bootcamp id ', $rootScope.bootcampId);
+      console.log('Using instructor id ', $rootScope.instructorId);
+
+      bootcampClasses = new PgSubscription('bootcampClasses', $rootScope.bootcampId, $rootScope.instructorId);   
+    })
+    .directive('filter', function ($timeout, $rootScope) {
       return {
         restrict: 'E',
         scope: {},
         link: function ($scope) {
-          console.log('directive filter link function ');
-          $scope.checkModel = {
-            'class': false,
-            'status': false
-          };
+          $scope.class = null;
+          $scope.status = null;
+          $scope.classes = bootcampClasses.reactive(); 
+          
+          $timeout(function () {
+            // angular.element('.users-list').css('max-height', '700px');
+            console.log($scope.classes);
+            $scope.class = typeof $scope.classes[0] != 'undefined' ? $scope.classes[0] : null;
+          }, 300);
+
+          $scope.$watch('class', function(newVal){
+              if(!newVal){
+                return;
+              }
+              $rootScope.$broadcast('filter-class', newVal);
+          });
         },
         templateUrl: 'filter.html'
       }
@@ -41,7 +68,7 @@ const bootcampId = 10;
 
           $scope.search = function (searchTerm) {
             if (searchTerm === '' || searchTerm === ' ') {
-              $scope.users = angular.copy($scope.allUsers);
+              $scope.users = $scope.allUsers;
               return;
             }
 
@@ -56,6 +83,12 @@ const bootcampId = 10;
             }
 
           }
+
+          $scope.$on('filter-class', function(ev, classObj){
+            users = new PgSubscription('allUsers', classObj.r_id);
+            $scope.allUsers = users.reactive();
+            $scope.users = $scope.allUsers;
+          });
         },
         templateUrl: 'users-list.html'
       }

@@ -10,6 +10,7 @@ echo 'Using connection string  ';
 set | grep POSTGRESQL_URL;
 export CHANNEL="usnetwork"
 export MONGO_URL="nope"
+bower install
 cd "$(dirname $0)"
 meteor 
 
