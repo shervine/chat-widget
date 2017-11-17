@@ -30,8 +30,8 @@ body {
   cursor: pointer;
 }
 
-.users-list {
-	/* max-height: 600px; */
+.users-list, .user-messages {
+  max-height: 700px;
 	overflow: scroll;
 }
 

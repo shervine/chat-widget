@@ -1,6 +1,6 @@
 <div class="users-list fill">
   <div class="row">
-    <div class="col-sm-12">
+    <div class="col-sm-12" style="margin-top:4px">
       <input type="text" ng-model="searchTerm" ng-keyup="search(searchTerm)" placeholder="Search .." class="form-control" name="search">
     </div>
   </div>
@@ -10,9 +10,9 @@
     >
     <div class="col-sm-6" user-id="{{user.u_id}}">
       <div class="row">
-        <div class="col-sm-6">
-          {{user.u_id}}
+        <div class="col-sm-6">  
           <img style="width:40px;cursor:pointer" src="{{user.u_image_url}}" ng-click="userSelected(user)">
+          {{user.u_id}}
         </div>
         <div class="col-sm-6 ml-10">
           <p>

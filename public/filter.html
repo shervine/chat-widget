@@ -12,10 +12,11 @@
           By Class
         </button>
         <div class="dropdown-menu">
-          <a class="dropdown-item" ng-click="class=cls" ng-repeat="cls in classes">{{cls.r_start_date}}</a>
+          <a class="dropdown-item" ng-click="selectClass()">All</a>
+          <a class="dropdown-item" ng-click="selectClass(cls)" ng-repeat="cls in classes">{{cls.r_start_date | date}}</a>
         </div>
       </div>
-      <input type="text" class="form-control" ng-model="class.r_start_date" aria-label="Class start date">
+      <input type="text" class="form-control"  ng-model="class.r_start_date" aria-label="Class start date">
     </div>
   </div>
   <div class="col-lg-3">
@@ -25,10 +26,10 @@
           By Status
         </button>
         <div class="dropdown-menu">
-          <a class="dropdown-item" href="#" ng-repeat="class in classes">{{class.name}}</a>
+          <a class="dropdown-item" ng-click="selectStatus(sts)" ng-repeat="sts in statuses">{{sts}}</a>
         </div>
       </div>
-      <input type="text" class="form-control" aria-label="Text input with dropdown button">
+      <input type="text" ng-model="status" class="form-control" aria-label="Status">
     </div>
   </div>
 </div>

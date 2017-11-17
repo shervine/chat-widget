@@ -15,29 +15,30 @@
         <users-list></users-list>
       </div>
       <div class="col-sm-6 border border-info border-top-0">
-        <h5>Chat window</h5>
+        <p><h5>Chat window</h5></p>
         <user-messages selected-user="selectedUser"></user-messages>
       </div>
       <div class="col-sm-3 border border-info border-left-0 border-top-0">
-        <h5>User Info</h5>
+        <p><h5>User Info</h5></p>
         <user-details selected-user="selectedUser"></user-details>
       </div>
     </div>
-    <div class="row">
+    <div class="row" ng-controller="chatCtrl">
       <div class="col-sm-3 border border-info border-right-0 border-top-0">
-        <h5>Broadcast msg</h5>
+        <p><h6>Broadcast msg</h6></p>
       </div>
       <div class="col-sm-6 border border-info border-top-0">
         <div class="row mt-2">
           <div class="col-sm-3">
-            <h4>Chat Input</h4>
+            <h6 style="margin-top:7px">Chat Input</h6>
           </div>
           <div class="col-sm-6">
-            <input width="200" />
+            <input style="width:100%" ng-model="chatInput" />
           </div>
           <div class="col-sm-2">
             <div style="float:right">
-              <button class="btn btn-primary btn-lg ">Send</button>
+              <button type="button" class="btn btn-secondary" 
+                style="margin-top: -2px;" ng-click="sendMessage()">Send</button>
             </div>
           </div>
         </div>
