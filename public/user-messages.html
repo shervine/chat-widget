@@ -1,17 +1,27 @@
 <div class="user-messages fill">
-  <div class="row" ng-show="msgs && msgs.length == 0">
-    <div class="col-sm-12">
-      No Messages
-    </div>
+  <div class="row" ng-show="loading">
+      <div class="container">
+          <div class="row">  
+                <div class="animationload">
+                    <div class="osahanloading"></div>
+                </div>
+          </div>
+        </div>
   </div>
-  <div class="row" >
+  <div class="row" style="margin-left:10px" ng-show="msgs && msgs.length == 0 && !loading">
+    No Messages
+  </div>
+
+  <div class="row">
     <div class="col-sm-12">
-        <ul>
-            <li  ng-repeat="message in msgs" 
-            class="{{message.e_type_id == 6 ? 'me' : 'him'}}"
-            >{{message.e_message}}</li>
-           </ul>
-      <!-- <p>[{{message.e_type_id == 6 ? 'Received' : 'Sent'}}] {{message.e_message}}</p> -->
+      <ul>
+        <li ng-repeat="message in msgs" class="{{message.e_type_id == 6 ? 'me' : 'him'}}">
+          <img ng-if="message.e_type_id != 6"
+          class="chat-avatar"
+          src="{{selectedUser.u_image_url}}">
+          {{message.e_message}}
+        </li>
+      </ul>
     </div>
   </div>
 </div>
