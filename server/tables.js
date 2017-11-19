@@ -116,7 +116,7 @@ Meteor.methods({
         return 'ok';
     });
 
-    console.log('post result ', result);
+    console.log('post result: ', result);
     return 'ok';
   }
 });
