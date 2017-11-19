@@ -33,11 +33,11 @@
             <h6 style="margin-top:7px">Chat Input</h6>
           </div>
           <div class="col-sm-6">
-            <input style="width:100%" ng-model="chatInput" />
+            <input style="width:100%" ng-model="chatInput" ng-enter="sendMessage()" />
           </div>
           <div class="col-sm-2">
             <div style="float:right">
-              <button type="button" class="btn btn-secondary" 
+              <button type="button" class="btn btn-secondary"  style="cursor:pointer"
                 style="margin-top: -2px;" ng-click="sendMessage()">Send</button>
             </div>
           </div>
