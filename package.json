@@ -1,0 +1,24 @@
+{
+  "name": "chat-widget",
+  "version": "1.0.0",
+  "description": "Mench is a learning game on Facebook Messenger. We connect online instructors to students for on-demand learning over a Chatbot.",
+  "main": "index.js",
+  "dependencies": {
+    "md5": "^2.2.1",
+    "needle": "^2.0.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/menchco/chat-widget.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/menchco/chat-widget/issues"
+  },
+  "homepage": "https://github.com/menchco/chat-widget#readme"
+}

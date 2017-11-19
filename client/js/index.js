@@ -5,7 +5,7 @@ messages = new PgSubscription('userMessages');
   angular.module('menChat', ['ui.bootstrap'])
     .run(function ($location, $rootScope) {
       users = new PgSubscription('allUsers');
-      $rootScope.instructorId = 82;
+      $rootScope.instructorId = 1;
       $rootScope.bootcampId = 1;
       var bId = $location.search().bootcampId;
       var instrId = $location.search().instructorId;
@@ -173,11 +173,23 @@ messages = new PgSubscription('userMessages');
           alert('Please type the message you want to send');
           return;
         }
+
+        if(!$rootScope.selectedUser) {
+          alert('No user selected');
+          return;
+        }
+
         var postObj = {
-          'message': $scope.chatInput
+          'message': $scope.chatInput,
+          'receiverId': $rootScope.selectedUser.u_id,
+          'senderId': $rootScope.instructorId
         }
         Meteor.call('sendChatMessage', postObj, function (err, success) {
           console.log('sendChatMessage ', err, success);
+          if(err){
+            alert('Sending error');
+            return;
+          }
           $scope.chatInput = '';
         });
       }

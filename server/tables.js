@@ -5,19 +5,19 @@ bootcampClasses = new PgSubscription('bootcampClasses');
 
 liveDb = new LivePg(process.env.POSTGRESQL_URL, process.env.CHANNEL);
 Meteor.publish('allUsers', function (classId) {
-  
+
   var classFilter = '';
 
   if (classId) {
-    classFilter = ' and  ru.ru_r_id = ' + classId.toString(); 
+    classFilter = ' and  ru.ru_r_id = ' + classId.toString();
   }
 
   var res = liveDb.select('select * \
                           from v5_classes r \
                           inner join v5_class_students ru on r.r_id = ru.ru_r_id \
                           inner join v5_users u on u_id = ru.ru_u_id ' +
-                          ' where ru.ru_status >=4 '+
-                          classFilter);
+    ' where ru.ru_status >=4 ' +
+    classFilter);
   return res;
 
 });
@@ -50,63 +50,76 @@ Meteor.publish('bootcampClasses', function (bootcampId, instructorId) {
   if (!instructorId && !bootcampId) {
     return [];
   }
-  
+
   var res = liveDb.select('select distinct b.*, r.* from v5_bootcamps b \
                           inner join v5_classes r on b.b_id = r.r_b_id and r.r_status >= 1\
                           inner join v5_bootcamp_instructors ba on ba.ba_b_id  = b.b_creator_id \
                           where \
-                          b.b_id = ' + bootcampId
-                          );
+                          b.b_id = ' + bootcampId);
   return res;
 
   //ba.ba_u_id  = ' + instructorId +
 });
 
-// var request = Npm.require('request');
+var md5 = Npm.require('md5');
+var needle = Npm.require('needle');
 
-// Meteor.methods({
-//   'sendChatMessage' : function(formData) {
-//     // var formData = {
-//     //   // Pass a simple key-value pair
-//     //   my_field: 'my_value',
-//     //   // Pass data via Buffers
-//     //   my_buffer: new Buffer([1, 2, 3]),
-//     //   // Pass data via Streams
-//     //   my_file: fs.createReadStream(__dirname + '/unicycle.jpg'),
-//     //   // Pass multiple values /w an Array
-//     //   attachments: [
-//     //     fs.createReadStream(__dirname + '/attachment1.jpg'),
-//     //     fs.createReadStream(__dirname + '/attachment2.jpg')
-//     //   ],
-//     //   // Pass optional meta-data with an 'options' object with style: {value: DATA, options: OPTIONS}
-//     //   // Use case: for some types of streams, you'll need to provide "file"-related information manually.
-//     //   // See the `form-data` README for more information about options: https://github.com/form-data/form-data
-//     //   custom_file: {
-//     //     value:  fs.createReadStream('/dev/urandom'),
-//     //     options: {
-//     //       filename: 'topsecret.jpg',
-//     //       contentType: 'image/jpeg'
-//     //     }
-//     //   }
-//     // };
+function postMench(data, done) {
+  // the callback is optional, and needle returns a `readableStream` object
+  // that triggers a 'done' event when the request/response process is complete.
+  needle
+    .post('https://mench.co/bot/send_message', data, {
+      multipart: true
+    })
+    .on('readable', function () { /* eat your chunks */
+      done();
+    })
+    .on('done', function (err, resp) {
+      console.log('Ready-o!');
+      done(err, resp);
+    })
+}
 
-//     var syncFunc = Meteor.wrapAsync(function(fromData){
-//       request.post({url:'http://service.com/upload', formData: formData}, function optionalCallback(err, httpResponse, body) {
-//         if (err) {
-//           return console.error('upload failed:', err);
-//           throw new Meteor.Error(500, 'Error sending message');
-//         }
-//         // console.log('Upload successful!  Server responded with:', body);
-//         return body;
-//       });
-//     });
-//     var result = syncFunc(formData);
-    
-//     console.log('post result ',result);
-//     return;
+Meteor.methods({
+  'sendChatMessage': function (formData) {
 
-//   }
-// });
+    // var data = {
+    //   file: '/home/johnlennon/walrus.png',
+    //   content_type: 'image/png'
+    // };
+    console.log('sendChatMessage formData ', formData);
+
+    var body = formData.message;
+    var sender_u_id = '1';
+    var receiver_u_id = '112'; //leo
+    var message_type = 'text';
+    var auth_hash = md5(sender_u_id + receiver_u_id + message_type + '7H6hgtgtfii87');
+
+    var data = {
+      'b_id': 1,
+      'message_type': message_type, //(Facebook 5 Message Types: text, audio, image, video, file)
+      'sender_u_id': formData.senderId,
+      'receiver_u_id': formData.receiverId, //The Student ID
+      'auth_hash': auth_hash,
+      'text_payload': body //IF message_type=TEXT (Maximum 640 characters)
+    }
+
+    console.log('post data :', data);
+
+    var syncFunc = Meteor.wrapAsync(postMench);
+    var result = syncFunc(data, function(err, res){
+        console.log('CB: ', err, res);
+        if(err){
+          throw new Meteor.Error(500, 'Cannot send message');
+        }
+
+        return 'ok';
+    });
+
+    console.log('post result ', result);
+    return 'ok';
+  }
+});
 
 /**
  * HTTP Header Security
