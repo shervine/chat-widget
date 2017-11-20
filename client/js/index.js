@@ -25,7 +25,7 @@
         d.animate({
           scrollTop: d.prop('scrollHeight')
         }, 1);
-      }, 1000);
+      }, 1500);
 
     })
     .directive('filter', function ($timeout, $rootScope) {
@@ -198,9 +198,11 @@
         }
 
         var postObj = {
+          'bId': $rootScope.bootcampId,
           'message': $scope.chatInput,
           'receiverId': $rootScope.selectedUser.u_id,
-          'senderId': $rootScope.instructorId
+          'senderId': $rootScope.instructorId,
+          'messageType': 'text' //for now
         }
         Meteor.call('sendChatMessage', postObj, function (err, success) {
           console.log('sendChatMessage ', err, success);

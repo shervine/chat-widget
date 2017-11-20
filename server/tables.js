@@ -32,7 +32,7 @@ Meteor.publish('userMessages', function (userId) {
                           e_recipient_u_id = $1)\
                           order by e_timestamp ASC \
                           limit 100', [userId]);
-                          
+
   // Subscription has been stopped, also stop supporting query
   this.onStop(function() {
     mSubscription.stop();
@@ -95,21 +95,17 @@ Meteor.methods({
     // };
     console.log('sendChatMessage formData ', formData);
 
-    var body = formData.message;
-    var sender_u_id = '1';
-    var receiver_u_id = '112'; //leo
-    var message_type = 'text';
-    var auth_hash = md5(sender_u_id + receiver_u_id + message_type + '7H6hgtgtfii87');
+    var auth_hash = md5(formData.senderId.toString() + formData.receiverId.toString() + formData.messageType + '7H6hgtgtfii87');
 
     var data = {
-      'b_id': 1,
-      'message_type': message_type, //(Facebook 5 Message Types: text, audio, image, video, file)
+      'b_id': formData.bId,
+      'message_type': formData.messageType, //(Facebook 5 Message Types: text, audio, image, video, file)
       'sender_u_id': formData.senderId,
       'receiver_u_id': formData.receiverId, //The Student ID
       'auth_hash': auth_hash,
-      'text_payload': body //IF message_type=TEXT (Maximum 640 characters)
+      'text_payload': formData.message //IF message_type=TEXT (Maximum 640 characters)
     }
-
+    console.log('formData :', formData);
     console.log('post data :', data);
 
     var syncFunc = Meteor.wrapAsync(postMench);
