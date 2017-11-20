@@ -136,7 +136,7 @@
 
             $scope.messages = new PgSubscription('userMessages', $scope.selectedUser.u_id).reactive();    
             $timeout(function () {
-              $scope.msgs = $scope.messages.reverse();
+              $scope.msgs = $scope.messages;
               console.log('User messages :', $scope.msgs);
               $timeout(function () {
                 var d = angular.element('.user-messages');
