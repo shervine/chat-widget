@@ -1,4 +1,4 @@
-<div class="user-messages fill">
+<div class="fill">
   <div class="row" ng-show="loading">
       <div class="container">
           <div class="row">  
@@ -13,7 +13,7 @@
   </div>
 
   <div class="row">
-    <div class="col-sm-12">
+    <div class="col-sm-12 user-messages">
       <ul>
         <li ng-repeat="message in msgs" class="{{message.e_type_id == 6 ? 'him' : 'me'}}">
           <img ng-if="message.e_type_id == 6"

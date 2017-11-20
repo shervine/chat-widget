@@ -1,9 +1,9 @@
-bootcampClasses = new PgSubscription('bootcampClasses');
-messages = new PgSubscription('userMessages');
+// bootcampClasses = new PgSubscription('bootcampClasses');
+//messages = new PgSubscription('userMessages');
 
 (function () {
   angular.module('menChat', ['ui.bootstrap'])
-    .run(function ($location, $rootScope) {
+    .run(function ($location, $rootScope, $interval) {
       users = new PgSubscription('allUsers');
       $rootScope.instructorId = 1;
       $rootScope.bootcampId = 1;
@@ -18,7 +18,15 @@ messages = new PgSubscription('userMessages');
       console.log('Using bootcamp id ', $rootScope.bootcampId);
       console.log('Using instructor id ', $rootScope.instructorId);
 
-      bootcampClasses = new PgSubscription('bootcampClasses', $rootScope.bootcampId, $rootScope.instructorId);
+      $rootScope.bootcampClasses = new PgSubscription('bootcampClasses', $rootScope.bootcampId, $rootScope.instructorId);
+
+      $interval(function () {
+        var d = angular.element('.user-messages');
+        d.animate({
+          scrollTop: d.prop('scrollHeight')
+        }, 1);
+      }, 1000);
+
     })
     .directive('filter', function ($timeout, $rootScope) {
       return {
@@ -30,7 +38,7 @@ messages = new PgSubscription('userMessages');
           };
           $scope.statuses = ['All', 'Inactive', 'Pending', 'Active'];
           $scope.status = $scope.statuses[0];
-          $scope.classes = bootcampClasses.reactive();
+          $scope.classes = $rootScope.bootcampClasses.reactive();
 
           $scope.selectClass = function (classObj) {
             console.log('Selected class ', classObj);
@@ -108,7 +116,7 @@ messages = new PgSubscription('userMessages');
         templateUrl: 'users-list.html'
       }
     })
-    .directive('userMessages', function ($rootScope, $timeout) {
+    .directive('userMessages', function ($rootScope, $timeout, $interval) {
       return {
         restrict: 'E',
         scope: {
@@ -121,17 +129,21 @@ messages = new PgSubscription('userMessages');
               return;
             }
             $scope.loading = true;
-            messages = new PgSubscription('userMessages', $scope.selectedUser.u_id);
 
+            if ($scope.messages) {
+              $scope.messages.stop();
+            }
+
+            $scope.messages = new PgSubscription('userMessages', $scope.selectedUser.u_id).reactive();    
             $timeout(function () {
-              $scope.msgs = messages.reactive().reverse();
+              $scope.msgs = $scope.messages.reverse();
               console.log('User messages :', $scope.msgs);
               $timeout(function () {
                 var d = angular.element('.user-messages');
                 d.animate({
                   scrollTop: d.prop('scrollHeight')
                 }, 1);
-              }, 300);
+              }, 500);
               $scope.loading = false;
             }, 300);
           });
@@ -151,30 +163,36 @@ messages = new PgSubscription('userMessages');
             if (!newVal) {
               return;
             }
-
-            userData = new PgSubscription('userData', $scope.selectedUser.u_id);
-            $scope.details = userData.reactive();
-            $timeout(function () {
-              $scope.userDetails1 = typeof $scope.details[0] !== 'undefined' ? $scope.details[0] : {};
-              console.log('User details : ', $scope.userDetails1);
-            }, 300);
-
+            $scope.userDetails1 = newVal;
+            console.log('User details : ', newVal);
           });
         },
         templateUrl: 'user-details.html'
       }
     })
+    .directive('ngEnter', function () {
+      return function (scope, element, attrs) {
+        element.bind("keydown keypress", function (event) {
+          if (event.which === 13) {
+            scope.$apply(function () {
+              scope.$eval(attrs.ngEnter);
+            });
+
+            event.preventDefault();
+          }
+        });
+      };
+    })
     .controller('chatCtrl', function ($scope, $rootScope) {
 
       $scope.chatInput = '';
       $scope.sendMessage = function () {
-        // var auth_hash = md5( sender_u_id . receiver_u_id . message_type . '7H6hgtgtfii87' )
         if ($scope.chatInput === '') {
           alert('Please type the message you want to send');
           return;
         }
 
-        if(!$rootScope.selectedUser) {
+        if (!$rootScope.selectedUser) {
           alert('No user selected');
           return;
         }
@@ -186,11 +204,12 @@ messages = new PgSubscription('userMessages');
         }
         Meteor.call('sendChatMessage', postObj, function (err, success) {
           console.log('sendChatMessage ', err, success);
-          if(err){
+          if (err) {
             alert('Sending error');
             return;
           }
           $scope.chatInput = '';
+          $scope.$apply();
         });
       }
     })
