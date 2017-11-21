@@ -20,13 +20,6 @@
 
       $rootScope.bootcampClasses = new PgSubscription('bootcampClasses', $rootScope.bootcampId, $rootScope.instructorId);
 
-      $interval(function () {
-        var d = angular.element('.user-messages');
-        d.animate({
-          scrollTop: d.prop('scrollHeight')
-        }, 1);
-      }, 1500);
-
     })
     .directive('filter', function ($timeout, $rootScope) {
       return {
@@ -130,6 +123,19 @@
             }
             $scope.loading = true;
 
+ 	    var observer = new MutationObserver(function(mutations) {
+                 console.log('New content into messages div');
+                var d = angular.element('.user-messages');
+                d.animate({
+                  scrollTop: d.prop('scrollHeight')
+                }, 1);
+
+            });
+            observer.observe(iElem.find('.user-messages')[0], {
+                childList: true,
+                subtree: true
+            });
+
             if ($scope.messages) {
               $scope.messages.stop();
             }
@@ -180,6 +186,7 @@
 
             event.preventDefault();
           }
+	
         });
       };
     })

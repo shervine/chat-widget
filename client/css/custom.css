@@ -17,7 +17,7 @@ body {
   min-height: 88%;
   height: 88%;
   box-sizing: border-box;
-  overflow: scroll;
+  /*overflow: scroll;*/
 }
 .dropdown-item {
   cursor:pointer;
@@ -39,6 +39,7 @@ body {
 
 .user-messages {
   max-height: 600px;
+  overflow-x: hidden;
 }
 
 .selected {
