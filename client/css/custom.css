@@ -29,7 +29,7 @@ body {
 }
 
 .users-list, .user-messages {
-	overflow: scroll;
+	overflow: auto;
   overflow-x: hidden;
 }
 
@@ -39,7 +39,7 @@ body {
 
 .users-list {
   margin-top: 1px;
-  margin-right: -12px;
+  margin-right: -8px;
   margin-left: -8px;
   max-height: 91vh;
 }

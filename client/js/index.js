@@ -1,6 +1,3 @@
-// bootcampClasses = new PgSubscription('bootcampClasses');
-//messages = new PgSubscription('userMessages');
-
 (function () {
   angular.module('menChat', ['ui.bootstrap'])
     .run(function ($location, $rootScope, $interval) {
@@ -43,16 +40,6 @@
           $scope.selectStatus = function (statusObj) {
             $scope.status = statusObj;
           }
-
-          //set the default filter on load
-          // $scope.selectClass($scope.class);
-
-          // $scope.$watch('class', function (newVal) {
-          //   if (!newVal) {
-          //     return;
-          //   }
-          //   $rootScope.$broadcast('filter-class', newVal);
-          // });
         },
         templateUrl: 'filter.html'
       }
@@ -105,8 +92,8 @@
               users = new PgSubscription('allUsers');
             }
 
-            // $rootScope.selectedUser = null;
-            // $scope.selectedUser = null;
+            $rootScope.selectedUser = null;
+            $scope.selectedUser = null;
 
             $scope.allUsers = users.reactive();
             $timeout(function () {
