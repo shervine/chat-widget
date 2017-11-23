@@ -64,10 +64,11 @@
         link: function ($scope, iElem, iAttr) {
           $scope.searchTerm = '';
           $scope.allUsers = users.reactive();
-
+          $scope.loading = true;
           $timeout(function () {
             // angular.element('.users-list').css('max-height', '700px');
             $scope.users = $scope.allUsers;
+            $scope.loading = false;
           }, 300);
 
           $scope.userSelected = function (user) {
@@ -96,7 +97,8 @@
           }
 
           $scope.$on('filter-class', function (ev, classObj) {
-            if (typeof classObj.r_id !== 'undefined') {
+            $scope.loading = true;
+            if (classObj && typeof classObj.r_id !== 'undefined') {
               users = new PgSubscription('allUsers', classObj.r_id);
             } else {
               //no filter
@@ -110,6 +112,7 @@
             $timeout(function () {
               $scope.users = $scope.allUsers;
               console.log('Filtered users ', $scope.users);
+              $scope.loading = false;
             }, 300);
 
 

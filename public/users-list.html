@@ -7,10 +7,20 @@
       <filter></filter>
     </div>
   </div>
-  <div class="row no-students" ng-show="!users || users.length == 0">
+  <div class="row" ng-show="loading">
+      <div class="container" style="padding-bottom: 26px;">
+          <div class="row">
+                <div class="animationload">
+                    <div class="osahanloading"></div>
+                </div>
+          </div>
+        </div>
+  </div>
+  <div class="row no-students" ng-show="!loading && (!users || users.length == 0)">
       No Students.
   </div>
   <div class="row user-row" ng-repeat="user in users"
+    ng-show="!loading"
     ng-click="userSelected(user)"
     style="padding: 5px; margin: 5px 0;cursor: pointer"
       ng-class="{'selected' : user.u_id == selectedUser.u_id}"
