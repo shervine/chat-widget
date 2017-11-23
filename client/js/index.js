@@ -38,16 +38,21 @@
             $scope.class = typeof classObj !== 'undefined' ? classObj : {
               'r_start_date': 'All'
             };
+            $rootScope.$broadcast('filter-class', classObj);
           }
           $scope.selectStatus = function (statusObj) {
             $scope.status = statusObj;
           }
-          $scope.$watch('class', function (newVal) {
-            if (!newVal) {
-              return;
-            }
-            $rootScope.$broadcast('filter-class', newVal);
-          });
+
+          //set the default filter on load
+          // $scope.selectClass($scope.class);
+
+          // $scope.$watch('class', function (newVal) {
+          //   if (!newVal) {
+          //     return;
+          //   }
+          //   $rootScope.$broadcast('filter-class', newVal);
+          // });
         },
         templateUrl: 'filter.html'
       }
@@ -98,8 +103,8 @@
               users = new PgSubscription('allUsers');
             }
 
-            $rootScope.selectedUser = null;
-            $scope.selectedUser = null;
+            // $rootScope.selectedUser = null;
+            // $scope.selectedUser = null;
 
             $scope.allUsers = users.reactive();
             $timeout(function () {
