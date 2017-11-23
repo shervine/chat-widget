@@ -1,35 +1,41 @@
-<div class="row mb-2 mt-2">
-  <div class="col-sm-2 mt-2">
-    <h6>Filter Students:</h6>
-  </div>
-  <div class="col-lg-3">
-    <div class="input-group" ng-disabled="status">
+<div class="row">
+  <div class="col-sm-6">
+    <div class="input-group" >
       <div class="input-group-btn">
-        <button type="button" class="btn btn-secondary dropdown-toggle" 
-            data-toggle="dropdown" 
-            aria-haspopup="true" 
-            aria-expanded="false">
-          By Class
+        <button type="button" class="btn btn-secondary dropdown-toggle"
+            title="Class filter"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+            ng-model="class.r_start_date"
+            >
+            {{class.r_start_date | date}}
         </button>
         <div class="dropdown-menu">
           <a class="dropdown-item" ng-click="selectClass()">All</a>
           <a class="dropdown-item" ng-click="selectClass(cls)" ng-repeat="cls in classes">{{cls.r_start_date | date}}</a>
         </div>
       </div>
-      <input type="text" class="form-control"  ng-model="class.r_start_date" aria-label="Class start date">
     </div>
   </div>
-  <div class="col-lg-3">
-    <div class="input-group" ng-disabled="class">
+  <div class="col-sm-6">
+    <div class="input-group">
       <div class="input-group-btn">
-        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          By Status
+        <button
+            type="button"
+            class="btn btn-secondary dropdown-toggle"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+            ng-model="status"
+            title="Status"
+            >
+            {{status}}
         </button>
         <div class="dropdown-menu">
           <a class="dropdown-item" ng-click="selectStatus(sts)" ng-repeat="sts in statuses">{{sts}}</a>
         </div>
       </div>
-      <input type="text" ng-model="status" class="form-control" aria-label="Status">
     </div>
   </div>
 </div>

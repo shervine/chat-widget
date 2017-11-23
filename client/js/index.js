@@ -97,6 +97,10 @@
               //no filter
               users = new PgSubscription('allUsers');
             }
+
+            $rootScope.selectedUser = user;
+            $scope.selectedUser = user;
+
             $scope.allUsers = users.reactive();
             $timeout(function () {
               $scope.users = $scope.allUsers;
@@ -123,7 +127,15 @@
             }
             $scope.loading = true;
 
- 	    var observer = new MutationObserver(function(mutations) {
+              $scope.$on('filter-class', function (ev, classObj) {
+                if ($scope.messages) {
+                  $scope.messages.stop();
+                }
+
+                $scope.msgs = [];
+              });
+
+ 	            var observer = new MutationObserver(function(mutations) {
                  console.log('New content into messages div');
                 var d = angular.element('.user-messages');
                 d.animate({
@@ -140,7 +152,7 @@
               $scope.messages.stop();
             }
 
-            $scope.messages = new PgSubscription('userMessages', $scope.selectedUser.u_id).reactive();    
+            $scope.messages = new PgSubscription('userMessages', $scope.selectedUser.u_id).reactive();
             $timeout(function () {
               $scope.msgs = $scope.messages;
               console.log('User messages :', $scope.msgs);
@@ -186,7 +198,7 @@
 
             event.preventDefault();
           }
-	
+
         });
       };
     })

@@ -7,14 +7,13 @@
   <div class="container" id="main-div" ng-app="menChat">
     <div class="row filter border border-info">
       <div class="col-sm-12">
-        <filter></filter>
       </div>
     </div>
-    <div class="row">
+    <div class="row main-row">
       <div class="col-sm-3 border border-info border-right-0 border-top-0">
         <users-list></users-list>
       </div>
-      <div class="col-sm-6 border border-info border-top-0">
+      <div class="col-sm-6 border border-info border-top-0 chat-section">
         <p><h5>Chat window</h5></p>
         <user-messages selected-user="selectedUser"></user-messages>
       </div>
@@ -32,13 +31,14 @@
           <div class="col-sm-3">
             <h6 style="margin-top:7px">Chat Input</h6>
           </div>
-          <div class="col-sm-6">
-            <input style="width:100%" ng-model="chatInput" ng-enter="sendMessage()" />
+
+          <div class="col-sm-6" style="margin-top: -1px;">
+            <input  class="form-control" ng-model="chatInput" ng-enter="sendMessage()" />
           </div>
           <div class="col-sm-2">
             <div style="float:right">
               <button type="button" class="btn btn-secondary"  style="cursor:pointer"
-                style="margin-top: -2px;" ng-click="sendMessage()">Send</button>
+                 ng-click="sendMessage()">Send</button>
             </div>
           </div>
         </div>

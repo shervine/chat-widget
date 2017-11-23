@@ -1,11 +1,3 @@
-#main-div {
-  width: 100%;
-  height: 100%;
-  min-height: 100%;
-  max-height: 100%;
-  display: block;
-}
-
 html,
 body {
   height: 100%;
@@ -13,11 +5,15 @@ body {
   color: rgb(127, 127, 127);
 }
 
+#main-div {
+  display: block;
+}
+.main-row {
+  height: 92vh;
+}
+
 .fill {
-  min-height: 88%;
-  height: 88%;
   box-sizing: border-box;
-  /*overflow: scroll;*/
 }
 .dropdown-item {
   cursor:pointer;
@@ -33,17 +29,44 @@ body {
 }
 
 .users-list, .user-messages {
-  max-height: 700px;
 	overflow: scroll;
+  overflow-x: hidden;
 }
 
 .user-messages {
-  max-height: 600px;
-  overflow-x: hidden;
+    max-height: 84vh;
+}
+
+.users-list {
+  margin-top: 1px;
+  margin-right: -12px;
+  margin-left: -8px;
+  max-height: 91vh;
 }
 
 .selected {
   background:rgb(216, 216, 216);
+}
+
+.no-students {
+    min-height: 100px;
+    margin-left: 2px;
+    margin-top: 5px;
+    overflow-x: hidden;
+}
+
+.input-group-btn {
+  height: 30px;
+  width: 100%;
+}
+
+.input-group-btn button {
+  font-size: 12px;
+  width: 100%
+}
+
+.dropdown-item, .search-user {
+  font-size: 12px;
 }
 
 .cmn-toggle {
