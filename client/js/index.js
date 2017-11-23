@@ -98,8 +98,8 @@
               users = new PgSubscription('allUsers');
             }
 
-            $rootScope.selectedUser = user;
-            $scope.selectedUser = user;
+            $rootScope.selectedUser = null;
+            $scope.selectedUser = null;
 
             $scope.allUsers = users.reactive();
             $timeout(function () {

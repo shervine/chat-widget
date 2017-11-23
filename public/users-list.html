@@ -12,17 +12,17 @@
   </div>
   <div class="row user-row" ng-repeat="user in users"
     ng-click="userSelected(user)"
-    style="border: 1px solid #ccc; padding: 5px; margin: 5px 0;cursor: pointer"
+    style="padding: 5px; margin: 5px 0;cursor: pointer"
       ng-class="{'selected' : user.u_id == selectedUser.u_id}"
     >
-    <div class="col-sm-6" user-id="{{user.u_id}}">
+    <div class="col-sm-12" user-id="{{user.u_id}}">
       <div class="row">
-        <div class="col-sm-4">
+        <div class="col-sm-3">
           <img
           style="cursor:pointer;margin-left: -8px; margin-top: 1px;"
           class="chat-avatar" src="{{user.u_image_url}}" ng-click="userSelected(user)">
         </div>
-        <div class="col-sm-6 ml-10">
+        <div class="col-sm-9 mt-1">
           <span>
             <h6 ng-click="userSelected(user)">{{user.u_fname}} {{user.u_lname}}</h6>
           </span>

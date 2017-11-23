@@ -1,7 +1,7 @@
 <div class="fill">
   <div class="row" ng-show="loading">
       <div class="container">
-          <div class="row">  
+          <div class="row">
                 <div class="animationload">
                     <div class="osahanloading"></div>
                 </div>
@@ -13,7 +13,7 @@
   </div>
 
   <div class="row">
-    <div class="col-sm-12 user-messages">
+    <div class="col-sm-12 user-messages" ng-show="!loading">
       <ul>
         <li ng-repeat="message in msgs" class="{{message.e_type_id == 6 ? 'him' : 'me'}}">
           <img ng-if="message.e_type_id == 6"
