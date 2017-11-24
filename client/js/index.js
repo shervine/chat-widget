@@ -82,7 +82,7 @@
         link: function ($scope, iElem, iAttr) {
           $scope.searchTerm = '';
 
-          if ($scope.allUsers) {
+          if ($scope.allUsers && typeof $scope.allUsers.stop == 'function') {
             $scope.allUsers.stop();
           }
 
@@ -173,11 +173,13 @@
             $scope.loading = true;
 
               $scope.$on('filter-class', function (ev, classObj) {
-                if ($scope.messages) {
+                if ($scope.messages && typeof $scope.messages.stop == 'function') {
                   $scope.messages.stop();
                 }
 
-                $scope.msgs = [];
+                $scope.messages = [];
+                $rootScope.selectedUser = null;
+                $scope.selectedUser = null;
               });
 
               //observer for chat messages content to enable scroll down
@@ -195,7 +197,7 @@
                 subtree: true
             });
 
-            if ($scope.messages) {
+            if ($scope.messages && typeof $scope.messages.stop == 'function') {
               $scope.messages.stop();
             }
 
@@ -220,7 +222,7 @@
                   d.animate({
                     scrollTop: d.prop('scrollHeight')
                   }, 1);
-                  
+
                }, 50);
                $scope.stopInterval();
              }, 60);
@@ -252,6 +254,11 @@
             $scope.userDetails1 = newVal;
             console.log('User details : ', newVal);
           });
+
+          $scope.$on('filter-class', function (ev, classObj) {
+            $scope.userDetails1 = {};
+          });
+
         },
         templateUrl: 'user-details.html'
       }
