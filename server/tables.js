@@ -12,7 +12,13 @@ Meteor.publish('allUsers', function (classId) {
     classFilter = ' and  ru.ru_r_id = ' + classId.toString();
   }
 
-  var res = liveDb.select('select * \
+  var res = liveDb.select('select u.*, \
+                          (select e.e_message from v5_engagements e \
+                          left join v5_engagement_types a on a_id = e_type_id \
+                          where e_type_id in (6,7) and (e_initiator_u_id = u_id or \
+                          e_recipient_u_id = u_id)\
+                          order by e_timestamp DESC \
+                          limit 1) as e_message \
                           from v5_classes r \
                           inner join v5_class_students ru on r.r_id = ru.ru_r_id \
                           inner join v5_users u on u_id = ru.ru_u_id ' +
