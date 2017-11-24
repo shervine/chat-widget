@@ -26,12 +26,14 @@ Meteor.publish('userMessages', function (userId) {
     return [];
   }
 
+  check(userId, Number);
+
   var mSubscription = liveDb.select('select e.* from v5_engagements e \
-                          left join v5_engagement_types on a_id = e_type_id \
+                          left join v5_engagement_types a on a_id = e_type_id \
                           where e_type_id in (6,7) and (e_initiator_u_id = $1 or \
                           e_recipient_u_id = $1)\
-                          order by e_timestamp ASC \
-                          limit 100', [userId]);
+                          order by e_timestamp DESC \
+                          limit 150', [userId]);
 
   // Subscription has been stopped, also stop supporting query
   this.onStop(function() {

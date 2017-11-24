@@ -1,7 +1,6 @@
 (function () {
   angular.module('menChat', ['ui.bootstrap'])
     .run(function ($location, $rootScope, $interval) {
-      users = new PgSubscription('allUsers');
       $rootScope.instructorId = 1;
       $rootScope.bootcampId = 1;
       var bId = $location.search().bootcampId;
@@ -44,19 +43,37 @@
         templateUrl: 'filter.html'
       }
     })
-    .directive('usersList', function ($rootScope, $timeout) {
+    .directive('usersList', function ($rootScope, $timeout, $interval) {
       return {
         restrict: 'E',
         scope: {},
         link: function ($scope, iElem, iAttr) {
           $scope.searchTerm = '';
-          $scope.allUsers = users.reactive();
-          $scope.loading = true;
-          $timeout(function () {
-            // angular.element('.users-list').css('max-height', '700px');
+
+          if ($scope.allUsers) {
+            $scope.allUsers.stop();
+          }
+
+          $scope.allUsers = new PgSubscription('allUsers').reactive();
+
+         var stop;
+         $scope.loading = true;
+         stop = $interval(function(){
+            if(!$scope.allUsers.ready()){
+              return;
+            }
             $scope.users = $scope.allUsers;
-            $scope.loading = false;
-          }, 300);
+            console.log('allUsers populated ', $scope.users);
+            $scope.stopInterval();
+          }, 60);
+
+          $scope.stopInterval = function() {
+           if (angular.isDefined(stop)) {
+                $scope.loading = false;
+               $interval.cancel(stop);
+               stop = undefined;
+             }
+          };
 
           $scope.userSelected = function (user) {
             console.log('Selected user ', user);
@@ -86,23 +103,23 @@
           $scope.$on('filter-class', function (ev, classObj) {
             $scope.loading = true;
             if (classObj && typeof classObj.r_id !== 'undefined') {
-              users = new PgSubscription('allUsers', classObj.r_id);
+              $scope.allUsers = new PgSubscription('allUsers', classObj.r_id).reactive();
             } else {
               //no filter
-              users = new PgSubscription('allUsers');
+              $scope.allUsers = new PgSubscription('allUsers');
             }
 
             $rootScope.selectedUser = null;
             $scope.selectedUser = null;
 
-            $scope.allUsers = users.reactive();
-            $timeout(function () {
-              $scope.users = $scope.allUsers;
-              console.log('Filtered users ', $scope.users);
-              $scope.loading = false;
-            }, 300);
-
-
+            stop = $interval(function(){
+               if(!$scope.allUsers.ready()){
+                 return;
+               }
+               $scope.users = $scope.allUsers;
+               console.log('allUsers populated ', $scope.users);
+               $scope.stopInterval();
+             }, 60);
           });
         },
         templateUrl: 'users-list.html'
@@ -130,6 +147,8 @@
                 $scope.msgs = [];
               });
 
+              //observer for chat messages content to enable scroll down
+              //when new content is inserted
  	            var observer = new MutationObserver(function(mutations) {
                  console.log('New content into messages div');
                 var d = angular.element('.user-messages');
@@ -148,17 +167,25 @@
             }
 
             $scope.messages = new PgSubscription('userMessages', $scope.selectedUser.u_id).reactive();
-            $timeout(function () {
-              $scope.msgs = $scope.messages;
-              console.log('User messages :', $scope.msgs);
-              $timeout(function () {
-                var d = angular.element('.user-messages');
-                d.animate({
-                  scrollTop: d.prop('scrollHeight')
-                }, 1);
-              }, 500);
-              $scope.loading = false;
-            }, 300);
+
+            var stop;
+            $scope.loading = true;
+            stop = $interval(function(){
+               if (!$scope.messages.ready()){
+                 return;
+               }
+               $scope.msgs = $scope.messages.reverse();
+               console.log('userMessages populated ', $scope.msgs);
+               $scope.stopInterval();
+             }, 60);
+
+             $scope.stopInterval = function() {
+              if (angular.isDefined(stop)) {
+                  $scope.loading = false;
+                  $interval.cancel(stop);
+                  stop = undefined;
+                }
+             };
           });
         },
         templateUrl: 'user-messages.html'
