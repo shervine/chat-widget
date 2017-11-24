@@ -17,6 +17,38 @@
       $rootScope.bootcampClasses = new PgSubscription('bootcampClasses', $rootScope.bootcampId, $rootScope.instructorId);
 
     })
+    .controller('chatCtrl', function ($scope, $rootScope) {
+
+      $scope.chatInput = '';
+      $scope.sendMessage = function () {
+        if ($scope.chatInput === '') {
+          alert('Please type the message you want to send');
+          return;
+        }
+
+        if (!$rootScope.selectedUser) {
+          alert('No user selected');
+          return;
+        }
+
+        var postObj = {
+          'bId': $rootScope.bootcampId,
+          'message': $scope.chatInput,
+          'receiverId': $rootScope.selectedUser.u_id,
+          'senderId': $rootScope.instructorId,
+          'messageType': 'text' //for now
+        }
+        Meteor.call('sendChatMessage', postObj, function (err, success) {
+          console.log('sendChatMessage ', err, success);
+          if (err) {
+            alert('Sending error');
+            return;
+          }
+          $scope.chatInput = '';
+          $scope.$apply();
+        });
+      }
+    })
     .directive('filter', function ($timeout, $rootScope) {
       return {
         restrict: 'E',
@@ -131,6 +163,7 @@
         scope: {
           selectedUser: '='
         },
+        // controller: 'chatCtrl',
         link: function ($scope, iElem, iAttr) {
           $scope.msgs = [];
           $scope.$watch('selectedUser', function (newVal) {
@@ -168,14 +201,27 @@
 
             $scope.messages = new PgSubscription('userMessages', $scope.selectedUser.u_id).reactive();
 
+            $scope.messages.addEventListener('updated', function(diff, data){
+                console.log('Subscription updated ', diff, data);
+                $scope.$apply();
+            });
+
             var stop;
+
             $scope.loading = true;
             stop = $interval(function(){
                if (!$scope.messages.ready()){
                  return;
                }
-               $scope.msgs = $scope.messages.reverse();
-               console.log('userMessages populated ', $scope.msgs);
+               console.log('userMessages populated ', $scope.messages);
+               $timeout(function(){
+                  $scope.$apply();
+                  var d = angular.element('.user-messages');
+                  d.animate({
+                    scrollTop: d.prop('scrollHeight')
+                  }, 1);
+                  
+               }, 50);
                $scope.stopInterval();
              }, 60);
 
@@ -223,37 +269,5 @@
 
         });
       };
-    })
-    .controller('chatCtrl', function ($scope, $rootScope) {
-
-      $scope.chatInput = '';
-      $scope.sendMessage = function () {
-        if ($scope.chatInput === '') {
-          alert('Please type the message you want to send');
-          return;
-        }
-
-        if (!$rootScope.selectedUser) {
-          alert('No user selected');
-          return;
-        }
-
-        var postObj = {
-          'bId': $rootScope.bootcampId,
-          'message': $scope.chatInput,
-          'receiverId': $rootScope.selectedUser.u_id,
-          'senderId': $rootScope.instructorId,
-          'messageType': 'text' //for now
-        }
-        Meteor.call('sendChatMessage', postObj, function (err, success) {
-          console.log('sendChatMessage ', err, success);
-          if (err) {
-            alert('Sending error');
-            return;
-          }
-          $scope.chatInput = '';
-          $scope.$apply();
-        });
-      }
-    })
+    });
 })();
