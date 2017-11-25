@@ -44,6 +44,7 @@
             alert('Sending error');
             return;
           }
+          angular.element('.user-messages ul').append('<li class="me tmpInsert">'+angular.copy($scope.chatInput)+'</li>');
           $scope.chatInput = '';
           $scope.$apply();
 
@@ -206,6 +207,8 @@
 
             $scope.messages.addEventListener('updated', function(diff, data){
                 console.log('Subscription updated ', diff, data);
+                //remove any previous tmpInserts
+                angular.element('.user-messages ul .tmpInsert').remove();
                 $scope.$apply();
             });
 
