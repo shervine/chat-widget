@@ -46,6 +46,7 @@
           }
           $scope.chatInput = '';
           $scope.$apply();
+
         });
       }
     })
@@ -163,7 +164,7 @@
         scope: {
           selectedUser: '='
         },
-        // controller: 'chatCtrl',
+        controller: 'chatCtrl',
         link: function ($scope, iElem, iAttr) {
           $scope.msgs = [];
           $scope.$watch('selectedUser', function (newVal) {
@@ -275,6 +276,11 @@
           }
 
         });
+      };
+    })
+    .filter('reverse', function() {
+      return function(items) {
+        return items.slice().reverse();
       };
     });
 })();

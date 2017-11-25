@@ -15,7 +15,7 @@
   <div class="row">
     <div class="col-sm-12 user-messages" ng-show="!loading">
       <ul>
-        <li ng-repeat="message in messages" class="{{message.e_type_id == 6 ? 'him' : 'me'}}">
+        <li ng-repeat="message in messages | reverse" class="{{message.e_type_id == 6 ? 'him' : 'me'}}">
           <img ng-if="message.e_type_id == 6"
           class="chat-avatar"
           src="{{selectedUser.u_image_url}}">
