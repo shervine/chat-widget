@@ -10,7 +10,7 @@ angular.module('menChat')
         $scope.allUsers.stop();
       }
 
-      $scope.allUsers = new PgSubscription('allUsers').reactive();
+    $scope.allUsers = new PgSubscription('allUsers').reactive();
 
      var stop;
      $scope.loading = true;
@@ -53,18 +53,11 @@ angular.module('menChat')
             $scope.users.push($scope.allUsers[i]);
           }
         }
-
       }
 
-      $scope.$on('filter-class', function (ev, classObj) {
+      $scope.$on('new-filter', function (ev, filterObj) {
         $scope.loading = true;
-        if (classObj && typeof classObj.r_id !== 'undefined') {
-          $scope.allUsers = new PgSubscription('allUsers', classObj.r_id).reactive();
-        } else {
-          //no filter
-          $scope.allUsers = new PgSubscription('allUsers');
-        }
-
+        $scope.allUsers = new PgSubscription('allUsers', filterObj).reactive();
         $rootScope.selectedUser = null;
         $scope.selectedUser = null;
 

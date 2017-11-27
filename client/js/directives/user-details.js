@@ -15,7 +15,7 @@ angular.module('menChat')
         console.log('User details : ', newVal);
       });
 
-      $scope.$on('filter-class', function (ev, classObj) {
+      $scope.$on('new-filter', function (ev, filterObj) {
         $scope.userDetails1 = {};
       });
 

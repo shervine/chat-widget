@@ -4,13 +4,22 @@ userData = new PgSubscription('userData');
 bootcampClasses = new PgSubscription('bootcampClasses');
 
 liveDb = new LivePg(process.env.POSTGRESQL_URL, process.env.CHANNEL);
-Meteor.publish('allUsers', function (classId) {
+Meteor.publish('allUsers', function (filterObj) {
 
   var classFilter = '';
+  var statusFilter = '';
 
-  if (classId) {
-    classFilter = ' and  ru.ru_r_id = ' + classId.toString();
+  if(filterObj) {
+    if (typeof filterObj.class.r_id !== 'undefined' ) {
+      classFilter = ' and  ru.ru_r_id = ' + filterObj.class.r_id.toString();
+    };
+
+    if (typeof filterObj.status.val !== 'undefined' && filterObj.status.val != -10 ) {
+      statusFilter = ' and  ru.ru_status = ' + filterObj.status.val.toString();
+    };
   }
+
+  console.log('Meteor publish all users with filter ', filterObj);
 
   var res = liveDb.select('select u.*, \
                           (select e.e_message from v5_engagements e \
@@ -22,8 +31,9 @@ Meteor.publish('allUsers', function (classId) {
                           from v5_classes r \
                           inner join v5_class_students ru on r.r_id = ru.ru_r_id \
                           inner join v5_users u on u_id = ru.ru_u_id ' +
-                          ' where ru.ru_status >=4 ' +
-                          classFilter);
+                          ' where 1=1 ' +
+                          classFilter + statusFilter);
+                          // /ru.ru_status >=4
   return res;
 
 });

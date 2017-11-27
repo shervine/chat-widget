@@ -30,10 +30,10 @@
             ng-model="status"
             title="Status"
             >
-            {{status}}
+            {{status.txt}}
         </button>
         <div class="dropdown-menu">
-          <a class="dropdown-item" ng-click="selectStatus(sts)" ng-repeat="sts in statuses">{{sts}}</a>
+          <a class="dropdown-item" ng-click="selectStatus(sts)" ng-repeat="sts in statuses">{{sts.txt}}</a>
         </div>
       </div>
     </div>

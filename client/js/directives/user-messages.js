@@ -14,7 +14,7 @@ angular.module('menChat')
         }
         $scope.loading = true;
 
-          $scope.$on('filter-class', function (ev, classObj) {
+          $scope.$on('new-filter', function (ev, filterObj) {
             if ($scope.messages && typeof $scope.messages.stop == 'function') {
               $scope.messages.stop();
             }
