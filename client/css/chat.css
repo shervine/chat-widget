@@ -4,6 +4,11 @@
   padding: 0;
 }
 
+.user-messages {
+  margin-top: 3px;
+  padding: 0;
+}
+
 .last-msg {
   display: inline-block;
   max-width: 140px;
