@@ -5,10 +5,10 @@ angular.module('menChat')
     scope: {},
     link: function ($scope) {
       $scope.class = {
-        'r_start_date': 'All'
+        'r_start_date': 'All Channels'
       };
       $scope.statuses = [{val: -10,
-                          txt: 'All'
+                          txt: 'All Statuses'
                           },
                           {
                             val: -2,

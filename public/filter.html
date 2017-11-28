@@ -12,7 +12,7 @@
             {{class.r_start_date | date}}
         </button>
         <div class="dropdown-menu">
-          <a class="dropdown-item" ng-click="selectClass()">All</a>
+          <a class="dropdown-item" ng-click="selectClass()">All Classes</a>
           <a class="dropdown-item" ng-click="selectClass(cls)" ng-repeat="cls in classes">{{cls.r_start_date | date}}</a>
         </div>
       </div>
