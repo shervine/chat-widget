@@ -42,7 +42,7 @@ angular.module('menChat')
       $scope.selectClass = function (classObj) {
         console.log('Selected class ', classObj);
         $scope.class = typeof classObj !== 'undefined' ? classObj : {
-          'r_start_date': 'All'
+          'r_start_date': 'All Channels'
         };
 
         $scope.filterObj = {

@@ -7,6 +7,7 @@
 .user-messages {
   margin-top: 3px;
   padding: 0;
+  max-height: 91vh;
 }
 
 .last-msg {
@@ -24,10 +25,11 @@
 .user-messages ul li {
   display: inline-block;
   clear: both;
-  padding: 9px;
-  border-radius: 25px;
+  padding: 5px;
+  border-radius: 16px;
   font-family: Helvetica, Arial, sans-serif;
-  margin: 10px;
+  margin: 5px;
+  font-size: 12px;
 }
 
 .him {

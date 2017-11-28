@@ -33,10 +33,6 @@ body {
   overflow-x: hidden;
 }
 
-.user-messages {
-    max-height: 84vh;
-}
-
 .users-list {
   margin-top: 1px;
   margin-right: -8px;

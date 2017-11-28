@@ -1,10 +1,10 @@
 <div class="users-list fill">
   <div class="row">
     <div class="col-sm-12" style="margin-top:4px">
-      <input type="text" ng-model="searchTerm" ng-keyup="search(searchTerm)" placeholder="Search .." class="form-control search-user" name="search">
+      <filter></filter>
     </div>
     <div class="col-sm-12" style="margin-top:4px">
-      <filter></filter>
+      <input type="text" ng-model="searchTerm" ng-keyup="search(searchTerm)" placeholder="Search .." class="form-control search-user" name="search">
     </div>
   </div>
   <div class="row" ng-show="loading">
@@ -29,6 +29,7 @@
       <div class="row">
         <div class="col-sm-2">
           <img
+          ng-if="user.u_image_url"
           style="cursor:pointer;margin-left: -8px; margin-top: 1px;"
           class="chat-avatar" src="{{user.u_image_url}}" ng-click="userSelected(user)">
         </div>
