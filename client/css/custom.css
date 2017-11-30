@@ -7,9 +7,15 @@ body {
 
 #main-div {
   display: block;
+  max-width: 100% !important;
 }
+
 .main-row {
-  height: 92vh;
+  height: 93.5vh;
+}
+
+.border-info {
+    border-color: #cccccc !important;
 }
 
 .fill {

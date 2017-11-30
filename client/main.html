@@ -1,5 +1,6 @@
 <head>
   <title>Mench Chat</title>
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet" />
   <link href="/components/bootstrap4c-buttons/dist/css/component-buttons.min.css" rel="stylesheet">
   <link href="/components/bootstrap4c-custom-switch/dist/css/component-custom-switch.min.css" rel="stylesheet">
 </head>
@@ -28,15 +29,15 @@
       <div class="col-sm-6 border border-info border-top-0">
         <div class="row mt-2">
           <div class="col-sm-3">
-            <h6 style="margin-top:7px">Chat Input</h6>
+            <h6 style="margin-top:2px">Chat Input</h6>
           </div>
 
-          <div class="col-sm-6" style="margin-top: -1px;">
-            <input  class="form-control" ng-model="chatInput" ng-enter="sendMessage()" />
+          <div class="col-sm-6" >
+            <input style="margin-top: -6px;"  class="form-control" ng-model="chatInput" ng-enter="sendMessage()" />
           </div>
           <div class="col-sm-2">
             <div style="float:right">
-              <button type="button" class="btn btn-secondary"  style="cursor:pointer"
+              <button type="button" class="btn btn-secondary"  style="cursor:pointer; margin-top: -6px;"
                  ng-click="sendMessage()">Send</button>
             </div>
           </div>
