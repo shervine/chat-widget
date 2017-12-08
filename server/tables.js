@@ -1,6 +1,7 @@
 users = new PgSubscription('allUsers');
 messages = new PgSubscription('userMessages');
 userData = new PgSubscription('userData');
+instructorData = new PgSubscription('instructorData');
 bootcampClasses = new PgSubscription('bootcampClasses');
 
 liveDb = new LivePg(process.env.POSTGRESQL_URL, process.env.CHANNEL);
@@ -70,6 +71,18 @@ Meteor.publish('userData', function (userId) {
   return res;
 });
 
+Meteor.publish('instructorData', function (userId) {
+  if (!userId) {
+    return [];
+  }
+
+  check(userId, Number);
+
+  var res = liveDb.select('select u_id, u_email, u_website_url, u_image_url, u_lname, \
+                          u_fname, u_url_key from v5_users where u_id = $1' ,[userId]);
+  return res;
+});
+
 Meteor.publish('bootcampClasses', function (bootcampId, instructorId) {
   if (!instructorId && !bootcampId) {
     return [];
@@ -79,7 +92,7 @@ Meteor.publish('bootcampClasses', function (bootcampId, instructorId) {
                           inner join v5_classes r on b.b_id = r.r_b_id and r.r_status >= 1\
                           inner join v5_bootcamp_instructors ba on ba.ba_b_id  = b.b_creator_id \
                           where \
-                          b.b_id = ' + bootcampId);
+                          b.b_id = $1', [bootcampId]);
   return res;
 
   //ba.ba_u_id  = ' + instructorId +
