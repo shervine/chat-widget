@@ -9,6 +9,10 @@
   padding: 0;
 }
 
+.user-message a {
+  color: #75ace7;
+}
+
 .last-msg {
   display: inline-block;
   max-width: 140px;
