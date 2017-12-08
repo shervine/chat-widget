@@ -149,11 +149,11 @@ angular.module('menChat')
                       console.log('Attachement type : ', $segments[0]);
                       if($segments[0]=='image'){
                           $e_message = '<a href="'+$sub_segments+'" target="_blank"><img src="'+
-                          $sub_segments+'" style="max-width:100%" /></a>';
+                          $sub_segments+'" style="max-width:90%" /></a>';
                       } else if($segments[0]=='audio'){
                           $e_message = '<audio controls><source src="'+$sub_segments+'" type="audio/mpeg"></audio>';
                       } else if($segments[0]=='video'){
-                          $e_message = '<video width="100%" onclick="this.play()" controls><source src="'+
+                          $e_message = '<video width="90%" onclick="this.play()" controls><source src="'+
                           $sub_segments+'" type="video/mp4"></video>';
                       } else if($segments[0]=='file'){
                           $e_message = '<a href="'+$sub_segments+'" class="btn btn-primary" target="_blank">'+
