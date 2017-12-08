@@ -5,7 +5,7 @@ angular.module('menChat')
     scope: {
       selectedUser: '='
     },
-    controller: 'chatCtrl',
+    controller: 'uploadCtrl',
     link: function ($scope, iElem, iAttr) {
       $scope.msgs = [];
       $scope.$watch('selectedUser', function (newVal) {

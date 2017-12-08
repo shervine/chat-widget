@@ -9,12 +9,12 @@ Meteor.publish('allUsers', function (filterObj) {
   var classFilter = '';
   var statusFilter = '';
 
-  if(filterObj) {
-    if (typeof filterObj.class.r_id !== 'undefined' ) {
+  if (filterObj) {
+    if (typeof filterObj.class.r_id !== 'undefined') {
       classFilter = ' and  ru.ru_r_id = ' + filterObj.class.r_id.toString();
     };
 
-    if (typeof filterObj.status.val !== 'undefined' && filterObj.status.val != -10 ) {
+    if (typeof filterObj.status.val !== 'undefined' && filterObj.status.val != -10) {
       statusFilter = ' and  ru.ru_status = ' + filterObj.status.val.toString();
     };
   }
@@ -31,9 +31,9 @@ Meteor.publish('allUsers', function (filterObj) {
                           from v5_classes r \
                           inner join v5_class_students ru on r.r_id = ru.ru_r_id \
                           inner join v5_users u on u_id = ru.ru_u_id ' +
-                          ' where 1=1 ' +
-                          classFilter + statusFilter);
-                          // /ru.ru_status >=4
+    ' where 1=1 ' +
+    classFilter + statusFilter);
+  // /ru.ru_status >=4
   return res;
 
 });
@@ -52,7 +52,7 @@ Meteor.publish('userMessages', function (userId) {
                           limit 100', [userId]);
 
   // Subscription has been stopped, also stop supporting query
-  this.onStop(function() {
+  this.onStop(function () {
     mSubscription.stop();
   });
 
@@ -104,13 +104,25 @@ function postMench(data, done) {
     })
 }
 
+var fs = Npm.require('fs');
+var meteor_root = fs.realpathSync(process.cwd() + '/../../../../../');
+var temPath = meteor_root + '/uploads/';
+
 Meteor.methods({
+  'uploadFile': function (fileInfo, fileData) {
+    console.log("received file " + fileInfo.name);
+    // + " data: " + fileData
+    console.log('Uploading to :', temPath);
+    fs.writeFileSync(temPath + fileInfo.name, fileData, 'binary');
+
+    menchUpload(fileData, fileInfo.name, function (response) {
+      console.log('menchUpload cb ', response);
+    });
+
+    return 'success';
+  },
   'sendChatMessage': function (formData) {
 
-    // var data = {
-    //   file: '/home/johnlennon/walrus.png',
-    //   content_type: 'image/png'
-    // };
     console.log('sendChatMessage formData ', formData);
 
     var auth_hash = md5(formData.senderId.toString() + formData.receiverId.toString() + formData.messageType + '7H6hgtgtfii87');
@@ -127,13 +139,13 @@ Meteor.methods({
     console.log('post data :', data);
 
     var syncFunc = Meteor.wrapAsync(postMench);
-    var result = syncFunc(data, function(err, res){
-        console.log('CB: ', err, res);
-        if(err){
-          throw new Meteor.Error(500, 'Cannot send message');
-        }
+    var result = syncFunc(data, function (err, res) {
+      console.log('CB: ', err, res);
+      if (err) {
+        throw new Meteor.Error(500, 'Cannot send message');
+      }
 
-        return 'ok';
+      return 'ok';
     });
 
     console.log('post result: ', result);

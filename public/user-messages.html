@@ -13,7 +13,16 @@
   </div>
 
   <div class="row">
-    <div class="col-sm-12 user-messages" ng-show="!loading">
+    <div class="col-sm-12 user-messages drop-box"
+     ng-show="!loading"
+     ngf-drop ngf-select ng-model="files"
+           ngf-drag-over-class="'dragover'"
+           ngf-multiple="true"
+           ngf-allow-dir="true"
+           accept="image/*,application/pdf"
+           ngf-max-size="20MB"
+           ngf-pattern="'image/*,video/*,application/pdf'"
+     >
       <ul>
         <li ng-repeat="message in messages | reverse" class="{{message.e_type_id == 6 ? 'him' : 'me'}}">
           <img ng-if="message.e_type_id == 6"
@@ -23,5 +32,29 @@
         </li>
       </ul>
     </div>
+  </div>
+  <div class="row">
+    <div class="upload-info" ng-show="uploadProgress || filesUploaded.length > 0">
+      <div ng-show="uploadProgress">
+          <h5>Uploading ..</h5>
+      </div>
+      <div ngf-no-file-drop>File Drag/Drop is not supported for this browser</div>
+      <div class="preview">
+                 <div>Preview image/audio/video:</div>
+                 <img ngf-src="!filesUploaded[0].$error && filesUploaded[0]" style="width:200px">
+                 <audio controls="" ngf-src="!filesUploaded[0].$error && filesUploaded[0]"></audio>
+                 <video controls="" ngf-src="!filesUploaded[0].$error && filesUploaded[0]"></video>
+       </div>
+
+        <div class="upload-status">
+            Files:
+            <ul>
+                <li ng-repeat="f in filesUploaded" style="font:smaller">{{f.name}} {{f.$error}} {{f.$errorParam}}</li>
+            </ul>
+            <!-- Upload Log:
+            <pre>{{log}}</pre> -->
+        </div>
+      </div>
+  </div>
   </div>
 </div>

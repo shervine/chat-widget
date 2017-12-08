@@ -4,6 +4,7 @@
   "description": "Mench is a learning game on Facebook Messenger. We connect online instructors to students for on-demand learning over a Chatbot.",
   "main": "index.js",
   "dependencies": {
+    "aws-sdk": "^2.160.0",
     "md5": "^2.2.1",
     "needle": "^2.0.1"
   },

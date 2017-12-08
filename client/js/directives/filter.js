@@ -5,7 +5,7 @@ angular.module('menChat')
     scope: {},
     link: function ($scope) {
       $scope.class = {
-        'r_start_date': 'All Channels'
+        'r_start_date': 'All Classes'
       };
       $scope.statuses = [{val: -10,
                           txt: 'All Statuses'
@@ -42,7 +42,7 @@ angular.module('menChat')
       $scope.selectClass = function (classObj) {
         console.log('Selected class ', classObj);
         $scope.class = typeof classObj !== 'undefined' ? classObj : {
-          'r_start_date': 'All Channels'
+          'r_start_date': 'All Classes'
         };
 
         $scope.filterObj = {

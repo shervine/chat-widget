@@ -1,24 +1,12 @@
 <div class="row user-details">
-  <tabset active="active" ng-show="userDetails1.u_lname">
-    <tab index="0" heading="Profile">
-      <div class="row">
-        <div class="col-sm-12">
-            <center>
-              <img class="chat-avatar" style="width:170px;height:auto" src="{{userDetails1.u_image_url}}">
-            </center>
-            <h5>{{userDetails1.u_fname}} {{userDetails1.u_lname}}</h5>
-            <p>E-Mail: {{userDetails1.u_email}}</p>
-            <p>Country: {{userDetails1.u_country_code}}</p>
-            <p>Timezone: {{userDetails1.u_timezone}}</p>
-            <p>Id: {{userDetails1.u_id}}</p>
-        </div>
-      </div>
-    </tab>
-    <tab index="1" heading="Notes">
-      Not implemented yet
-    </tab>
-    <tab index="2" heading="Action Plan">
-      Not implemented yet
-    </tab>
-  </tabset>
+  <div class="col-sm-12">
+      <center>
+        <img class="chat-avatar" style="width:170px;height:auto" src="{{userDetails1.u_image_url}}">
+      </center>
+      <h5>{{userDetails1.u_fname}} {{userDetails1.u_lname}}</h5>
+      <p>E-Mail: {{userDetails1.u_email}}</p>
+      <p>Country: {{userDetails1.u_country_code}}</p>
+      <p>Timezone: {{userDetails1.u_timezone}}</p>
+      <p>Id: {{userDetails1.u_id}}</p>
+  </div>
 </div>

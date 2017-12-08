@@ -1,5 +1,5 @@
 
-angular.module('menChat', ['ui.bootstrap', 'ui.bootstrap.tpls'])
+angular.module('menChat', ['ui.bootstrap', 'ui.bootstrap.tpls', 'ngFileUpload'])
     .run(function ($location, $rootScope, $interval) {
       $rootScope.instructorId = 1;
       $rootScope.bootcampId = 1;
