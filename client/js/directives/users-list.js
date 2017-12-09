@@ -32,8 +32,6 @@ angular.module('menChat')
       };
 
       $scope.userSelected = function (user) {
-        console.log('Selected user ', user);
-
         $rootScope.selectedUser = user;
         $scope.selectedUser = user;
       }

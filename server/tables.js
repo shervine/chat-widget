@@ -16,7 +16,19 @@ Meteor.publish('allUsers', function (filterObj) {
     };
 
     if (typeof filterObj.status.val !== 'undefined' && filterObj.status.val != -10 ) {
-      statusFilter = ' and  ru.ru_status = ' + filterObj.status.val.toString();
+
+      if(filterObj.status.txt == 'Rejected') {
+        statusFilter = ' and  ru.ru_status < 0 ';
+      }  
+
+      if(filterObj.status.txt == 'Pending') {
+        statusFilter = ' and  ru_status >= 0 AND ru_status < 4 ';
+      }  
+
+      if(filterObj.status.txt == 'Active') {
+        statusFilter = ' and  ru_status >= 4 ';
+      }  
+      
     };
   }
 

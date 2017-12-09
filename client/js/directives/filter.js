@@ -5,22 +5,18 @@ angular.module('menChat')
     scope: {},
     link: function ($scope) {
       $scope.class = {
-        'r_start_date': 'All Channels'
+        'r_start_date': 'All Classes'
       };
       $scope.statuses = [{val: -10,
                           txt: 'All Statuses'
                           },
                           {
                             val: -2,
-                            txt: 'Student Withdrew'
-                          },
-                          {
-                            val: 0,
-                            txt: 'Admission Initiated by Student'
+                            txt: 'Rejected'
                           },
                           {
                             val: 2,
-                            txt: 'Pending Admission'
+                            txt: 'Pending'
                           },
                           {
                             val: 4,
@@ -35,20 +31,31 @@ angular.module('menChat')
                         };
 
       //broadcast the initial filters
-      // $timeout(function(){
-      //     $rootScope.$broadcast('new-filter', $scope.filterObj);
-      // });
+      $timeout(function(){
+        $rootScope.$broadcast('new-filter', $scope.filterObj);
+      }, 200);
 
       $scope.selectClass = function (classObj) {
-        console.log('Selected class ', classObj);
+        
         $scope.class = typeof classObj !== 'undefined' ? classObj : {
-          'r_start_date': 'All Channels'
+          'r_start_date': 'All Classes'
         };
+
+        if(typeof classObj !== 'undefined') {
+           if (classObj.r_status>=-1 &&  classObj.r_status<=1) {
+              $scope.status = $scope.statuses[0];
+           }
+           if (classObj.r_status<-1 || classObj.r_status>1) {
+              $scope.status = $scope.statuses[3];
+           }
+        }
 
         $scope.filterObj = {
                             'class': $scope.class,
                             'status' : $scope.status
                             }
+
+        console.log('New Filter  ', $scope.filterObj);                   
         $rootScope.$broadcast('new-filter', $scope.filterObj);
       }
       $scope.selectStatus = function (statusObj) {
@@ -58,6 +65,7 @@ angular.module('menChat')
                             'status' : $scope.status
                             }
         $rootScope.$broadcast('new-filter', $scope.filterObj);
+        console.log('New Filter  ', $scope.filterObj);
       }
     },
     templateUrl: 'filter.html'
