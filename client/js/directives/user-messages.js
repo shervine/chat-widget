@@ -1,5 +1,5 @@
 angular.module('menChat')
-.directive('userMessages', function ($rootScope, $timeout, $interval) {
+.directive('userMessages', function ($rootScope, $timeout, $interval, $filter) {
   return {
     restrict: 'E',
     scope: {
@@ -76,6 +76,15 @@ angular.module('menChat')
                 scrollTop: d.prop('scrollHeight')
               }, 1);
 
+              //render tooltips
+              $('[data-toggle="tooltip"]').tooltip({placement: 'bottom', 
+                                                    container: '#user-messages',
+                                                    // show: {
+                                                    //     duration: 30000
+                                                    // }
+                                                    
+                                                    }).delay(30000).close();
+
            }, 50);
            $scope.stopInterval();
          }, 60);
@@ -87,6 +96,14 @@ angular.module('menChat')
               stop = undefined;
             }
          };
+
+         $scope.renderTooltip = function(message) {
+            var userName = message.e_type_id == 6 ? 
+                      $rootScope.selectedUser.u_fname + ' ' + $rootScope.selectedUser.u_lname  :
+                      $scope.instructorData.u_fname + ' ' + $scope.instructorData.u_lname ; 
+            var msg = userName + ' on ' + $filter('date')(message.e_timestamp);
+            return msg;
+         }
       });
     },
     templateUrl: 'user-messages.html'
@@ -102,8 +119,6 @@ angular.module('menChat')
 })
 .filter('formatMsg', function($sce) {
   return function($e_message) {
-    
-        // console.log('Formatting msg ', $e_message);
 
         function linkify(inputText) {
             var replacedText, replacePattern1, replacePattern2, replacePattern3;
@@ -124,16 +139,11 @@ angular.module('menChat')
         }
 
          function nl2br (str, is_xhtml) {
-            // var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';
-            // return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
-
             return str.replace('<br />', "<br>");
          }
         
                 if($e_message.indexOf('/attach') >= 0 ){
-
                   var $attachementsTxt = $e_message.split(' ');
-                  console.log('aaa ', $attachementsTxt);
                   if(typeof $attachementsTxt[1] !== 'undefined'){
                     var attachement = $attachementsTxt[1];
                     // attachements = attachements.split(':');

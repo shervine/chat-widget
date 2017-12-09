@@ -31,9 +31,9 @@ angular.module('menChat')
                         };
 
       //broadcast the initial filters
-      $timeout(function(){
-        $rootScope.$broadcast('new-filter', $scope.filterObj);
-      }, 200);
+      // $timeout(function(){
+      //   $rootScope.$broadcast('new-filter', $scope.filterObj);
+      // }, 200);
 
       $scope.selectClass = function (classObj) {
         

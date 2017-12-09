@@ -13,21 +13,25 @@
   </div>
 
   <div class="row">
-    <div class="col-sm-12 user-messages" ng-show="!loading">
+    <div class="col-sm-12 user-messages" id="user-messages" ng-show="!loading">
       <ul>
         <li ng-repeat="message in messages | reverse" class="{{message.e_type_id == 6 ? 'him' : 'me'}}">
 
           <img ng-if="message.e_type_id == 6"
           class="chat-avatar"
           src="{{selectedUser.u_image_url}}"
-          uib-tooltip="aaa"
+          data-toggle="tooltip" 
+          title="{{renderTooltip(message)}}"
           >
 
           <img ng-if="message.e_type_id != 6"
           class="chat-avatar" style="float:right; margin-left:5px"
           src="{{instructorData.u_image_url}}"
-          uib-tooltip="eee"
+          data-toggle="tooltip" 
+          title="{{renderTooltip(message)}}"
           >
+
+
 
           <!-- {{message.e_message}} -->
 

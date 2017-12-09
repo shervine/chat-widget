@@ -10,7 +10,7 @@
   max-height: 91vh;
 }
 
-.user-message a {
+.user-messages a {
   color: #75ace7;
 }
 
@@ -40,6 +40,7 @@
   font-family: Helvetica, Arial, sans-serif;
   margin: 5px;
   font-size: 14px;
+  padding: 10px;
 }
 
 .him {
@@ -150,4 +151,17 @@
   100% {
     transform: rotate(360deg);
   }
+}
+
+div[role="log"] {
+  background-color:#000;
+  border:1px solid #fff;
+  padding:10px 15px;
+  width:200px;
+  color:#fff;
+  text-align:left;
+  font-size:12px;
+
+ -moz-box-shadow:0 0 10px #000;
+ -webkit-box-shadow:0 0 10px #000;
 }
