@@ -80,12 +80,7 @@ angular.module('menChat')
               $('[data-toggle="tooltip"]').tooltip({
                 placement: 'bottom',
                 container: '#user-messages',
-                // show: {
-                //     duration: 30000
-                // }
-
-              }).delay(30000).close();
-
+              });
             }, 50);
             $scope.stopInterval();
           }, 60);
