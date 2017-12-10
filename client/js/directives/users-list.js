@@ -54,6 +54,10 @@ angular.module('menChat')
         }
 
         $scope.renderLastMessage = function (message) {
+          if(!message){
+            return
+          }
+          
           if (message.indexOf('image:') >= 0 && message.indexOf('/attach') >= 0) {
             return 'image';
           }
