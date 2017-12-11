@@ -43,8 +43,7 @@ angular.module('menChat', ['ui.bootstrap', 'ui.bootstrap.tpls', 'ui.bootstrap.to
                     console.log('we have access token ', window.authToken);
                     return;
                   }
-                }, 300);
-
+                }, 500);
               }]
           }
         })
