@@ -1,5 +1,6 @@
 queryDict = {};
-angular.module('menChat', ['ui.bootstrap', 'ui.bootstrap.tpls', 'ui.bootstrap.tooltip', 'ui.router'])
+angular.module('menChat', ['ui.bootstrap', 'ui.bootstrap.tpls', 'ui.bootstrap.tooltip', 
+          'ui.router', 'toastr'])
   .config(['$stateProvider', '$urlRouterProvider',
     function ($stateProvider, $urlRouterProvider) {
       $urlRouterProvider.otherwise("/");
@@ -52,7 +53,7 @@ angular.module('menChat', ['ui.bootstrap', 'ui.bootstrap.tpls', 'ui.bootstrap.to
           templateUrl: '/denied.html'
         })
     }])
-  .run(function ($location, $rootScope, $interval, $state, $window, $timeout) {
+  .run(function ($location, $rootScope, $interval, $state, $window, $timeout, toastr) {
     $rootScope.instructorId = 1;
     $rootScope.bootcampId = 1;
     $rootScope.token = '';
@@ -80,4 +81,16 @@ angular.module('menChat', ['ui.bootstrap', 'ui.bootstrap.tpls', 'ui.bootstrap.to
                                       queryDict.instructorId).reactive();
   
     });
+    $rootScope.lostConnection = false;
+    $interval(function(){
+      toastr.clear();
+        if(!Meteor.connection.status().connected){
+          toastr.error('Lost server connection', 'Error');
+          $rootScope.lostConnection = true;
+        }
+        if(Meteor.connection.status().connected && $rootScope.lostConnection){
+          $rootScope.lostConnection = false;
+          toastr.success('Connected !');
+        }
+    }, 2000);
   });
