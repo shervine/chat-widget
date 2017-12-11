@@ -1,27 +1,33 @@
 angular.module('menChat')
-  .directive('usersList', function ($rootScope, $timeout, $interval) {
+  .directive('usersList', function ($rootScope, $timeout, $interval, $window) {
     return {
       restrict: 'E',
       scope: {},
       link: function ($scope, iElem, iAttr) {
+
+        $rootScope.$watch('authToken', function(newVal){
+          if(!newVal) {
+            return;
+          }
+          $scope.authToken = newVal;
+        });
+
         $scope.searchTerm = '';
 
         if ($scope.allUsers && typeof $scope.allUsers.stop == 'function') {
           $scope.allUsers.stop();
         }
 
-        $scope.allUsers = new PgSubscription('allUsers').reactive();
-
-        var stop;
-        $scope.loading = true;
-        stop = $interval(function () {
-          if (!$scope.allUsers.ready()) {
-            return;
-          }
-          $scope.users = $scope.allUsers;
-          console.log('allUsers populated ', $scope.users);
-          $scope.stopInterval();
-        }, 60);
+        // $scope.allUsers = new PgSubscription('allUsers').reactive();
+        // var stop;
+        // $scope.loading = true;
+        // stop = $interval(function () {
+        //   if (!$scope.allUsers.ready()) {
+        //     return;
+        //   }
+        //   $scope.users = $scope.allUsers;
+        //   $scope.stopInterval();
+        // }, 60);
 
         $scope.stopInterval = function () {
           if (angular.isDefined(stop)) {
@@ -76,7 +82,8 @@ angular.module('menChat')
 
         $scope.$on('new-filter', function (ev, filterObj) {
           $scope.loading = true;
-          $scope.allUsers = new PgSubscription('allUsers', filterObj).reactive();
+          $scope.allUsers = new PgSubscription('allUsers', filterObj, queryDict.bootcampId, 
+          queryDict.instructorId).reactive();
           $rootScope.selectedUser = null;
           $scope.selectedUser = null;
 

@@ -1,6 +1,7 @@
 alexwine:bootstrap-4@4.0.0-beta.2
 angular:angular@1.5.3_1
 angularui:angular-ui-bootstrap@0.13.0
+angularui:angular-ui-router@0.2.15
 autoupdate@1.2.3-rc.0
 babel-compiler@5.8.20-rc.0
 babel-runtime@0.1.4-rc.0

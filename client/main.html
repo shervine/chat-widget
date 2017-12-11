@@ -13,47 +13,13 @@
     integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
     crossorigin="anonymous">
   </script>
-
   <link href="https://code.jquery.com/ui/jquery-ui-git.css"  rel="stylesheet" />
 </head>
 <body>
-  <div class="container" id="main-div" ng-app="menChat">
-    <div class="row filter border border-info">
-      <div class="col-sm-12">
-      </div>
-    </div>
-    <div class="row main-row">
-      <div class="col-sm-3 border border-info border-right-0 border-top-0">
-        <users-list></users-list>
-      </div>
-      <div class="col-sm-6 border border-info border-top-0 chat-section">
-        <user-messages selected-user="selectedUser"></user-messages>
-      </div>
-      <div class="col-sm-3 border border-info border-left-0 border-top-0">
-        <p><h5>User Info</h5></p>
-        <user-details selected-user="selectedUser"></user-details>
-      </div>
-    </div>
-    <div class="row chat-send" ng-controller="chatCtrl">
-      <div class="col-sm-3 border border-info border-right-0 border-top-0">
-        <p>&nbsp;</p>
-      </div>
-      <div class="col-sm-6 border border-info border-top-0">
-        <div class="row mt-2">
-          <div class="col-sm-10" style="margin-top: -1px;">
-            <textarea  class="form-control" ng-model="chatInput"></textarea>
-          </div>
-          <div class="col-sm-2">
-            <div style="">
-              <button type="button" class="btn btn-secondary" style="cursor:pointer"
-                 ng-click="sendMessage()">Send</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-sm-3 border border-info border-left-0 border-top-0">
-          <p></p>
-      </div>
-    </div>
+  <div ng-app="menChat">
+      <ui-view>
+          <i>Loading ..</i>
+      </ui-view>
   </div>
+
 </body>

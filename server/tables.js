@@ -4,8 +4,15 @@ userData = new PgSubscription('userData');
 instructorData = new PgSubscription('instructorData');
 bootcampClasses = new PgSubscription('bootcampClasses');
 
+//access token salt
+//&token='.md5($bootcamp['b_id'].'ChatiFrameS@lt'.$udata['u_id']).
+const salt = 'ChatiFrameS@lt';
 liveDb = new LivePg(process.env.POSTGRESQL_URL, process.env.CHANNEL);
-Meteor.publish('allUsers', function (filterObj) {
+
+Meteor.publish('allUsers', function (filterObj, bootcampId, instructorId, authHash) {
+  
+  check(bootcampId, String);
+  check(instructorId, String);
 
   var classFilter = '';
   var statusFilter = '';
@@ -44,12 +51,11 @@ Meteor.publish('allUsers', function (filterObj) {
                           from v5_classes r \
                           inner join v5_class_students ru on r.r_id = ru.ru_r_id \
                           inner join v5_users u on u_id = ru.ru_u_id ' +
-                          ' where 1=1 ' +
-                          classFilter + statusFilter);
-                          // /ru.ru_status >=4
+                          ' where r.r_b_id = $1 ' +
+                          classFilter + statusFilter, [bootcampId]);
   return res;
-
 });
+
 Meteor.publish('userMessages', function (userId) {
   if (!userId) {
     return [];
@@ -88,7 +94,7 @@ Meteor.publish('instructorData', function (userId) {
     return [];
   }
 
-  check(userId, Number);
+  check(userId, String);
 
   var res = liveDb.select('select u_id, u_email, u_website_url, u_image_url, u_lname, \
                           u_fname, u_url_key from v5_users where u_id = $1' ,[userId]);
@@ -103,8 +109,9 @@ Meteor.publish('bootcampClasses', function (bootcampId, instructorId) {
   var res = liveDb.select('select distinct b.*, r.* from v5_bootcamps b \
                           inner join v5_classes r on b.b_id = r.r_b_id and r.r_status >= 1\
                           inner join v5_bootcamp_instructors ba on ba.ba_b_id  = b.b_creator_id \
+                          and ba.ba_u_id = $2 \
                           where \
-                          b.b_id = $1', [bootcampId]);
+                          b.b_id = $1 ', [bootcampId, instructorId]);
   return res;
 
   //ba.ba_u_id  = ' + instructorId +
@@ -130,6 +137,16 @@ function postMench(data, done) {
 }
 
 Meteor.methods({
+  'checkToken' : function (token, instructorId, bootcampId){  
+    check(instructorId, String);
+    check(bootcampId, String);
+    check(token, String);
+
+    //&token='.md5($bootcamp['b_id'].'ChatiFrameS@lt'.$udata['u_id']).
+    var authToken = md5(instructorId.toString() + salt + bootcampId.toString());
+    console.log('CheckToken :',token, authToken);
+    return authToken == token;
+  },
   'sendChatMessage': function (formData) {
 
     // var data = {

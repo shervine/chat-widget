@@ -1,9 +1,16 @@
 angular.module('menChat')
-.directive('filter', function ($timeout, $rootScope) {
+.directive('filter', function ($timeout, $rootScope, $window) {
   return {
     restrict: 'E',
     scope: {},
-    link: function ($scope) {
+    link: function ($scope, $rootScope) {
+      // if (!$window.authToken) {
+      //   return;
+      // }
+
+      $scope.bootcampClasses = new PgSubscription('bootcampClasses', queryDict.bootcampId, 
+      queryDict.instructorId);
+
       $scope.class = {
         'r_start_date': 'All Classes'
       };
@@ -24,16 +31,20 @@ angular.module('menChat')
                           }];
       $scope.status = $scope.statuses[0];
 
-      $scope.classes = $rootScope.bootcampClasses.reactive();
+      $timeout(function(){
+        $scope.classes = $scope.bootcampClasses;
+      },500);
+     
       $scope.filterObj = {
                           'class': $scope.class,
                           'status' : $scope.status
                         };
 
       //broadcast the initial filters
-      // $timeout(function(){
-      //   $rootScope.$broadcast('new-filter', $scope.filterObj);
-      // }, 200);
+      $timeout(function(){
+        $scope.$emit('new-filter', $scope.filterObj);
+        $scope.$broadcast('new-filter', $scope.filterObj);
+      }, 500);
 
       $scope.selectClass = function (classObj) {
         
@@ -56,7 +67,8 @@ angular.module('menChat')
                             }
 
         console.log('New Filter  ', $scope.filterObj);                   
-        $rootScope.$broadcast('new-filter', $scope.filterObj);
+        $scope.$emit('new-filter', $scope.filterObj);
+        $scope.$broadcast('new-filter', $scope.filterObj);
       }
       $scope.selectStatus = function (statusObj) {
         $scope.status = statusObj;
@@ -64,7 +76,8 @@ angular.module('menChat')
                             'class': $scope.class,
                             'status' : $scope.status
                             }
-        $rootScope.$broadcast('new-filter', $scope.filterObj);
+        $scope.$emit('new-filter', $scope.filterObj);
+        $scope.$broadcast('new-filter', $scope.filterObj);
         console.log('New Filter  ', $scope.filterObj);
       }
     },

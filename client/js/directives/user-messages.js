@@ -1,5 +1,5 @@
 angular.module('menChat')
-  .directive('userMessages', function ($rootScope, $timeout, $interval, $filter) {
+  .directive('userMessages', function ($rootScope, $timeout, $interval, $filter, $window) {
     return {
       restrict: 'E',
       scope: {
@@ -8,36 +8,22 @@ angular.module('menChat')
       controller: 'chatCtrl',
       link: function ($scope, iElem, iAttr) {
         $scope.msgs = [];
+
+        $rootScope.$on('new-filter', function (ev, filterObj) {
+          if ($scope.messages && typeof $scope.messages.stop == 'function') {
+            $scope.messages.stop();
+          }
+
+          $scope.messages = [];
+          $rootScope.selectedUser = null;
+          $scope.selectedUser = null;
+        });
+
         $scope.$watch('selectedUser', function (newVal) {
           if (!newVal) {
             return;
           }
           $scope.loading = true;
-
-          $scope.$on('new-filter', function (ev, filterObj) {
-            if ($scope.messages && typeof $scope.messages.stop == 'function') {
-              $scope.messages.stop();
-            }
-
-            $scope.messages = [];
-            $rootScope.selectedUser = null;
-            $scope.selectedUser = null;
-          });
-
-          //observer for chat messages content to enable scroll down
-          //when new content is inserted
-          var observer = new MutationObserver(function (mutations) {
-            console.log('New content into messages div');
-            var d = angular.element('.user-messages');
-            d.animate({
-              scrollTop: d.prop('scrollHeight')
-            }, 1);
-
-          });
-          observer.observe(iElem.find('.user-messages')[0], {
-            childList: true,
-            subtree: true
-          });
 
           if ($scope.messages && typeof $scope.messages.stop == 'function') {
             $scope.messages.stop();
@@ -94,6 +80,9 @@ angular.module('menChat')
           };
 
           $scope.renderTooltip = function (message) {
+            if(!$rootScope.selectedUser || !$scope.instructorData){
+              return;
+            }
             var userName = message.e_type_id == 6 ?
               $rootScope.selectedUser.u_fname + ' ' + $rootScope.selectedUser.u_lname :
               $scope.instructorData.u_fname + ' ' + $scope.instructorData.u_lname;

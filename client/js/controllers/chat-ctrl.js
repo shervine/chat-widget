@@ -1,6 +1,9 @@
 (function () {
   angular.module('menChat')
-    .controller('chatCtrl', function ($scope, $rootScope) {
+    .controller('chatCtrl', function ($scope, $rootScope, $window) {
+      if (!$window.authToken) {
+        return;
+      }
 
       $scope.chatInput = '';
       $scope.sendMessage = function () {
@@ -27,7 +30,7 @@
             alert('Sending error');
             return;
           }
-          angular.element('.user-messages ul').append('<li class="me tmpInsert">'+angular.copy($scope.chatInput)+'</li>');
+          angular.element('.user-messages ul').append('<li class="me tmpInsert">' + angular.copy($scope.chatInput) + '</li>');
           $scope.chatInput = '';
           $scope.$apply();
 
