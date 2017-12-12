@@ -16,34 +16,25 @@ angular.module('menChat', ['ui.bootstrap', 'ui.bootstrap.tpls', 'ui.bootstrap.to
                 location.search.substr(1).split("&").
                 forEach(function(item) {queryDict[item.split("=")[0]] = item.split("=")[1]});
                 console.log('QueryDict:', queryDict);
-                Meteor.call('checkToken', queryDict.token, queryDict.instructorId, queryDict.bootcampId,
+                return Meteor.call('checkToken', queryDict.token, queryDict.instructorId, queryDict.bootcampId,
                   function (err, success) {
                     console.log('checkToken response ', err, success);
-                    if (err) {
+                    if (err || !success) {
                       console.log('Meteor checkToken error ', err);
-                      return;
+                      $state.go('denied');
+                      return $q.reject();
                     }
 
                     if(success){
                        window.authToken = queryDict.token;
                        window.instructorId = queryDict.instructorId;
                        window.bootcampId = queryDict.bootcampId;
+                       return $q.resolve('token ok');
+                    } else {
+                      return $q.reject();
+                      $state.go('denied');
                     }
                   });
-
-                $timeout(function () {
-                  if (!window.authToken) {
-                    $timeout(function () {
-                      $state.go('denied');
-                      //alert('Auth check failed');
-                    }, 0);
-                    console.log('No access token, redirect to deny ');
-                    return $q.reject();
-                  } else {
-                    console.log('we have access token ', window.authToken);
-                    return;
-                  }
-                }, 500);
               }]
           }
         })
