@@ -143,8 +143,9 @@ Meteor.methods({
     check(token, String);
 
     //&token='.md5($bootcamp['b_id'].'ChatiFrameS@lt'.$udata['u_id']).
-    var authToken = md5(instructorId.toString() + salt + bootcampId.toString());
-    console.log('CheckToken :',token, authToken);
+    var authToken = md5(bootcampId + salt + instructorId);
+    console.log('checkToken: ', bootcampId,  instructorId);
+    console.log('checkToken :',token, authToken);
     return authToken == token;
   },
   'sendChatMessage': function (formData) {
