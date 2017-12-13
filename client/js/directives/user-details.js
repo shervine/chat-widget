@@ -19,6 +19,15 @@ angular.module('menChat')
         $scope.userDetails1 = {};
       });
 
+      $scope.userStatus = {
+         '-3': 'STUDENT DISPELLED',
+         '-2': 'STUDENT WITHDREW',
+         '-1': 'ADMISSION REJECTED',
+         '0': 'ADMISSION INITIATED',
+         '2': 'PENDING ADMISSION',
+         '4': 'BOOTCAMP STUDENT',
+         '5': 'BOOTCAMP GRADUATE'
+      };
     },
     templateUrl: 'user-details.html'
   }
