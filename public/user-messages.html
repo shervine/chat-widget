@@ -8,8 +8,8 @@
           </div>
         </div>
   </div>
-  <div class="row" style="margin-left:10px" ng-show="messages && messages.length == 0 && !loading">
-    No Messages
+  <div class="row" style="margin-left:10px;margin-top:16px" ng-show="messages && messages.length == 0 && !loading">
+    <h5>No Messages</h5>
   </div>
 
   <div class="row">
@@ -22,6 +22,8 @@
            accept="image/*,application/pdf"
            ngf-max-size="20MB"
            ngf-pattern="'image/*,video/*,application/pdf'"
+           ngf-model-options="{updateOn: 'drop dropUrl paste'}"
+           ngf-select-disabled="true"
      >
       <ul>
         <li ng-repeat="message in messages | reverse" class="{{message.e_type_id == 6 ? 'him' : 'me'}}">
