@@ -10,6 +10,10 @@
   max-height: 91vh;
 }
 
+.user-messages a {
+  color: #75ace7;
+}
+
 .last-msg {
   display: inline-block;
   max-width: 140px;
@@ -19,7 +23,19 @@
   padding: 0;
   margin: 0;
   margin-top: -7px;
-  font-size: 13px;
+  font-size: 14px;
+}
+
+.chat-send textarea {
+    max-height: 44px;
+    margin-bottom: 5px;
+    margin-left: -7px;
+}
+
+.chat-send .send-file {
+  cursor: pointer;
+  font-size: 33px;
+  margin-top: 3px;
 }
 
 .user-messages ul li {
@@ -29,7 +45,8 @@
   border-radius: 16px;
   font-family: Helvetica, Arial, sans-serif;
   margin: 5px;
-  font-size: 12px;
+  font-size: 14px;
+  padding: 10px;
 }
 
 .him {
@@ -39,7 +56,7 @@
 
 .me {
   float: right;
-  background: #0084ff;
+  background: #888888;
   color: #fff;
 }
 
@@ -143,12 +160,12 @@
 }
 
 .drop-box {
-    /*border: 1px dashed #DDD;*/
+    border: 1px dashed #DDD;
     /*width: 200px;
     height: 65px;*/
     /*text-align: center;
     padding-top: 25px;*/
-    /*margin: 10px;*/
+    /*margin: 10px; */
 }
 .dragover {
     border: 1px dashed blue;
@@ -161,4 +178,18 @@
   background: #fff;
   border-top: 1px solid #000;
   width: 100%;
+
+}
+
+div[role="log"] {
+  background-color:#000;
+  border:1px solid #fff;
+  padding:10px 15px;
+  width:200px;
+  color:#fff;
+  text-align:left;
+  font-size:12px;
+
+ -moz-box-shadow:0 0 10px #000;
+ -webkit-box-shadow:0 0 10px #000;
 }

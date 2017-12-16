@@ -1,9 +1,13 @@
 angular.module('menChat')
-.directive('filter', function ($timeout, $rootScope) {
+.directive('filter', function ($timeout, $rootScope, $window) {
   return {
     restrict: 'E',
     scope: {},
-    link: function ($scope) {
+    link: function ($scope, $rootScope) {
+
+      $scope.bootcampClasses = new PgSubscription('bootcampClasses', queryDict.bootcampId, 
+      queryDict.instructorId);
+
       $scope.class = {
         'r_start_date': 'All Classes'
       };
@@ -12,15 +16,11 @@ angular.module('menChat')
                           },
                           {
                             val: -2,
-                            txt: 'Student Withdrew'
-                          },
-                          {
-                            val: 0,
-                            txt: 'Admission Initiated by Student'
+                            txt: 'Rejected'
                           },
                           {
                             val: 2,
-                            txt: 'Pending Admission'
+                            txt: 'Pending'
                           },
                           {
                             val: 4,
@@ -28,28 +28,44 @@ angular.module('menChat')
                           }];
       $scope.status = $scope.statuses[0];
 
-      $scope.classes = $rootScope.bootcampClasses.reactive();
+      $timeout(function(){
+        $scope.classes = $scope.bootcampClasses;
+      },500);
+     
       $scope.filterObj = {
                           'class': $scope.class,
                           'status' : $scope.status
                         };
 
       //broadcast the initial filters
-      // $timeout(function(){
-      //     $rootScope.$broadcast('new-filter', $scope.filterObj);
-      // });
+      $timeout(function(){
+        $scope.$emit('new-filter', $scope.filterObj);
+        $scope.$broadcast('new-filter', $scope.filterObj);
+      }, 500);
 
       $scope.selectClass = function (classObj) {
-        console.log('Selected class ', classObj);
+        
         $scope.class = typeof classObj !== 'undefined' ? classObj : {
           'r_start_date': 'All Classes'
         };
+
+        if(typeof classObj !== 'undefined') {
+           if (classObj.r_status>=-1 &&  classObj.r_status<=1) {
+              $scope.status = $scope.statuses[0];
+           }
+           if (classObj.r_status<-1 || classObj.r_status>1) {
+              $scope.status = $scope.statuses[3];
+           }
+        }
 
         $scope.filterObj = {
                             'class': $scope.class,
                             'status' : $scope.status
                             }
-        $rootScope.$broadcast('new-filter', $scope.filterObj);
+
+        console.log('New Filter  ', $scope.filterObj);                   
+        $scope.$emit('new-filter', $scope.filterObj);
+        $scope.$broadcast('new-filter', $scope.filterObj);
       }
       $scope.selectStatus = function (statusObj) {
         $scope.status = statusObj;
@@ -57,7 +73,9 @@ angular.module('menChat')
                             'class': $scope.class,
                             'status' : $scope.status
                             }
-        $rootScope.$broadcast('new-filter', $scope.filterObj);
+        $scope.$emit('new-filter', $scope.filterObj);
+        $scope.$broadcast('new-filter', $scope.filterObj);
+        console.log('New Filter  ', $scope.filterObj);
       }
     },
     templateUrl: 'filter.html'

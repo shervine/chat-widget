@@ -3,52 +3,26 @@
   <link href="//maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet" />
   <link href="/components/bootstrap4c-buttons/dist/css/component-buttons.min.css" rel="stylesheet">
   <link href="/components/bootstrap4c-custom-switch/dist/css/component-custom-switch.min.css" rel="stylesheet">
-
+  <script
+    src="https://code.jquery.com/jquery-2.2.4.min.js"
+    integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+    crossorigin="anonymous">
+  </script>
+  <script
+    src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+    integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+    crossorigin="anonymous">
+  </script>
+  <link href="https://code.jquery.com/ui/jquery-ui-git.css"  rel="stylesheet" />
+  
   <script src="/components/ng-file-upload/ng-file-upload-shim.min.js"></script>
   <script src="/components/ng-file-upload/ng-file-upload.min.js"></script>
 </head>
 <body>
-  <div class="container" id="main-div" ng-app="menChat">
-    <div class="row filter border border-info">
-      <div class="col-sm-12">
-      </div>
-    </div>
-    <div class="row main-row">
-      <div class="col-sm-3 border border-info border-right-0 border-top-0">
-        <users-list></users-list>
-      </div>
-      <div class="col-sm-6 border border-info border-top-0 chat-section">
-        <user-messages selected-user="selectedUser"></user-messages>
-      </div>
-      <div class="col-sm-3 border border-info border-left-0 border-top-0">
-        <p><h5>User Info</h5></p>
-        <user-details selected-user="selectedUser"></user-details>
-      </div>
-    </div>
-    <div class="row" ng-controller="chatCtrl">
-      <div class="col-sm-3 border border-info border-right-0 border-top-0">
-        <p>&nbsp;</p>
-      </div>
-      <div class="col-sm-6 border border-info border-top-0">
-        <div class="row mt-2">
-          <div class="col-sm-3">
-            <h6 style="margin-top:2px">Chat Input</h6>
-          </div>
-
-          <div class="col-sm-6" >
-            <input style="margin-top: -6px;"  class="form-control" ng-model="chatInput" ng-enter="sendMessage()" />
-          </div>
-          <div class="col-sm-2">
-            <div style="float:right">
-              <button type="button" class="btn btn-secondary"  style="cursor:pointer; margin-top: -6px;"
-                 ng-click="sendMessage()">Send</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-sm-3 border border-info border-left-0 border-top-0">
-        <h5></h5>
-      </div>
-    </div>
+  <div ng-app="menChat">
+      <ui-view>
+          <i>Loading ..</i>
+      </ui-view>
   </div>
+
 </body>

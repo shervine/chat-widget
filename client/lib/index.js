@@ -1,18 +1,75 @@
+queryDict = {};
+angular.module('menChat', ['ui.bootstrap', 'ui.bootstrap.tpls', 'ui.bootstrap.tooltip', 
+          'ui.router', 'toastr', 'ngFileUpload'])
+  .config(['$stateProvider', '$urlRouterProvider',
+    function ($stateProvider, $urlRouterProvider) {
+      $urlRouterProvider.otherwise("/");
+      $stateProvider
+        .state('home',
+        {
+          url: "/",
+          templateUrl: '/home.html',
+          resolve: {
+            AutoLoginCheck: ['$state', '$window', '$q', '$timeout',
+              function ($state, $window, $q, $timeout) {
+                
+                location.search.substr(1).split("&").
+                forEach(function(item) {queryDict[item.split("=")[0]] = item.split("=")[1]});
+                console.log('QueryDict:', queryDict);
+                return Meteor.call('checkToken', queryDict.token, queryDict.instructorId, queryDict.bootcampId,
+                  function (err, success) {
+                    console.log('checkToken response ', err, success);
+                    if (err || !success) {
+                      console.log('Meteor checkToken error ', err);
+                      $state.go('denied');
+                      return $q.reject();
+                    }
 
-angular.module('menChat', ['ui.bootstrap', 'ui.bootstrap.tpls', 'ngFileUpload'])
-    .run(function ($location, $rootScope, $interval) {
-      $rootScope.instructorId = 1;
-      $rootScope.bootcampId = 1;
-      var bId = $location.search().bootcampId;
-      var instrId = $location.search().instructorId;
-      if (bId) {
-        $rootScope.bootcampId = bId;
-      }
-      if (instrId) {
-        $rootScope.instructorId = instrId;
-      }
-      console.log('Using bootcamp id ', $rootScope.bootcampId);
-      console.log('Using instructor id ', $rootScope.instructorId);
+                    if(success){
+                       window.authToken = queryDict.token;
+                       window.instructorId = queryDict.instructorId;
+                       window.bootcampId = queryDict.bootcampId;
+                       window.authObj = {
+                         instructorId: window.instructorId,
+                         bootcampId: window.bootcampId,
+                         authToken: window.authToken
+                       }
+                       return $q.resolve('token ok');
+                    } else {
+                      return $q.reject();
+                      $state.go('denied');
+                    }
+                  });
+              }]
+          }
+        })
+        .state('denied', {
+          url: "/denied",
+          templateUrl: '/denied.html'
+        })
+    }])
+  .run(function ($location, $rootScope, $interval, $state, $window, $timeout, toastr) {
+    
+    $timeout(function(){
+      $rootScope.authToken = window.authToken;
+      $rootScope.bootcampId = window.bootcampId;
+      $rootScope.instructorId = window.instructorId;
+      console.log('Auth token ', window.authToken);
 
-      $rootScope.bootcampClasses = new PgSubscription('bootcampClasses', $rootScope.bootcampId, $rootScope.instructorId);
+      $rootScope.instructorData = new PgSubscription('instructorData', 
+                                      queryDict.instructorId).reactive();
+  
     });
+    $rootScope.lostConnection = false;
+    $interval(function(){
+      toastr.clear();
+        if(!Meteor.connection.status().connected){
+          toastr.error('Lost server connection', 'Error');
+          $rootScope.lostConnection = true;
+        }
+        if(Meteor.connection.status().connected && $rootScope.lostConnection){
+          $rootScope.lostConnection = false;
+          toastr.success('Connected !');
+        }
+    }, 2000);
+  });

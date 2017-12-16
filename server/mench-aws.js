@@ -16,11 +16,7 @@ menchUpload = function(fileBlob, fileName, cb) {
       Key: fileName,
       Body: base64data,
       ACL: 'public-read'
-    },function (resp) {
-      console.log(resp);
-      console.log('Successfully uploaded package.');
-      cb(null, 'Successfully uploaded package.');
-    });
+    },cb);
 };
 
 // Read in the file, convert it to base64, store to S3
