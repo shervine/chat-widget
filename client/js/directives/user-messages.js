@@ -45,6 +45,12 @@ angular.module('menChat')
             //remove any previous tmpInserts
             angular.element('.user-messages ul .tmpInsert').remove();
             $scope.$apply();
+            $timeout(function () {
+              var d = angular.element('.user-messages');
+              d.animate({
+                scrollTop: d.prop('scrollHeight')
+              }, 1);
+            }, 200);
           });
 
           var stop;
@@ -67,7 +73,7 @@ angular.module('menChat')
                 placement: 'bottom',
                 container: '#user-messages',
               });
-            }, 50);
+            }, 100);
             $scope.stopInterval();
           }, 60);
 

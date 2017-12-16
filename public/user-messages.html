@@ -17,12 +17,11 @@
      ng-show="!loading && messages.length >0"
      ngf-drop ngf-select ng-model="files"
            ngf-drag-over-class="'dragover'"
-           ngf-multiple="false"
-           ngf-allow-dir="false"
+           ngf-multiple="true"
+           ngf-allow-dir="truye"
            accept="image/*,application/pdf"
            ngf-max-size="20MB"
            ngf-pattern="'image/*,video/*,application/pdf'"
-           ngf-model-options="{updateOn: 'drop dropUrl paste'}"
            ngf-select-disabled="true"
      >
       <ul>
@@ -50,8 +49,8 @@
   <div class="row">
     <div class="upload-info" ng-show="uploadProgress">
       <div ng-show="uploadProgress">
-        <img src="/img/loading-apple.gif">&nbsp;  
-        <h5>Uploading ..</h5>
+        <img src="/img/loading_apple.gif" style="width: 33px;">&nbsp;  
+        <h5>Uploading ... </h5>
       </div>
       <div ngf-no-file-drop>File Drag/Drop is not supported for this browser</div>
       <!-- <div class="preview">

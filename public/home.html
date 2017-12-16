@@ -27,14 +27,15 @@
           </div>
           <div class="col-sm-2">
             <div class="pull-right">
-              <span class="fa fa-paperclip send-file" 
+              <span class="fa fa-paperclip send-file"  ng-controller="uploadCtrl"
+              ng-model="files"
               aria-hidden="true"
               data-toggle="tooltip" 
               title="Send file"
               ngf-drop ngf-select
               ngf-drag-over-class="'dragover'"
-              ngf-multiple="false"
-              ngf-allow-dir="false"
+              ngf-multiple="true"
+              ngf-allow-dir="true"
               accept="image/*,application/pdf"
               ngf-max-size="20MB"
               ngf-pattern="'image/*,video/*,application/pdf'"

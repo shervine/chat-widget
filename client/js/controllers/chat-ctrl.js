@@ -1,6 +1,6 @@
 (function () {
   angular.module('menChat')
-    .controller('chatCtrl', function ($scope, $rootScope, toastr) {
+    .controller('chatCtrl', function ($scope, $rootScope, toastr, $timeout) {
       $scope.chatInput = '';
       $scope.sendMessage = function () {
         if ($scope.chatInput === '') {
@@ -32,6 +32,14 @@
           angular.element('.user-messages ul').append('<li class="me tmpInsert">' + angular.copy($scope.chatInput) + '</li>');
           $scope.chatInput = '';
           $scope.$apply();
+
+          //scroll div 
+          $timeout(function () {
+            var d = angular.element('.user-messages');
+            d.animate({
+              scrollTop: d.prop('scrollHeight')
+            }, 1);
+          }, 100);
 
         });
       }
