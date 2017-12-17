@@ -1,4 +1,4 @@
-<div class="fill">
+<div class="user-messages-wrapper">
   <div class="row" ng-show="loading">
       <div class="container">
           <div class="row">
@@ -13,7 +13,7 @@
   </div>
 
   <div class="row">
-    <div class="col-sm-12 user-messages drop-box" id="user-messages"
+    <div class="col-sm-12 user-messages fill drop-box" id="user-messages"
      ng-show="!loading && messages.length >0"
      ngf-drop ngf-select ng-model="files"
            ngf-drag-over-class="'dragover'"

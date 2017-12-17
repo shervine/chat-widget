@@ -11,7 +11,7 @@ body {
 }
 
 .main-row {
-  height: 92.5vh;
+  height: 89.5vh;
 }
 
 .border-info {
@@ -20,6 +20,7 @@ body {
 
 .fill {
   box-sizing: border-box;
+  max-height: 89vh;
 }
 .dropdown-item {
   cursor:pointer;
@@ -43,7 +44,6 @@ body {
   margin-top: 1px;
   margin-right: -8px;
   margin-left: -8px;
-  max-height: 91vh;
 }
 
 .selected {
