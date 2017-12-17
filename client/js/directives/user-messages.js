@@ -1,15 +1,15 @@
 angular.module('menChat')
-.directive('userMessages', function ($rootScope, $timeout, $interval,$filter, $window) {
+.directive('userMessages', function($rootScope, $timeout, $interval, $filter, $window) {
   return {
     restrict: 'E',
     scope: {
-      selectedUser: '='
+      selectedUser: '=',
     },
     controller: 'uploadCtrl',
-    link: function ($scope, iElem, iAttr) {
+    link: function($scope, iElem, iAttr) {
       $scope.msgs = [];
-      
-        $rootScope.$on('new-filter', function (ev, filterObj) {
+
+        $rootScope.$on('new-filter', function(ev, filterObj) {
           if ($scope.messages && typeof $scope.messages.stop == 'function') {
             $scope.messages.stop();
           }
@@ -19,7 +19,7 @@ angular.module('menChat')
           $scope.selectedUser = null;
         });
 
-        $scope.$watch('selectedUser', function (newVal) {
+        $scope.$watch('selectedUser', function(newVal) {
           if (!newVal) {
             return;
           }
@@ -29,7 +29,7 @@ angular.module('menChat')
             $scope.messages.stop();
           }
 
-          $rootScope.$watch('instructorData', function (newData) {
+          $rootScope.$watch('instructorData', function(newData) {
             if (!newData) {
               return;
             }
@@ -38,37 +38,37 @@ angular.module('menChat')
             console.log('Instructor data ', $scope.instructorData);
           });
 
-          $scope.messages = new PgSubscription('userMessages', $scope.selectedUser.u_id).reactive();
+          $scope.messages = new PgSubscription('userMessages', $scope.selectedUser.u_id,  window.authObj).reactive();
 
-          $scope.messages.addEventListener('updated', function (diff, data) {
+          $scope.messages.addEventListener('updated', function(diff, data) {
             console.log('Subscription updated ', diff, data);
-            //remove any previous tmpInserts
+            // remove any previous tmpInserts
             angular.element('.user-messages ul .tmpInsert').remove();
             $scope.$apply();
-            $timeout(function () {
-              var d = angular.element('.user-messages');
+            $timeout(function() {
+              let d = angular.element('.user-messages');
               d.animate({
-                scrollTop: d.prop('scrollHeight')
+                scrollTop: d.prop('scrollHeight'),
               }, 1);
             }, 200);
           });
 
-          var stop;
+          let stop;
 
           $scope.loading = true;
-          stop = $interval(function () {
+          stop = $interval(function() {
             if (!$scope.messages.ready()) {
               return;
             }
             console.log('userMessages populated ', $scope.messages);
-            $timeout(function () {
+            $timeout(function() {
               $scope.$apply();
-              var d = angular.element('.user-messages');
+              let d = angular.element('.user-messages');
               d.animate({
-                scrollTop: d.prop('scrollHeight')
+                scrollTop: d.prop('scrollHeight'),
               }, 1);
 
-              //render tooltips
+              // render tooltips
               $('[data-toggle="tooltip"]').tooltip({
                 placement: 'bottom',
                 container: '#user-messages',
@@ -77,7 +77,7 @@ angular.module('menChat')
             $scope.stopInterval();
           }, 60);
 
-          $scope.stopInterval = function () {
+          $scope.stopInterval = function() {
             if (angular.isDefined(stop)) {
               $scope.loading = false;
               $interval.cancel(stop);
@@ -85,44 +85,44 @@ angular.module('menChat')
             }
           };
 
-          $scope.renderTooltip = function (message) {
-            if(!$rootScope.selectedUser || !$scope.instructorData){
+          $scope.renderTooltip = function(message) {
+            if (!$rootScope.selectedUser || !$scope.instructorData) {
               return;
             }
-            var userName = message.e_type_id == 6 ?
+            let userName = message.e_type_id == 6 ?
               $rootScope.selectedUser.u_fname + ' ' + $rootScope.selectedUser.u_lname :
               $scope.instructorData.u_fname + ' ' + $scope.instructorData.u_lname;
-            var msg = userName + ' on ' + $filter('date')(message.e_timestamp);
+            let msg = userName + ' on ' + $filter('date')(message.e_timestamp);
             return msg;
-          }
+          };
         });
       },
-      templateUrl: 'user-messages.html'
-    }
+      templateUrl: 'user-messages.html',
+    };
   })
-  .filter('reverse', function () {
-    return function (items) {
+  .filter('reverse', function() {
+    return function(items) {
       if (typeof items === 'undefined') {
         return null;
       }
       return items.slice().reverse();
     };
   })
-  .filter('formatMsg', function ($sce) {
-    return function ($e_message) {
+  .filter('formatMsg', function($sce) {
+    return function($e_message) {
 
       function linkify(inputText) {
-        var replacedText, replacePattern1, replacePattern2, replacePattern3;
+        let replacedText, replacePattern1, replacePattern2, replacePattern3;
 
-        //URLs starting with http://, https://, or ftp://
+        // URLs starting with http://, https://, or ftp://
         replacePattern1 = /(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim;
         replacedText = inputText.replace(replacePattern1, '<a href="$1" target="_blank">$1</a>');
 
-        //URLs starting with "www." (without // before it, or it'd re-link the ones done above).
+        // URLs starting with "www." (without // before it, or it'd re-link the ones done above).
         replacePattern2 = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
         replacedText = replacedText.replace(replacePattern2, '$1<a href="http://$2" target="_blank">$2</a>');
 
-        //Change email addresses to mailto:: links.
+        // Change email addresses to mailto:: links.
         replacePattern3 = /(([a-zA-Z0-9\-\_\.])+@[a-zA-Z\_]+?(\.[a-zA-Z]{2,6})+)/gim;
         replacedText = replacedText.replace(replacePattern3, '<a href="mailto:$1">$1</a>');
 
@@ -130,11 +130,11 @@ angular.module('menChat')
       }
 
       function nl2br(str, is_xhtml) {
-        return str.replace('<br />', "<br>");
+        return str.replace('<br />', '<br>');
       }
 
       if ($e_message.indexOf('/attach') >= 0) {
-        var $attachementsTxt = $e_message.split(' ');
+        let $attachementsTxt = $e_message.split(' ');
         if (typeof $attachementsTxt[1] !== 'undefined') {
           var attachement = $attachementsTxt[1];
           // attachements = attachements.split(':');
@@ -144,8 +144,8 @@ angular.module('menChat')
         }
         // console.log('Attachement: ', attachement);
 
-        var $segments = attachement.split(':https:');
-        var $sub_segments = 'https:' + $segments[1];
+        let $segments = attachement.split(':https:');
+        let $sub_segments = 'https:' + $segments[1];
 
         // console.log('Attachement type : ', $segments[0]);
         if ($segments[0] == 'image') {

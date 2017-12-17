@@ -7,17 +7,22 @@ bootcampClasses = new PgSubscription('bootcampClasses');
 //access token salt
 //&token='.md5($bootcamp['b_id'].'ChatiFrameS@lt'.$udata['u_id']).
 const salt = 'ChatiFrameS@lt';
+const saltSendMsg = '7H6hgtgtfii87';
+
 liveDb = new LivePg(process.env.POSTGRESQL_URL, process.env.CHANNEL);
 
 function checkAuth(authObj) {
+  if(!authObj){
+    return;
+  }
   return authObj.authToken == md5(authObj.bootcampId + salt + authObj.instructorId);
 }
 
 function sendChatMessage(formData) {
-
   console.log('sendChatMessage formData ', formData);
 
-  var auth_hash = md5(formData.senderId.toString() + formData.receiverId.toString() + formData.messageType + '7H6hgtgtfii87');
+  var auth_hash = md5(formData.senderId.toString() + formData.receiverId.toString() + 
+  formData.messageType + saltSendMsg);
 
   var data = {
     'b_id': formData.bId,
@@ -49,7 +54,15 @@ function sendChatMessage(formData) {
   return 'ok';
 }
 
-Meteor.publish('allUsers', function (filterObj, bootcampId, instructorId, authHash) {
+Meteor.publish('allUsers', function (filterObj, authObj) {
+
+  if (!checkAuth(authObj)) {
+    console.log('allUsers Authentication failed ', authObj);
+    throw new Meteor.Error(500, 'Error');
+  }
+
+  let instructorId = authObj.instructorId;
+  let bootcampId = authObj.bootcampId;
 
   check(bootcampId, String);
   check(instructorId, String);
@@ -60,7 +73,7 @@ Meteor.publish('allUsers', function (filterObj, bootcampId, instructorId, authHa
   if (filterObj) {
     if (typeof filterObj.class.r_id !== 'undefined') {
       classFilter = ' and  ru.ru_r_id = ' + filterObj.class.r_id.toString();
-    };
+    }
 
     if (typeof filterObj.status.val !== 'undefined' && filterObj.status.val != -10) {
 
@@ -76,7 +89,7 @@ Meteor.publish('allUsers', function (filterObj, bootcampId, instructorId, authHa
         statusFilter = ' and  ru_status >= 4 ';
       }
 
-    };
+    }
   }
 
   console.log('Meteor publish all users with filter ', filterObj);
@@ -96,9 +109,14 @@ Meteor.publish('allUsers', function (filterObj, bootcampId, instructorId, authHa
   return res;
 });
 
-Meteor.publish('userMessages', function (userId) {
+Meteor.publish('userMessages', function (userId, authObj) {
   if (!userId) {
     return [];
+  }
+
+  if (!checkAuth(authObj)) {
+    console.log('userMessages Authentication failed ', authObj);
+    throw new Meteor.Error(500, 'Error');
   }
 
   check(userId, Number);
@@ -118,18 +136,28 @@ Meteor.publish('userMessages', function (userId) {
   return mSubscription;
 });
 
-Meteor.publish('userData', function (userId) {
-  if (!userId) {
-    return [];
+// Meteor.publish('userData', function (userId, authObj) {
+  
+//   if (!checkAuth(authObj)) {
+//     console.log('userMessages Authentication failed ', authObj);
+//     throw new Meteor.Error(500, 'Error');
+//   }
+
+//   if (!userId) {
+//     return [];
+//   }
+
+//   check(userId, Number);
+
+//   var res = liveDb.select('select * from v5_users where u_id = ' + userId);
+//   return res;
+// });
+
+Meteor.publish('instructorData', function (userId, authObj) {
+    if (!checkAuth(authObj)) {
+    console.log('instructorData Authentication failed ', authObj);
+    throw new Meteor.Error(500, 'Error');
   }
-
-  check(userId, Number);
-
-  var res = liveDb.select('select * from v5_users where u_id = ' + userId);
-  return res;
-});
-
-Meteor.publish('instructorData', function (userId) {
   if (!userId) {
     return [];
   }
@@ -141,7 +169,16 @@ Meteor.publish('instructorData', function (userId) {
   return res;
 });
 
-Meteor.publish('bootcampClasses', function (bootcampId, instructorId) {
+Meteor.publish('bootcampClasses', function (authObj) {
+  
+  if (!checkAuth(authObj)) {
+    console.log('bootcampClasses Authentication failed ', authObj);
+    throw new Meteor.Error(500, 'Error');
+  }
+
+  let instructorId = authObj.instructorId;
+  let bootcampId = authObj.bootcampId;
+  
   if (!instructorId && !bootcampId) {
     return [];
   }
