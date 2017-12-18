@@ -111,6 +111,10 @@ angular.module('menChat')
   .filter('formatMsg', function($sce) {
     return function($e_message) {
 
+      if ($e_message === null || typeof $e_message  === 'undefined' || $e_message.length == 0){
+         return $e_message;
+      }
+
       function linkify(inputText) {
         let replacedText, replacePattern1, replacePattern2, replacePattern3;
 

@@ -27,6 +27,7 @@
       <ul>
         <li ng-repeat="message in messages | reverse" class="{{message.e_type_id == 6 ? 'him' : 'me'}}">
 
+          <!-- User chat message and avatar --> 
           <img ng-if="message.e_type_id == 6"
           class="chat-avatar"
           src="{{selectedUser.u_image_url}}"
@@ -34,14 +35,29 @@
           title="{{renderTooltip(message)}}"
           >
 
-          <img ng-if="message.e_type_id != 6"
+          <!-- Instructor chat message and avatar --> 
+          <img ng-if="message.e_type_id == 7"
           class="chat-avatar" style="float:right; margin-left:5px"
           src="{{instructorData.u_image_url}}"
           data-toggle="tooltip" 
           title="{{renderTooltip(message)}}"
           >
-          <span ng-bind-html="message.e_message | formatMsg"></span>
 
+          <!-- Other engagements --> 
+          <img ng-if="message.e_type_id != 6 && message.e_type_id != 7"
+          class="chat-avatar" style="float:right; margin-left:5px"
+          src="/img/mench_ico.png" 
+          data-toggle="tooltip" 
+          title="{{renderTooltip(message)}}"
+          >
+          <!-- src="{{selectedUser.u_image_url}}"--> 
+
+          <span ng-if="message.e_type_id != 6 && message.e_type_id != 7">
+            {{message.a_name}}{{message.e_message.length > 0 ? ':' : ''}} {{message.e_message}}</span>
+
+          <span 
+            ng-if="message.e_type_id == 6 || message.e_type_id == 7"
+            ng-bind-html="message.e_message | formatMsg"></span>
         </li>
       </ul>
     </div>
