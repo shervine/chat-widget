@@ -9,6 +9,17 @@
   padding: 0;
 }
 
+.user-messages .system-message {
+  background: #f1f10078 !important;
+  color: rgb(127,127,127) !important;
+  text-align: center !important;
+  float: none !important;
+  margin: 0 auto !important;
+  display: block !important;
+  border-radius: 5px !important;
+  margin: 10px !important;
+}
+
 .user-messages a {
   color: #75ace7;
 }
