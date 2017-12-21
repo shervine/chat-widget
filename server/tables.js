@@ -27,8 +27,8 @@ function sendChatMessage(formData) {
   var data = {
     'b_id': formData.bId,
     'message_type': formData.messageType, //(Facebook 5 Message Types: text, audio, image, video, file)
-    'sender_u_id': formData.senderId,
-    'receiver_u_id': formData.receiverId, //The Student ID
+    'initiator_u_id': formData.senderId,
+    'recipient_u_id': formData.receiverId, //The Student ID
     'auth_hash': auth_hash,
     'text_payload': formData.message ? formData.message : '' //IF message_type=TEXT (Maximum 640 characters)
   }
@@ -200,8 +200,9 @@ var needle = Npm.require('needle');
 function postMench(data, done) {
   // the callback is optional, and needle returns a `readableStream` object
   // that triggers a 'done' event when the request/response process is complete.
+  console.log('posting ', data, ' to ', 'https://mench.co/api_chat_v1/send_message');
   needle
-    .post('https://mench.co/bot/send_message', data, {
+    .post('https://mench.co/api_chat_v1/send_message', data, {
       multipart: true
     })
     .on('readable', function () { /* eat your chunks */
