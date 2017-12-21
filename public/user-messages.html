@@ -1,4 +1,4 @@
-<div class="fill">
+<div class="user-messages-wrapper">
   <div class="row" ng-show="loading">
       <div class="container">
           <div class="row">
@@ -8,33 +8,90 @@
           </div>
         </div>
   </div>
-  <div class="row" style="margin-left:10px" ng-show="messages && messages.length == 0 && !loading">
-    No Messages
+  <div class="row" style="margin-left:10px;margin-top:16px" ng-show="messages && messages.length == 0 && !loading">
+    <h5>No Messages</h5>
   </div>
 
   <div class="row">
-    <div class="col-sm-12 user-messages" ng-show="!loading">
+    <div class="col-sm-12 user-messages fill drop-box" id="user-messages"
+     ng-show="!loading && messages.length >0"
+     ngf-drop ngf-select ng-model="files"
+           ngf-drag-over-class="'dragover'"
+           ngf-multiple="true"
+           ngf-allow-dir="truye"
+           accept="image/*,application/pdf"
+           ngf-max-size="20MB"
+           ngf-pattern="'image/*,video/*,application/pdf'"
+           ngf-select-disabled="true"
+     >
       <ul>
-        <li ng-repeat="message in messages | reverse" class="{{message.e_type_id == 6 ? 'him' : 'me'}}">
+        <li ng-repeat="message in messages | reverse" class="{{message.e_type_id == 6 ? 'him' : 'me'}}" 
+          ng-class="{'system-message' : message.e_type_id != 6 && message.e_type_id != 7}"
+        >
 
-          <img ng-if="message.e_type_id == 6"
+          <!-- User chat message and avatar --> 
+          <img ng-if="message.e_type_id == 6 && message.e_initiator_u_id > 0"
           class="chat-avatar"
           src="{{selectedUser.u_image_url}}"
-          uib-tooltip="aaa"
+          data-toggle="tooltip" 
+          title="{{renderTooltip(message)}}"
           >
 
-          <img ng-if="message.e_type_id != 6"
+          <!-- Instructor chat message and avatar --> 
+          <img ng-if="message.e_type_id == 7 && message.e_initiator_u_id > 0"
           class="chat-avatar" style="float:right; margin-left:5px"
           src="{{instructorData.u_image_url}}"
-          uib-tooltip="eee"
+          data-toggle="tooltip" 
+          title="{{renderTooltip(message)}}"
           >
 
-          <!-- {{message.e_message}} -->
+          <!-- Chat message with no initiator id instructor --> 
+          <img ng-if="message.e_type_id == 7 && message.e_initiator_u_id == 0"
+          class="chat-avatar" style="float:right; margin-left:5px"
+          src="/img/mench_ico.png"
+          data-toggle="tooltip" 
+          title="{{renderTooltip(message)}}"
+          >
 
-          <span ng-bind-html="message.e_message | formatMsg"></span>
+          <!-- Chat message with no initiator id student --> 
+          <img ng-if="message.e_type_id == 6 && message.e_initiator_u_id == 0"
+          class="chat-avatar" style="float:right; margin-left:5px"
+          src="/img/mench_ico.png"
+          data-toggle="tooltip" 
+          title="{{renderTooltip(message)}}"
+          >
 
+          <span ng-if="message.e_type_id != 6 && message.e_type_id != 7">
+            {{message.a_name}}{{message.e_message.length > 0 ? ':' : ''}} {{message.e_message}}</span>
+          <span 
+            ng-if="message.e_type_id == 6 || message.e_type_id == 7"
+            ng-bind-html="message.e_message | formatMsg"></span>
         </li>
       </ul>
     </div>
+  </div>
+  <div class="row">
+    <div class="upload-info" ng-show="uploadProgress">
+      <div ng-show="uploadProgress">
+        <img src="/img/loading_apple.gif" style="width: 33px;">&nbsp;  
+        <h5>Uploading ... </h5>
+      </div>
+      <div ngf-no-file-drop>File Drag/Drop is not supported for this browser</div>
+      <!-- <div class="preview">
+                 <div>Preview image/audio/video:</div>
+                 <img ngf-src="!filesUploaded[0].$error && filesUploaded[0]" style="width:200px">
+                 <audio controls="" ngf-src="!filesUploaded[0].$error && filesUploaded[0]"></audio>
+                 <video controls="" ngf-src="!filesUploaded[0].$error && filesUploaded[0]"></video>
+       </div> -->
+
+        <!-- <div class="upload-status">
+            Files:
+            <ul>
+                <li ng-repeat="f in filesUploaded" style="font:smaller">{{f.name}} {{f.$error}} {{f.$errorParam}}</li>
+            </ul>
+           
+        </div> -->
+      </div>
+  </div>
   </div>
 </div>

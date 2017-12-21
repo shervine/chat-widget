@@ -1,24 +1,30 @@
-<div class="row user-details">
-  <tabset active="active" ng-show="userDetails1.u_lname">
-    <tab index="0" heading="Profile">
-      <div class="row">
-        <div class="col-sm-12">
-            <center>
-              <img class="chat-avatar" style="width:170px;height:auto" src="{{userDetails1.u_image_url}}">
-            </center>
-            <h5>{{userDetails1.u_fname}} {{userDetails1.u_lname}}</h5>
-            <p>E-Mail: {{userDetails1.u_email}}</p>
-            <p>Country: {{userDetails1.u_country_code}}</p>
-            <p>Timezone: {{userDetails1.u_timezone}}</p>
-            <p>Id: {{userDetails1.u_id}}</p>
+<div class="row user-details" ng-show="userDetails1.u_email">
+  <div class="col-sm-12">
+    <center>
+      <img ng-if="userDetails1.u_image_url" class="chat-avatar" style="width:170px;height:auto" src="{{userDetails1.u_image_url}}">
+      <i ng-if="!userDetails1.u_image_url" class="fa fa-5x fa-user-o" style="margin-left: -7px; margin-top: 3px;"></i>
+    </center>
+    <h5>{{userDetails1.u_fname}} {{userDetails1.u_lname}}</h5>
+    <p>E-Mail: {{userDetails1.u_email}}</p>
+    <p>Country: {{userDetails1.u_country_code}}</p>
+    <p>Timezone: {{userDetails1.u_timezone}}</p>
+
+    <div class="row">
+      <div class="col-sm-2">
+        <label style="margin-top: 8px;">Status:</label>
+      </div>
+      <div class="col-sm-6">
+        <div class="dropdown">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+            aria-expanded="false">
+            {{studentStatus.status}}
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" ng-click="changeStudentStatus(item)" ng-repeat="item in userStatuses">{{item.status}}</a>
+          </div>
         </div>
       </div>
-    </tab>
-    <tab index="1" heading="Notes">
-      Not implemented yet
-    </tab>
-    <tab index="2" heading="Action Plan">
-      Not implemented yet
-    </tab>
-  </tabset>
+    </div>
+
+  </div>
 </div>

@@ -19,3 +19,5 @@ angular:angular@1.5.0
 angularui:angular-ui-bootstrap
 rgnevashev:angular-ui-select
 alexwine:bootstrap-4
+angularui:angular-ui-router
+vishalm:angular-toastr

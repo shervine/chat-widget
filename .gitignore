@@ -1,3 +1,5 @@
 public/components
 node_modules/
 .idea/
+uploads/
+.*

@@ -7,13 +7,20 @@ body {
 
 #main-div {
   display: block;
+  max-width: 100% !important;
 }
+
 .main-row {
-  height: 92vh;
+  height: 87.5vh;
+}
+
+.border-info {
+    border-color: #cccccc !important;
 }
 
 .fill {
   box-sizing: border-box;
+  max-height: 87vh;
 }
 .dropdown-item {
   cursor:pointer;
@@ -33,15 +40,10 @@ body {
   overflow-x: hidden;
 }
 
-.user-messages {
-    max-height: 84vh;
-}
-
 .users-list {
   margin-top: 1px;
   margin-right: -8px;
   margin-left: -8px;
-  max-height: 91vh;
 }
 
 .selected {
