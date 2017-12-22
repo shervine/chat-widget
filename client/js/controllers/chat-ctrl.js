@@ -2,6 +2,16 @@
   angular.module('menChat')
     .controller('chatCtrl', function ($scope, $rootScope, toastr, $timeout) {
       $scope.chatInput = '';
+
+      $rootScope.$watch('selectedUser', function(newVal){
+        if(!newVal) {
+          return;
+        }
+
+        $scope.selectedUser = newVal;
+
+      });
+
       $scope.sendMessage = function () {
         if ($scope.chatInput === '') {
           alert('Please type the message you want to send');
@@ -22,14 +32,23 @@
         }
 
         console.log('Sending message using post data :', postObj);
-
-        Meteor.call('sendChatMessage', postObj, function (err, success) {
+        angular.element('.user-messages ul').append('<li class="me tmpInsert">' + angular.copy($scope.chatInput) + '</li>');
+        //scroll div 
+        $timeout(function () {
+          var d = angular.element('.user-messages');
+          d.animate({
+            scrollTop: d.prop('scrollHeight')
+          }, 1);
+        }, 10);
+        Meteor.call('sendChatMessage', postObj, window.authObj,  function (err, success) {
           console.log('sendChatMessage ', err, success);
           if (err) {
+            console.log('Sending message error ' , err);
             toastr.error('Sending error');
+            $('.tmpInsert').remove();
             return;
           }
-          angular.element('.user-messages ul').append('<li class="me tmpInsert">' + angular.copy($scope.chatInput) + '</li>');
+          
           $scope.chatInput = '';
           $scope.$apply();
 

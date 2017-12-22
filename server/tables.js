@@ -8,6 +8,7 @@ bootcampClasses = new PgSubscription('bootcampClasses');
 //&token='.md5($bootcamp['b_id'].'ChatiFrameS@lt'.$udata['u_id']).
 const salt = 'ChatiFrameS@lt';
 const saltSendMsg = '7H6hgtgtfii87';
+const menchApiUrl = 'https://mench.co/api_chat_v1';
 
 liveDb = new LivePg(process.env.POSTGRESQL_URL, process.env.CHANNEL);
 
@@ -18,8 +19,12 @@ function checkAuth(authObj) {
   return authObj.authToken == md5(authObj.bootcampId + salt + authObj.instructorId);
 }
 
-function sendChatMessage(formData) {
-  console.log('sendChatMessage formData ', formData);
+function sendChatMessage(formData, authObj, cbRes) {
+
+  if (!checkAuth(authObj)) {
+    console.log('uploadFile authentication failed ', authObj);
+    throw new Meteor.Error(500, 'Error');
+  }
 
   var auth_hash = md5(formData.senderId.toString() + formData.receiverId.toString() + 
   formData.messageType + saltSendMsg);
@@ -37,21 +42,20 @@ function sendChatMessage(formData) {
     data.attach_url = formData.attachUrl;
   }
 
-  console.log('formData :', formData);
-  console.log('post data :', data);
-
+  var postUrl = menchApiUrl + '/send_message';
   var syncFunc = Meteor.wrapAsync(postMench);
-  var result = syncFunc(data, function (err, res) {
-    console.log('CB: ', err, res);
-    if (err) {
-      throw new Meteor.Error(500, 'Cannot send message');
-    }
+  var res = syncFunc(postUrl, data, cbRes);
+    
+  //   function (err, result) {
+  //   console.log('Meteor.wrapAsync(postMench) : ', err, result);
+  //   if (err) {
+  //     // throw new Meteor.Error(500, err);
+  //     return err;
+  //   } else {
+  //       return result;
+  //     }
+  // });
 
-    return 'ok';
-  });
-
-  console.log('post result: ', result);
-  return 'ok';
 }
 
 Meteor.publish('allUsers', function (filterObj, authObj) {
@@ -197,21 +201,27 @@ Meteor.publish('bootcampClasses', function (authObj) {
 var md5 = Npm.require('md5');
 var needle = Npm.require('needle');
 
-function postMench(data, done) {
-  // the callback is optional, and needle returns a `readableStream` object
-  // that triggers a 'done' event when the request/response process is complete.
-  console.log('posting ', data, ' to ', 'https://mench.co/api_chat_v1/send_message');
-  needle
-    .post('https://mench.co/api_chat_v1/send_message', data, {
-      multipart: true
+function postMench(url, data, cb) {
+  console.log('posting ', data, ' to ', url);
+
+  needle('post', url, data)
+    .then(function(response) {
+      console.log('postMench response ', response.body, response.body.status);
+
+      if (response.body.status === 0 ) {
+        console.log('Error posting to url:', url, response.body);
+        var errMsg = response.body && response.body.message ? response.body.message : 'Error posting';
+        cb(errMsg);
+        return;
+      }
+
+      cb(null, 'Success');
     })
-    .on('readable', function () { /* eat your chunks */
-      done();
-    })
-    .on('done', function (err, resp) {
-      console.log('Ready-o!');
-      done(err, resp);
-    })
+    .catch(function(err) {
+      console.log('Error posting using postMEnch !', err);
+      // throw new Meteor.Error(500, 'Error');
+      cb('Error posting');
+    });
 }
 
 var fs = Npm.require('fs');
@@ -220,11 +230,34 @@ var fs = Npm.require('fs');
 var uuid = Npm.require('node-uuid');
 
 Meteor.methods({
+  'changeStudentStatus': function(studentId, authObj, cb){
+    if (!checkAuth(authObj)) {
+      console.log('uploadFile authentication failed ', authObj);
+      throw new Meteor.Error(500, 'Error');
+    }
+
+    var postUrl = menchApiUrl + '/update_admission_status';
+
+    // var auth_hash = md5(studentId.toString() + formData.receiverId.toString() + 
+    // formData.messageType + saltSendMsg);
+    // data = {
+    //   b_id (Bootcamp ID)
+    //   initiator_u_id (Instructor ID)
+    //   recipient_u_id (Student ID)
+    //   r_id (Class ID)
+    //   ru_status (The new status, see below for rules)
+    //   auth_hash = md5( $_POST['recipient_u_id'] . $_POST['r_id'] . $_POST['ru_status'] . '7H6hgtgtfii87' )
+      
+    // }
+    var data = {};
+    var syncFunc = Meteor.wrapAsync(postMench);
+    syncFunc(postUrl, data, cb);
+  },
   'uploadFile': function (fileInfo, fileData, authObj, receiverId, cb) {
 
     if (!checkAuth(authObj)) {
       console.log('uploadFile authentication failed ', authObj);
-      throw new Meteor.Error(500, 'Error');
+      throw new Meteor.Error(500, 'GeneralError');
     }
 
     console.log("received file " + fileInfo.name);
@@ -282,7 +315,7 @@ Meteor.methods({
 
     console.log('Sending message with attachment :', dataObj);
 
-    var sendChatSyncResponse = sendChatSync(dataObj);
+    var sendChatSyncResponse = sendChatSync(dataObj, cb);
     console.log('sendChatSyncResponse :', sendChatSyncResponse);
     return uploadedFilePath;
   },
@@ -291,10 +324,9 @@ Meteor.methods({
     check(bootcampId, String);
     check(token, String);
 
-    //&token='.md5($bootcamp['b_id'].'ChatiFrameS@lt'.$udata['u_id']).
     var authToken = md5(bootcampId + salt + instructorId);
-    console.log('checkToken: ', bootcampId, instructorId);
-    console.log('checkToken :', token, authToken);
+    console.log('checkToken bootcampId, instructorId: ', bootcampId, instructorId);
+    console.log('checkToken passedToken, generatedToken:', token, authToken);
     return authToken == token;
   },
   'sendChatMessage': sendChatMessage

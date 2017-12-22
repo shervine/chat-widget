@@ -4,14 +4,14 @@
   "description": "Mench is a learning game on Facebook Messenger. We connect online instructors to students for on-demand learning over a Chatbot.",
   "main": "index.js",
   "dependencies": {
-    "aws-sdk": "^2.160.0",
-    "md5": "^2.2.1",
-    "needle": "^2.0.1",
-    "node-uuid": "^1.4.8"
+    "aws-sdk": "~2.160.0",
+    "md5": "~2.2.1",
+    "needle": "~2.1.*",
+    "node-uuid": "~1.4.8"
   },
   "devDependencies": {
-    "eslint": "^4.13.1",
-    "eslint-config-google": "^0.9.1"
+    "eslint": "~4.13.1",
+    "eslint-config-google": "~0.9.1"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
