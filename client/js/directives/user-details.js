@@ -1,48 +1,80 @@
 angular.module('menChat')
-  .directive('userDetails', function($rootScope, $timeout, toastr) {
+  .directive('userDetails', function ($rootScope, $timeout, toastr) {
     return {
       restrict: 'E',
       scope: {
         selectedUser: '=',
       },
-      link: function($scope, iElem, iAttr) {
-        $scope.userDetails1 = {};
+      link: function ($scope, iElem, iAttr) {
+        $scope.userDetails = {};
 
         $scope.userStatuses = [
-          {id: '-3', status: 'STUDENT DISPELLED'},
-          {id: '-2', status: 'STUDENT WITHDREW'},
-          {id: '-1', status: 'ADMISSION REJECTED'},
-          {id: '0', status: 'ADMISSION INITIATED'},
-          {id: '2', status: 'PENDING ADMISSION'},
-          {id: '4', status: 'BOOTCAMP STUDENT'},
-          {id: '5', status: 'BOOTCAMP GRADUATE'},
+          { id: '-3', status: 'STUDENT DISPELLED' },
+          { id: '-2', status: 'STUDENT WITHDREW' },
+          { id: '-1', status: 'ADMISSION REJECTED' },
+          { id: '0', status: 'ADMISSION INITIATED' },
+          { id: '2', status: 'PENDING ADMISSION' },
+          { id: '4', status: 'BOOTCAMP STUDENT' },
+          { id: '7', status: 'BOOTCAMP GRADUATE' },
         ];
 
-        $scope.$watch('selectedUser', function(newVal) {
+        $scope.$watch('selectedUser', function (newVal) {
           if (!newVal) {
             return;
           }
-          $scope.userDetails1 = newVal;
+          $scope.userDetails = newVal;
           console.log('User details : ', newVal);
 
-          for (let i in $scope.userStatuses) {
+          if ($scope.userDetails.ru_status == 4) {
+            $scope.userStatuses = [
+              { id: '-3', status: 'STUDENT DISPELLED' },
+              { id: '4', status: 'BOOTCAMP STUDENT' },
+              { id: '7', status: 'BOOTCAMP GRADUATE' }
+            ];
+          }
 
-            if ($scope.userDetails1.ru_status == $scope.userStatuses[i].id) {
+          if ($scope.userDetails.ru_status == 2) {
+            $scope.userStatuses = [
+              { id: '-1', status: 'ADMISSION REJECTED' },
+              { id: '2', status: 'PENDING ADMISSION' },
+              { id: '4', status: 'BOOTCAMP STUDENT' }
+            ];
+          }
+
+
+          for (let i in $scope.userStatuses) {
+            if ($scope.userDetails.ru_status == $scope.userStatuses[i].id) {
               $scope.studentStatus = $scope.userStatuses[i];
             }
           }
-          console.log($scope.studentStatus);
-
         });
 
-        $scope.$on('new-filter', function(ev, filterObj) {
-          $scope.userDetails1 = {};
+        $rootScope.$on('new-filter', function (ev, filterObj) {
+          //reseting user details when filter is changed
+          $scope.userDetails = {};
+          console.log('New filter obj: ', filterObj);
         });
 
-        $scope.changeStudentStatus = function(newStatus) {
-          console.log('changeStudentStatus ', newStatus);
-          toastr.info('Changing student status to ' + newStatus.status);
-          // console.log('Changed student status :', $scope.studentStatus);
+
+        $scope.changeStudentStatus = function (newStatus) {
+
+          //studentId, classId, currentStatus, newStatus, authObj, cb
+          Meteor.call('changeStudentStatus', $scope.userDetails, newStatus.id, window.authObj, function (err, success) {
+
+            console.log('Change status Object ', err, success);
+
+            if (err) {
+              var msg = typeof err.reason !== 'undefined' ? err.reason : 'Error changing status';
+              toastr.error(msg);
+              return;
+            }
+
+            toastr.success('Changed student status to ' + newStatus.status);
+          });
+
+          // $scope.userDetails.u_id, $scope.classId,
+          //   $scope.studentStatus.id, newStatus.id, window.authObj, $scope.cb
+
         };
       },
       templateUrl: 'user-details.html',

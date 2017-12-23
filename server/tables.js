@@ -13,7 +13,7 @@ const menchApiUrl = 'https://mench.co/api_chat_v1';
 liveDb = new LivePg(process.env.POSTGRESQL_URL, process.env.CHANNEL);
 
 function checkAuth(authObj) {
-  if(!authObj){
+  if (!authObj) {
     return;
   }
   return authObj.authToken == md5(authObj.bootcampId + salt + authObj.instructorId);
@@ -26,8 +26,8 @@ function sendChatMessage(formData, authObj, cbRes) {
     throw new Meteor.Error(500, 'Error');
   }
 
-  var auth_hash = md5(formData.senderId.toString() + formData.receiverId.toString() + 
-  formData.messageType + saltSendMsg);
+  var auth_hash = md5(formData.senderId.toString() + formData.receiverId.toString() +
+    formData.messageType + saltSendMsg);
 
   var data = {
     'b_id': formData.bId,
@@ -45,7 +45,7 @@ function sendChatMessage(formData, authObj, cbRes) {
   var postUrl = menchApiUrl + '/send_message';
   var syncFunc = Meteor.wrapAsync(postMench);
   var res = syncFunc(postUrl, data, cbRes);
-    
+
   //   function (err, result) {
   //   console.log('Meteor.wrapAsync(postMench) : ', err, result);
   //   if (err) {
@@ -141,7 +141,7 @@ Meteor.publish('userMessages', function (userId, authObj) {
 });
 
 // Meteor.publish('userData', function (userId, authObj) {
-  
+
 //   if (!checkAuth(authObj)) {
 //     console.log('userMessages Authentication failed ', authObj);
 //     throw new Meteor.Error(500, 'Error');
@@ -158,7 +158,7 @@ Meteor.publish('userMessages', function (userId, authObj) {
 // });
 
 Meteor.publish('instructorData', function (userId, authObj) {
-    if (!checkAuth(authObj)) {
+  if (!checkAuth(authObj)) {
     console.log('instructorData Authentication failed ', authObj);
     throw new Meteor.Error(500, 'Error');
   }
@@ -174,7 +174,7 @@ Meteor.publish('instructorData', function (userId, authObj) {
 });
 
 Meteor.publish('bootcampClasses', function (authObj) {
-  
+
   if (!checkAuth(authObj)) {
     console.log('bootcampClasses Authentication failed ', authObj);
     throw new Meteor.Error(500, 'Error');
@@ -182,7 +182,7 @@ Meteor.publish('bootcampClasses', function (authObj) {
 
   let instructorId = authObj.instructorId;
   let bootcampId = authObj.bootcampId;
-  
+
   if (!instructorId && !bootcampId) {
     return [];
   }
@@ -205,10 +205,10 @@ function postMench(url, data, cb) {
   console.log('posting ', data, ' to ', url);
 
   needle('post', url, data)
-    .then(function(response) {
+    .then(function (response) {
       console.log('postMench response ', response.body, response.body.status);
 
-      if (response.body.status === 0 ) {
+      if (response.body.status === 0) {
         console.log('Error posting to url:', url, response.body);
         var errMsg = response.body && response.body.message ? response.body.message : 'Error posting';
         cb(errMsg);
@@ -217,7 +217,7 @@ function postMench(url, data, cb) {
 
       cb(null, 'Success');
     })
-    .catch(function(err) {
+    .catch(function (err) {
       console.log('Error posting using postMEnch !', err);
       // throw new Meteor.Error(500, 'Error');
       cb('Error posting');
@@ -230,28 +230,51 @@ var fs = Npm.require('fs');
 var uuid = Npm.require('node-uuid');
 
 Meteor.methods({
-  'changeStudentStatus': function(studentId, authObj, cb){
+  'changeStudentStatus': function (student,  newStatus, authObj, cb) {
     if (!checkAuth(authObj)) {
       console.log('uploadFile authentication failed ', authObj);
-      throw new Meteor.Error(500, 'Error');
+      throw new Meteor.Error(500, 'General Error');
     }
 
+    // console.log('typeof cb1 ', student, newStatus, authObj);
+    if(typeof student === 'undefined') {
+      throw new Meteor.Error(500, 'Invalid params');
+    }
+
+    var studentId  = student.u_id;
+    var currentStatus = student.ru_status;
     var postUrl = menchApiUrl + '/update_admission_status';
 
-    // var auth_hash = md5(studentId.toString() + formData.receiverId.toString() + 
-    // formData.messageType + saltSendMsg);
-    // data = {
-    //   b_id (Bootcamp ID)
-    //   initiator_u_id (Instructor ID)
-    //   recipient_u_id (Student ID)
-    //   r_id (Class ID)
-    //   ru_status (The new status, see below for rules)
-    //   auth_hash = md5( $_POST['recipient_u_id'] . $_POST['r_id'] . $_POST['ru_status'] . '7H6hgtgtfii87' )
-      
-    // }
-    var data = {};
+    console.log('changeStudentStatus curr-newStatus', currentStatus, newStatus);
+
+    if (currentStatus == 2 && !(newStatus == 4 || newStatus == -1)) {
+      throw new Meteor.Error(500, 'Invalid status set');
+    }
+
+    if (currentStatus == 4 && !(newStatus == -3 || newStatus == 7)) {
+      throw new Meteor.Error(500, 'Invalid status set');
+    }
+
+    data = {
+      b_id: authObj.bootcampId,
+      initiator_u_id: authObj.instructorId,
+      recipient_u_ids: [studentId],
+      ru_status: newStatus,
+      auth_hash: md5(authObj.instructorId.toString() + newStatus.toString() + saltSendMsg),
+      status_change_note: currentStatus == 4 ? '' : null
+    }
+    console.log('changeStudentStatus data to send: ', data);
     var syncFunc = Meteor.wrapAsync(postMench);
-    syncFunc(postUrl, data, cb);
+    syncFunc(postUrl, data, function(err, result){
+      console.log('Posted Mench ', err, result);
+
+      if(err){
+        throw new Meteor.Error(500, err);
+      }
+
+      return result;
+    });
+
   },
   'uploadFile': function (fileInfo, fileData, authObj, receiverId, cb) {
 
@@ -297,11 +320,11 @@ Meteor.methods({
       messageType = 'video';
     }
 
-    if (extension == 'mp3' || extension == 'wav' ) {
+    if (extension == 'mp3' || extension == 'wav') {
       messageType = 'audio';
     }
 
-    if(!messageType){
+    if (!messageType) {
       throw new Meteor.Error(500, 'File type not accepted.');
     }
 
