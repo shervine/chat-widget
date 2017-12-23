@@ -41,6 +41,18 @@ angular.module('menChat')
             ];
           }
 
+          if($scope.userDetails.ru_status != 2 && $scope.userDetails.ru_status !=4) {
+            $scope.userStatuses = [
+              { id: '-3', status: 'STUDENT DISPELLED' },
+              { id: '-2', status: 'STUDENT WITHDREW' },
+              { id: '-1', status: 'ADMISSION REJECTED' },
+              { id: '0', status: 'ADMISSION INITIATED' },
+              { id: '2', status: 'PENDING ADMISSION' },
+              { id: '4', status: 'BOOTCAMP STUDENT' },
+              { id: '7', status: 'BOOTCAMP GRADUATE' },
+            ];
+          }
+
 
           for (let i in $scope.userStatuses) {
             if ($scope.userDetails.ru_status == $scope.userStatuses[i].id) {
