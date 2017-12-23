@@ -41,7 +41,7 @@ angular.module('menChat')
             ];
           }
 
-          if($scope.userDetails.ru_status != 2 && $scope.userDetails.ru_status !=4) {
+          if ($scope.userDetails.ru_status != 2 && $scope.userDetails.ru_status != 4) {
             $scope.userStatuses = [
               { id: '-3', status: 'STUDENT DISPELLED' },
               { id: '-2', status: 'STUDENT WITHDREW' },
@@ -73,20 +73,16 @@ angular.module('menChat')
           //studentId, classId, currentStatus, newStatus, authObj, cb
           Meteor.call('changeStudentStatus', $scope.userDetails, newStatus.id, window.authObj, function (err, success) {
 
-            console.log('Change status Object ', err, success);
+            console.log('Response status: ', err, success);
 
             if (err) {
               var msg = typeof err.reason !== 'undefined' ? err.reason : 'Error changing status';
               toastr.error(msg);
               return;
+            } else {
+              toastr.success('Changed student status to ' + newStatus.status);
             }
-
-            toastr.success('Changed student status to ' + newStatus.status);
           });
-
-          // $scope.userDetails.u_id, $scope.classId,
-          //   $scope.studentStatus.id, newStatus.id, window.authObj, $scope.cb
-
         };
       },
       templateUrl: 'user-details.html',

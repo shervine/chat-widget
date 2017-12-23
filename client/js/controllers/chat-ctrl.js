@@ -35,7 +35,8 @@
             scrollTop: d.prop('scrollHeight')
           }, 1);
         }, 10);
-        Meteor.call('sendChatMessage', postObj, window.authObj,  function (err, success) {
+
+        Meteor.call('sendChatMessage', postObj, window.authObj, (err, success) => {
           console.log('sendChatMessage ', err, success);
           if (err) {
             console.log('Sending message error ' , err);
