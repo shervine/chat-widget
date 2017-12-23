@@ -4,12 +4,7 @@
       $scope.chatInput = '';
 
       $rootScope.$watch('selectedUser', function(newVal){
-        if(!newVal) {
-          return;
-        }
-
         $scope.selectedUser = newVal;
-
       });
 
       $scope.sendMessage = function () {
