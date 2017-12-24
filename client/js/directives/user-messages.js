@@ -1,15 +1,15 @@
 angular.module('menChat')
-.directive('userMessages', function($rootScope, $timeout, $interval, $filter, $window) {
-  return {
-    restrict: 'E',
-    scope: {
-      selectedUser: '=',
-    },
-    controller: 'uploadCtrl',
-    link: function($scope, iElem, iAttr) {
-      $scope.msgs = [];
+  .directive('userMessages', function ($rootScope, $timeout, $interval, $filter, $window) {
+    return {
+      restrict: 'E',
+      scope: {
+        selectedUser: '=',
+      },
+      controller: 'uploadCtrl',
+      link: function ($scope, iElem, iAttr) {
+        $scope.msgs = [];
 
-        $rootScope.$on('new-filter', function(ev, filterObj) {
+        $rootScope.$on('new-filter', function (ev, filterObj) {
           if ($scope.messages && typeof $scope.messages.stop == 'function') {
             $scope.messages.stop();
           }
@@ -19,17 +19,33 @@ angular.module('menChat')
           $scope.selectedUser = null;
         });
 
-        $scope.$watch('selectedUser', function(newVal) {
+        $scope.$watch('selectedUser', function (newVal) {
           if (!newVal) {
             return;
           }
           $scope.loading = true;
 
+          //observer for chat messages content to enable scroll down
+          //when new content is inserted
+          var observer = new MutationObserver(function (mutations) {
+            console.log('New content into messages div');
+            $timeout(function () {
+              var d = angular.element('.user-messages');
+              d.animate({
+                scrollTop: d.prop('scrollHeight')
+              }, 1);
+            }, 20);
+          });
+          observer.observe(iElem.find('.user-messages')[0], {
+            childList: true,
+            subtree: true
+          });
+
           if ($scope.messages && typeof $scope.messages.stop == 'function') {
             $scope.messages.stop();
           }
 
-          $rootScope.$watch('instructorData', function(newData) {
+          $rootScope.$watch('instructorData', function (newData) {
             if (!newData) {
               return;
             }
@@ -38,35 +54,35 @@ angular.module('menChat')
             console.log('Instructor data ', $scope.instructorData);
           });
 
-          $scope.messages = new PgSubscription('userMessages', $scope.selectedUser.u_id,  window.authObj).reactive();
+          $scope.messages = new PgSubscription('userMessages', $scope.selectedUser.u_id, window.authObj).reactive();
 
-          $scope.messages.addEventListener('updated', function(diff, data) {
+          $scope.messages.addEventListener('updated', function (diff, data) {
             console.log('Subscription updated ', diff, data);
             // remove any previous tmpInserts
             angular.element('.user-messages ul .tmpInsert').remove();
             $scope.$apply();
-            $timeout(function() {
-              let d = angular.element('.user-messages');
-              d.animate({
-                scrollTop: d.prop('scrollHeight'),
-              }, 1);
-            }, 200);
+            // $timeout(function() {
+            //   let d = angular.element('.user-messages');
+            //   d.animate({
+            //     scrollTop: d.prop('scrollHeight'),
+            //   }, 1);
+            // }, 200);
           });
 
           let stop;
 
           $scope.loading = true;
-          stop = $interval(function() {
+          stop = $interval(function () {
             if (!$scope.messages.ready()) {
               return;
             }
             console.log('userMessages populated ', $scope.messages);
-            $timeout(function() {
+            $timeout(function () {
               $scope.$apply();
-              let d = angular.element('.user-messages');
-              d.animate({
-                scrollTop: d.prop('scrollHeight'),
-              }, 1);
+              // let d = angular.element('.user-messages');
+              // d.animate({
+              //   scrollTop: d.prop('scrollHeight'),
+              // }, 1);
 
               // render tooltips
               $('[data-toggle="tooltip"]').tooltip({
@@ -77,7 +93,7 @@ angular.module('menChat')
             $scope.stopInterval();
           }, 60);
 
-          $scope.stopInterval = function() {
+          $scope.stopInterval = function () {
             if (angular.isDefined(stop)) {
               $scope.loading = false;
               $interval.cancel(stop);
@@ -85,7 +101,7 @@ angular.module('menChat')
             }
           };
 
-          $scope.renderTooltip = function(message) {
+          $scope.renderTooltip = function (message) {
             if (!$rootScope.selectedUser || !$scope.instructorData) {
               return;
             }
@@ -100,19 +116,19 @@ angular.module('menChat')
       templateUrl: 'user-messages.html',
     };
   })
-  .filter('reverse', function() {
-    return function(items) {
+  .filter('reverse', function () {
+    return function (items) {
       if (typeof items === 'undefined') {
         return null;
       }
       return items.slice().reverse();
     };
   })
-  .filter('formatMsg', function($sce) {
-    return function($e_message) {
+  .filter('formatMsg', function ($sce) {
+    return function ($e_message) {
 
-      if ($e_message === null || typeof $e_message  === 'undefined' || $e_message.length == 0){
-         return $e_message;
+      if ($e_message === null || typeof $e_message === 'undefined' || $e_message.length == 0) {
+        return $e_message;
       }
 
       function linkify(inputText) {
