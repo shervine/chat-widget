@@ -40,8 +40,11 @@
           console.log('sendChatMessage ', err, success);
           if (err) {
             console.log('Sending message error ' , err);
-            toastr.error('Sending error');
-            $('.tmpInsert').remove();
+            var errMsg = typeof err !== 'undefined' && typeof err.reason !== 'undefined' ? err.reason.toString() : 'Sending error';
+            toastr.error(errMsg);
+            $timeout(function(){
+              $('.tmpInsert').remove();
+            }, 50);
             return;
           }
           

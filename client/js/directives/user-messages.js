@@ -66,38 +66,34 @@ angular.module('menChat')
             // remove any previous tmpInserts
             angular.element('.user-messages ul .tmpInsert').remove();
             $scope.$apply();
-            // $timeout(function() {
-            //   let d = angular.element('.user-messages');
-            //   d.animate({
-            //     scrollTop: d.prop('scrollHeight'),
-            //   }, 1);
-            // }, 200);
           });
 
           let stop;
 
           $scope.loading = true;
-          stop = $interval(function () {
-            if (!$scope.messages.ready()) {
-              return;
-            }
-            console.log('userMessages populated ', $scope.messages);
-            $timeout(function () {
-              $scope.$apply();
-              // let d = angular.element('.user-messages');
-              // d.animate({
-              //   scrollTop: d.prop('scrollHeight'),
-              // }, 1);
 
-              // render tooltips
-              $('[data-toggle="tooltip"]').tooltip({
-                placement: 'bottom',
-                container: '#user-messages',
-              });
-            }, 100);
-            $scope.stopInterval();
-          }, 60);
+          if(stop !== 'undefined'){
+            //TODO: 
+            //remove previous subscriptions 
+          }
 
+            stop = $interval(function () {
+              if (!$scope.messages.ready()) {
+                return;
+              }
+              console.log('userMessages populated ', $scope.messages);
+              $timeout(function () {
+                $scope.$apply();
+
+                // render tooltips
+                $('[data-toggle="tooltip"]').tooltip({
+                  placement: 'bottom',
+                  container: '#user-messages',
+                });
+              }, 100);
+              $scope.stopInterval();
+            }, 60);
+          
           $scope.stopInterval = function () {
             if (angular.isDefined(stop)) {
               $scope.loading = false;
@@ -167,8 +163,7 @@ angular.module('menChat')
         if (!attachement) {
           return;
         }
-        // console.log('Attachement: ', attachement);
-
+    
         let $segments = attachement.split(':https:');
         let $sub_segments = 'https:' + $segments[1];
 
@@ -191,7 +186,6 @@ angular.module('menChat')
       }
 
       $e_message = nl2br($e_message);
-
 
       return $sce.trustAsHtml($e_message);
 
