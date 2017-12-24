@@ -7,6 +7,7 @@ angular.module('menChat')
       },
       link: function ($scope, iElem, iAttr) {
         $scope.userDetails = {};
+        $scope.changeNote = '';
 
         $scope.userStatuses = [
           { id: '-3', status: 'STUDENT DISPELLED' },
@@ -23,6 +24,7 @@ angular.module('menChat')
             return;
           }
           $scope.userDetails = newVal;
+          $scope.changeNote = '';
           console.log('User details : ', newVal);
 
           if ($scope.userDetails.ru_status == 4) {
@@ -64,25 +66,33 @@ angular.module('menChat')
         $rootScope.$on('new-filter', function (ev, filterObj) {
           //reseting user details when filter is changed
           $scope.userDetails = {};
+          $scope.changeNote = '';
           console.log('New filter obj: ', filterObj);
         });
 
 
         $scope.changeStudentStatus = function (newStatus) {
 
+          if (($scope.userDetails.ru_status == 4 || $scope.userDetails.ru_status == 2) &&
+            (!$scope.changeNote || $scope.changeNote.length < 50)) {
+            toastr.error('Change note must have at least 50 characters');
+            return;
+          }
+
           //studentId, classId, currentStatus, newStatus, authObj, cb
-          Meteor.call('changeStudentStatus', $scope.userDetails, newStatus.id, window.authObj, function (err, success) {
+          Meteor.call('changeStudentStatus', $scope.userDetails, newStatus.id, window.authObj, $scope.changeNote,
+            function (err, success) {
+              console.log('Response status: ', err, success);
 
-            console.log('Response status: ', err, success);
-
-            if (err) {
-              var msg = typeof err.reason !== 'undefined' ? err.reason : 'Error changing status';
-              toastr.error(msg);
-              return;
-            } else {
-              toastr.success('Changed student status to ' + newStatus.status);
-            }
-          });
+              if (err) {
+                var msg = typeof err.reason !== 'undefined' ? err.reason : 'Error changing status';
+                toastr.error(msg);
+                return;
+              } else {
+                toastr.success('Changed student status to ' + newStatus.status);
+                $scope.studentStatus = newStatus;
+              }
+            });
         };
       },
       templateUrl: 'user-details.html',

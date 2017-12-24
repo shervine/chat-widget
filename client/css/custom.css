@@ -10,6 +10,11 @@ body {
   max-width: 100% !important;
 }
 
+.change-note {
+  min-height: 200px;
+  width: 100%
+}
+
 .main-row {
   height: 87.5vh;
 }

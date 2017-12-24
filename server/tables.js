@@ -222,7 +222,7 @@ function sendChatMessage(formData, authObj) {
   var postUrl = menchApiUrl + '/send_message';
 
   var responsePromise = new Promise((resolve, reject) => {
-    postMench(postUrl, data, function(err, result) {
+     postMench(postUrl, data, function(err, result) {
       if (err) {
         logger.log('got error :', err);
         // throw new Meteor.Error(500, err);
@@ -236,15 +236,15 @@ function sendChatMessage(formData, authObj) {
   return responsePromise.await();
 }
 
-var fs = Npm.require('fs');
+//var fs = Npm.require('fs');
 // var meteor_root = fs.realpathSync(process.cwd() + '/../../../../../');
 // var temPath = meteor_root + '/uploads/';
 var uuid = Npm.require('node-uuid');
 
 Meteor.methods({
-   changeStudentStatus(student, newStatus, authObj) {
+   changeStudentStatus(student, newStatus, authObj, note) {
     if (!checkAuth(authObj)) {
-      logger.log('uploadFile authentication failed ', authObj);
+      logger.log('ChangeStatus authentication failed ', authObj);
       throw new Meteor.Error(500, 'General Error');
     }
   
@@ -273,7 +273,7 @@ Meteor.methods({
       recipient_u_ids: [studentId],
       ru_status: newStatus,
       auth_hash: md5(authObj.instructorId.toString() + newStatus.toString() + saltSendMsg),
-      status_change_note: currentStatus == 4 ? '' : null
+      status_change_note: currentStatus == 4 ||currentStatus == 2  ? note : null
     }
   
     var responsePromise = new Promise((resolve, reject) => {
@@ -288,23 +288,8 @@ Meteor.methods({
     });
   
     return responsePromise.await();
-  
-    // logger.log('changeStudentStatus data to send: ', data);
-    // var syncFunc = Meteor.wrapAsync(postMench);
-    // syncFunc(postUrl, data, (err, result) => {
-    //   logger.log('Posted Mench ', err, result);
-  
-    //   if(err){
-    //     callback(err);
-    //     // return err;
-    //     // throw new Meteor.Error(500, err);
-    //   }
-  
-    //   callback(null,result);
-    //   // return result;
-    // });
   },
-  'uploadFile': function (fileInfo, fileData, authObj, receiverId, cb) {
+  'uploadFile': function (fileInfo, fileData, authObj, receiverId) {
 
     if (!checkAuth(authObj)) {
       logger.log('uploadFile authentication failed ', authObj);
@@ -312,10 +297,6 @@ Meteor.methods({
     }
 
     logger.log("received file " + fileInfo.name);
-
-    // + " data: " + fileData
-    //logger.log('Uploading to :', temPath);
-    //fs.writeFileSync(temPath + fileInfo.name, fileData, 'binary');
 
     var splitted = fileInfo.name.split('.');
     var extension = splitted.slice(-1).pop();
@@ -332,9 +313,6 @@ Meteor.methods({
     var syncS3UploadSync = Meteor.wrapAsync(menchUpload);
     var S3syncResponse = syncS3UploadSync(fileData, fileInfo.name, cb1);
     logger.log('Uploaded to Amazon S3 reponse: ', S3syncResponse);
-
-    //send chat message with attached file
-    var sendChatSync = Meteor.wrapAsync(sendChatMessage);
 
     var uploadedFilePath = 'https://s3-us-west-2.amazonaws.com/mench-chat/' + fileInfo.name;
 
@@ -356,7 +334,7 @@ Meteor.methods({
       throw new Meteor.Error(500, 'File type not accepted.');
     }
 
-    var dataObj = {
+    var data = {
       bId: authObj.bootcampId,
       messageType: messageType,
       senderId: authObj.instructorId,
@@ -364,11 +342,17 @@ Meteor.methods({
       attachUrl: uploadedFilePath
     }
 
-    logger.log('Sending message with attachment :', dataObj);
+    logger.log('Sending message with attachment :', data);
 
-    var sendChatSyncResponse = sendChatSync(dataObj, cb);
-    logger.log('sendChatSyncResponse :', sendChatSyncResponse);
-    return uploadedFilePath;
+    var responsePromise = new Promise((resolve, reject) => {
+      sendChatMessage(data, authObj).then( (result) => {
+        resolve(result);
+      }, (err)=> {
+         reject(err);
+      });
+    });
+  
+    return responsePromise.await();
   },
   'checkToken': function (token, instructorId, bootcampId) {
     check(instructorId, String);

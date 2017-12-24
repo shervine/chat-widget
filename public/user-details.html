@@ -27,6 +27,14 @@
         </div>
       </div>
     </div>
+    <div class="row" ng-show="userDetails.ru_status == 4 || userDetails.ru_status == 2">
+        <div class="col-sm-12">
+        <label style="margin-top: 8px;">Status change note (min 50 chars):</label>
+        </div>
+        <div class="col-sm-12">
+          <textarea class="change-note" ng-model="changeNote"></textarea>
+        </div>
+    </div>
 
   </div>
 </div>
