@@ -30,16 +30,21 @@ angular.module('menChat')
           var observer = new MutationObserver(function (mutations) {
             console.log('New content into messages div');
             var d = angular.element('.user-messages');
-            $timeout(function () {
-              d.animate({
-                scrollTop: d.prop('scrollHeight')
-              }, 1);
-            }, 20);
-            $timeout(function () {
-              d.animate({
-                scrollTop: d.prop('scrollHeight')
-              }, 1);
-            }, 200);
+            
+            var timeoutSet = function(msec){
+              $timeout(function () {
+                d.animate({
+                  scrollTop: d.prop('scrollHeight')
+                }, 1);
+              }, msec);
+            }
+            
+            //sometimes the messages contain images and videos 
+            //so the div render is slower than usual, we still need to scroll the div to the bottom
+            timeoutSet(20);
+            timeoutSet(500);
+            timeoutSet(1500);
+            timeoutSet(2000);
           });
           observer.observe(iElem.find('.user-messages')[0], {
             childList: true,
@@ -72,9 +77,17 @@ angular.module('menChat')
 
           $scope.loading = true;
 
+          $scope.stopInterval = function () {
+            if (angular.isDefined(stop)) {
+              $scope.loading = false;
+              $interval.cancel(stop);
+              stop = undefined;
+            }
+          };
+          
           if(stop !== 'undefined'){
-            //TODO: 
             //remove previous subscriptions 
+            $scope.stopInterval();
           }
 
             stop = $interval(function () {
@@ -84,7 +97,6 @@ angular.module('menChat')
               console.log('userMessages populated ', $scope.messages);
               $timeout(function () {
                 $scope.$apply();
-
                 // render tooltips
                 $('[data-toggle="tooltip"]').tooltip({
                   placement: 'bottom',
@@ -94,13 +106,7 @@ angular.module('menChat')
               $scope.stopInterval();
             }, 60);
           
-          $scope.stopInterval = function () {
-            if (angular.isDefined(stop)) {
-              $scope.loading = false;
-              $interval.cancel(stop);
-              stop = undefined;
-            }
-          };
+          
 
           $scope.renderTooltip = function (message) {
             if (!$rootScope.selectedUser || !$scope.instructorData) {

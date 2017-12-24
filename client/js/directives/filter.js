@@ -4,7 +4,7 @@ angular.module('menChat')
       restrict: 'E',
       scope: {},
       link: function ($scope, $rootScope) {
-        $scope.bootcampClasses = new PgSubscription('bootcampClasses', window.authObj);
+        $scope.bootcampClasses = new PgSubscription('bootcampClasses', window.authObj).reactive();
 
         $scope.class = {
           'r_start_date': 'All Classes',
@@ -29,7 +29,7 @@ angular.module('menChat')
 
         $timeout(function () {
           $scope.classes = $scope.bootcampClasses;
-        }, 1500);
+        }, 1000);
 
         $scope.filterObj = {
           'class': $scope.class,

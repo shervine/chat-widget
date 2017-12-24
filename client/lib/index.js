@@ -2,8 +2,13 @@ queryDict = {};
 angular.module('menChat', ['ui.bootstrap', 'ui.bootstrap.tpls',
     'ui.bootstrap.tooltip', 'ui.router', 'toastr', 'ngFileUpload'
   ])
-  .config(['$stateProvider', '$urlRouterProvider',
-    function ($stateProvider, $urlRouterProvider) {
+  .config(['$stateProvider', '$urlRouterProvider', 'toastrConfig',
+    function ($stateProvider, $urlRouterProvider, toastrConfig) {
+      
+      angular.extend(toastrConfig, {
+        timeOut: 5000
+      });
+
       $urlRouterProvider.otherwise('/');
       $stateProvider
         .state('home', {

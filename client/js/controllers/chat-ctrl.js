@@ -27,14 +27,8 @@
         }
 
         console.log('Sending message using post data :', postObj);
+        //temporary insert the message into the div until will be updated from server
         angular.element('.user-messages ul').append('<li class="me tmpInsert">' + angular.copy($scope.chatInput) + '</li>');
-        //scroll div 
-        $timeout(function () {
-          var d = angular.element('.user-messages');
-          d.animate({
-            scrollTop: d.prop('scrollHeight')
-          }, 1);
-        }, 10);
 
         Meteor.call('sendChatMessage', postObj, window.authObj, (err, success) => {
           console.log('sendChatMessage ', err, success);
@@ -50,15 +44,6 @@
           
           $scope.chatInput = '';
           $scope.$apply();
-
-          //scroll div 
-          $timeout(function () {
-            var d = angular.element('.user-messages');
-            d.animate({
-              scrollTop: d.prop('scrollHeight')
-            }, 1);
-          }, 100);
-
         });
       }
     });
