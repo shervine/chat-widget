@@ -8,6 +8,21 @@ angular.module('menChat')
       controller: 'uploadCtrl',
       link: function ($scope, iElem, iAttr) {
         $scope.msgs = [];
+        var stop;
+
+        // $scope.loading = true;
+        // if (stop !== 'undefined') {
+        //   //remove previous subscriptions 
+        //   $scope.stopInterval();
+        // }
+
+        $scope.stopInterval = function () {
+          if (angular.isDefined(stop)) {
+            $scope.loading = false;
+            $interval.cancel(stop);
+            stop = undefined;
+          }
+        };
 
         $rootScope.$on('new-filter', function (ev, filterObj) {
           if ($scope.messages && typeof $scope.messages.stop == 'function') {
@@ -17,28 +32,34 @@ angular.module('menChat')
           $scope.messages = [];
           $rootScope.selectedUser = null;
           $scope.selectedUser = null;
+          //stop any previous subscription
+          $scope.stopInterval();
         });
 
         $scope.$watch('selectedUser', function (newVal) {
           if (!newVal) {
             return;
           }
+          
+          //stop any previous subscription
+          $scope.stopInterval();
+
           $scope.loading = true;
 
           //observer for chat messages content to enable scroll down
           //when new content is inserted
           var observer = new MutationObserver(function (mutations) {
-            console.log('New content into messages div');
+            // console.log('New content into messages div');
             var d = angular.element('.user-messages');
-            
-            var timeoutSet = function(msec){
+
+            var timeoutSet = function (msec) {
               $timeout(function () {
                 d.animate({
                   scrollTop: d.prop('scrollHeight')
                 }, 1);
               }, msec);
             }
-            
+
             //sometimes the messages contain images and videos 
             //so the div render is slower than usual, we still need to scroll the div to the bottom
             timeoutSet(20);
@@ -73,40 +94,23 @@ angular.module('menChat')
             $scope.$apply();
           });
 
-          let stop;
-
-          $scope.loading = true;
-
-          $scope.stopInterval = function () {
-            if (angular.isDefined(stop)) {
-              $scope.loading = false;
-              $interval.cancel(stop);
-              stop = undefined;
+          stop = $interval(function () {
+            if (!$scope.messages.ready()) {
+              return;
             }
-          };
-          
-          if(stop !== 'undefined'){
-            //remove previous subscriptions 
+            console.log('userMessages populated ', $scope.messages);
+            $timeout(function () {
+              $scope.$apply();
+              // render tooltips
+              $('[data-toggle="tooltip"]').tooltip({
+                placement: 'bottom',
+                container: '#user-messages',
+              });
+            }, 100);
             $scope.stopInterval();
-          }
+          }, 60);
 
-            stop = $interval(function () {
-              if (!$scope.messages.ready()) {
-                return;
-              }
-              console.log('userMessages populated ', $scope.messages);
-              $timeout(function () {
-                $scope.$apply();
-                // render tooltips
-                $('[data-toggle="tooltip"]').tooltip({
-                  placement: 'bottom',
-                  container: '#user-messages',
-                });
-              }, 100);
-              $scope.stopInterval();
-            }, 60);
-          
-          
+
 
           $scope.renderTooltip = function (message) {
             if (!$rootScope.selectedUser || !$scope.instructorData) {
@@ -169,7 +173,7 @@ angular.module('menChat')
         if (!attachement) {
           return;
         }
-    
+
         let $segments = attachement.split(':https:');
         let $sub_segments = 'https:' + $segments[1];
 
