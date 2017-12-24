@@ -38,8 +38,12 @@ angular.module('menChat')
                  window.authObj, $rootScope.selectedUser.u_id, 
                 function (err, response) {
                   console.log('Upload callback: ', err, response);
-                  var errMsg = typeof err !== 'undefined' && typeof err.reason !== 'undefined' ? err.reason.toString() : 'Uploading error';
-                  toastr.error(errMsg);
+                  if(err){
+                    var errMsg = typeof err !== 'undefined' && typeof err.reason !== 'undefined' ? err.reason.toString() : 'Uploading error';
+                    toastr.error(errMsg);
+                  } else {
+                    toastr.success(response);
+                  }
                   $scope.uploadProgress = false;
                   $scope.$apply();
                 });
