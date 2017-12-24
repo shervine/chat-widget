@@ -174,8 +174,8 @@ function postMench(url, data, cb) {
 
       if (response.body.status === 0) {
         logger.log('Error posting to url:', url, response.body);
-        var errMsg = typeof response.body !== 'undefined' && typeof response.body.message !== 'undefined' 
-        ? response.body.message : 'Error posting';
+        var errMsg = typeof response.body !== 'undefined' && typeof response.body.message !== 'undefined'
+          ? response.body.message : 'Error posting';
         // throw new Meteor.Error(errMsg);
         cb(errMsg);
         return;
@@ -183,17 +183,17 @@ function postMench(url, data, cb) {
 
       var successMessage = response.body && response.body.message ? response.body.message : 'Success';
       cb(null, successMessage);
-    }, function(err){
-        console.log(' Error postinttggggg ', err);
-        cb(err);
+    }, function (err) {
+      console.log(' Error postinttggggg ', err);
+      cb(err);
     });
-    // .catch(function (err) {
-    //   logger.log('Error posting using postMEnch !', err);
-    //   var errMsg = typeof err !== 'undefined' && typeof err.reason !== 'undefined' ? err.reason.toString() : 'General error';
-    //   // throw new Meteor.Error(errMsg);
-    //   logger.log('Error posting using postMEnch formatted msg ', errMsg);
-    //   cb(errMsg);
-    // });
+  // .catch(function (err) {
+  //   logger.log('Error posting using postMEnch !', err);
+  //   var errMsg = typeof err !== 'undefined' && typeof err.reason !== 'undefined' ? err.reason.toString() : 'General error';
+  //   // throw new Meteor.Error(errMsg);
+  //   logger.log('Error posting using postMEnch formatted msg ', errMsg);
+  //   cb(errMsg);
+  // });
 }
 
 function sendChatMessage(formData, authObj) {
@@ -222,7 +222,7 @@ function sendChatMessage(formData, authObj) {
   var postUrl = menchApiUrl + '/send_message';
 
   var responsePromise = new Promise((resolve, reject) => {
-     postMench(postUrl, data, function(err, result) {
+    postMench(postUrl, data, function (err, result) {
       if (err) {
         logger.log('got error :', err);
         // throw new Meteor.Error(500, err);
@@ -242,40 +242,40 @@ function sendChatMessage(formData, authObj) {
 var uuid = Npm.require('node-uuid');
 
 Meteor.methods({
-   changeStudentStatus(student, newStatus, authObj, note) {
+  changeStudentStatus(student, newStatus, authObj, note) {
     if (!checkAuth(authObj)) {
       logger.log('ChangeStatus authentication failed ', authObj);
       throw new Meteor.Error(500, 'General Error');
     }
-  
+
     // logger.log('typeof cb1 ', student, newStatus, authObj);
     if (typeof student === 'undefined') {
       throw new Meteor.Error(500, 'Invalid params');
     }
-  
+
     var studentId = student.u_id;
     var currentStatus = student.ru_status;
     var postUrl = menchApiUrl + '/update_admission_status';
-  
+
     logger.log('changeStudentStatus curr-newStatus', currentStatus, newStatus);
-  
+
     if (currentStatus == 2 && !(newStatus == 4 || newStatus == -1)) {
       throw new Meteor.Error(500, 'Invalid status set');
     }
-  
+
     if (currentStatus == 4 && !(newStatus == -3 || newStatus == 7)) {
       throw new Meteor.Error(500, 'Invalid status set');
     }
-  
+
     data = {
       b_id: authObj.bootcampId,
       initiator_u_id: authObj.instructorId,
       recipient_u_ids: [studentId],
       ru_status: newStatus,
       auth_hash: md5(authObj.instructorId.toString() + newStatus.toString() + saltSendMsg),
-      status_change_note: currentStatus == 4 ||currentStatus == 2  ? note : null
+      status_change_note: currentStatus == 4 || currentStatus == 2 ? note : null
     }
-  
+
     var responsePromise = new Promise((resolve, reject) => {
       postMench(postUrl, data, (err, result) => {
         if (err) {
@@ -286,7 +286,7 @@ Meteor.methods({
         resolve(result);
       });
     });
-  
+
     return responsePromise.await();
   },
   'uploadFile': function (fileInfo, fileData, authObj, receiverId) {
@@ -345,13 +345,18 @@ Meteor.methods({
     logger.log('Sending message with attachment :', data);
 
     var responsePromise = new Promise((resolve, reject) => {
-      sendChatMessage(data, authObj).then( (result) => {
-        resolve(result);
-      }, (err)=> {
-         reject(err);
-      });
+      var sent = sendChatMessage(data, authObj);
+
+      logger.log('sendChatMessage responser ', sent);
+
+      if (sent != 'Message sent') {
+        reject(sent);
+      } else {
+        resolve(sent);
+      }
+
     });
-  
+
     return responsePromise.await();
   },
   'checkToken': function (token, instructorId, bootcampId) {
