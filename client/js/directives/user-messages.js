@@ -29,12 +29,17 @@ angular.module('menChat')
           //when new content is inserted
           var observer = new MutationObserver(function (mutations) {
             console.log('New content into messages div');
+            var d = angular.element('.user-messages');
             $timeout(function () {
-              var d = angular.element('.user-messages');
               d.animate({
                 scrollTop: d.prop('scrollHeight')
               }, 1);
             }, 20);
+            $timeout(function () {
+              d.animate({
+                scrollTop: d.prop('scrollHeight')
+              }, 1);
+            }, 200);
           });
           observer.observe(iElem.find('.user-messages')[0], {
             childList: true,
