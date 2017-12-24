@@ -80,7 +80,8 @@ angular.module('menChat')
           }
 
           //studentId, classId, currentStatus, newStatus, authObj, cb
-          Meteor.call('changeStudentStatus', $scope.userDetails, newStatus.id, window.authObj, $scope.changeNote,
+          Meteor.call('changeStudentStatus', $scope.userDetails, newStatus.id, 
+            window.authObj, $scope.changeNote,
             function (err, success) {
               console.log('Response status: ', err, success);
 
@@ -89,8 +90,14 @@ angular.module('menChat')
                 toastr.error(msg);
                 return;
               } else {
-                toastr.success('Changed student status to ' + newStatus.status);
+                toastr.success(success);
                 $scope.studentStatus = newStatus;
+                $scope.changeNote = '';
+
+                if(newStatus.id == 4) {
+                  console.log('Should enable chat ');
+                  $('.dimmed').hide();
+                }
               }
             });
         };
