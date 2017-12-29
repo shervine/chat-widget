@@ -21,6 +21,13 @@ body {
 
 .user-details p, .user-details label {
   font-size: 1.5vw;
+  padding: 0;
+  margin: 0;
+  max-width: 210px;
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden !important;
+  text-overflow: ellipsis;
 }
 
 #dropdownMenuButton {
@@ -52,7 +59,7 @@ body {
 
 .change-note {
   width: 100%;
-  min-height: 172px;
+  min-height: 100px;
   width: 100%;
   border: 1px solid #cccccc;
   overflow: hidden;
