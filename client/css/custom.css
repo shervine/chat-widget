@@ -5,14 +5,57 @@ body {
   color: rgb(127, 127, 127);
 }
 
+.clearfix {
+  zoom: 1;
+}
+
+.clearfix:before, .clearfix:after {
+    content: "";
+    display: table;
+    line-height: 0;
+}
+
+.clearfix:after {
+    clear: both;
+}
+
+.user-details p, .user-details label {
+  font-size: 1.5vw;
+}
+
+#dropdownMenuButton {
+  font-size: 1.5vw;
+  max-width: 100%;
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden !important;
+  text-overflow: ellipsis;
+}
+
+.row {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display:  flex;
+}
+
 #main-div {
   display: block;
   max-width: 100% !important;
 }
 
+#menchChat {
+  min-width: 719px;
+  min-height: 500px;
+  overflow: scroll;
+}
+
 .change-note {
-  min-height: 200px;
-  width: 100%
+  width: 100%;
+  min-height: 172px;
+  width: 100%;
+  border: 1px solid #cccccc;
+  overflow: hidden;
 }
 
 .main-row {

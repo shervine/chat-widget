@@ -1,40 +1,49 @@
-<div class="row user-details" ng-show="userDetails.u_email">
+<div class="row">
   <div class="col-sm-12">
-    <center>
-      <img ng-if="userDetails.u_image_url" class="chat-avatar" style="width:170px;height:auto" src="{{userDetails.u_image_url}}">
-      <i ng-if="!userDetails.u_image_url" class="fa fa-5x fa-user-o" style="margin-left: -7px; margin-top: 3px;"></i>
-    </center>
-    <h5>{{userDetails.u_fname}} {{userDetails.u_lname}}</h5>
-    <p>E-Mail: {{userDetails.u_email}}</p>
-    <p>Country: {{userDetails.u_country_code}}</p>
-    <p>Timezone: {{userDetails.u_timezone}}</p>
-
-    <div class="row">
-      <div class="col-sm-2">
-        <label style="margin-top: 8px;">Status:</label>
-      </div>
-      <div class="col-sm-6">
-        <div class="dropdown">
-          <button class="btn btn-secondary dropdown-toggle" type="button" 
-            id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-            aria-expanded="false">
-            {{studentStatus.status}}
-          </button>
-          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" ng-click="changeStudentStatus(item)" 
-            ng-repeat="item in userStatuses">{{item.status}}</a>
+    <p>
+      <h5 ng-show="!userDetails.u_email">Student Info</h5>
+    </p>
+    <p>
+      <h5 ng-show="userDetails.u_fname">{{userDetails.u_fname}} {{userDetails.u_lname}}</h5>
+    </p>
+  </div>
+  <div class="col-sm-12">
+      <div class="row user-details" ng-show="userDetails.u_email">
+          <div class="col-sm-12">
+            <center>
+              <img ng-if="userDetails.u_image_url" class="chat-avatar" style="width: 12vw;height:auto" src="{{userDetails.u_image_url}}">
+              <i ng-if="!userDetails.u_image_url" class="fa fa-5x fa-user-o" style="margin-left: -7px; margin-top: 3px;"></i>
+            </center>
+            <p>E-Mail: {{userDetails.u_email}}</p>
+            <p>Country: {{userDetails.u_country_code}}</p>
+            <p>Timezone: {{userDetails.u_timezone}}</p>
+      
+            <div class="row">
+              <div class="col-sm-3">
+                <label style="margin-top: 8px;">Status:</label>
+              </div>
+              <div class="col-sm-9">
+                <div class="dropdown">
+                  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">
+                    {{studentStatus.status}}
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" ng-click="changeStudentStatus(item)" ng-repeat="item in userStatuses">{{item.status}}</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row" ng-show="userDetails.ru_status == 4 || userDetails.ru_status == 2">
+              <div class="col-sm-12">
+                <label style="margin-top: 8px;">Status change note (min 50 chars):</label>
+              </div>
+              <div class="col-sm-12">
+                <textarea class="change-note" ng-model="changeNote"></textarea>
+              </div>
+            </div>
+      
           </div>
         </div>
-      </div>
-    </div>
-    <div class="row" ng-show="userDetails.ru_status == 4 || userDetails.ru_status == 2">
-        <div class="col-sm-12">
-        <label style="margin-top: 8px;">Status change note (min 50 chars):</label>
-        </div>
-        <div class="col-sm-12">
-          <textarea class="change-note" ng-model="changeNote"></textarea>
-        </div>
-    </div>
-
   </div>
 </div>

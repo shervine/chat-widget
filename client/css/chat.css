@@ -43,6 +43,15 @@
   color: #75ace7;
 }
 
+.user-row .user-name {
+  max-width: 156px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin-top: -4px;
+  margin-bottom: 1px;
+  overflow: hidden !important;
+}
+
 .last-msg {
   display: inline-block;
   max-width: 140px;
@@ -55,6 +64,10 @@
   font-size: 14px;
 }
 
+.chat-input {
+  min-width: 364px;
+}
+
 .chat-send textarea {
     max-height: 44px;
     margin-bottom: 5px;
@@ -65,6 +78,7 @@
   cursor: pointer;
   font-size: 33px;
   margin-top: 3px;
+  margin-right: 5px;
 }
 
 .user-messages ul li {

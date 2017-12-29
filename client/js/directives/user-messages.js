@@ -127,6 +127,16 @@ angular.module('menChat')
       templateUrl: 'user-messages.html',
     };
   })
+  .filter("regexReplace", function() {
+    return function(input, searchRegex, replaceRegex) { // filter arguments
+      console.log(input);
+      if(!input || input.length == 0) {
+        return input;
+      }
+      return input.replace(RegExp(searchRegex), replaceRegex); // implementation
+  
+    };
+  })
   .filter('reverse', function () {
     return function (items) {
       if (typeof items === 'undefined') {
