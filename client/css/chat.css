@@ -65,7 +65,7 @@
 }
 
 .chat-input {
-  min-width: 364px;
+  min-width: 333px;
 }
 
 .chat-send textarea {
@@ -78,7 +78,7 @@
   cursor: pointer;
   font-size: 33px;
   margin-top: 3px;
-  margin-right: 5px;
+  margin-right: 8px;
 }
 
 .user-messages ul li {
