@@ -68,6 +68,10 @@
   min-width: 333px;
 }
 
+.chat-send {
+  height: 59px;
+}
+
 .chat-send textarea {
     max-height: 44px;
     margin-bottom: 5px;

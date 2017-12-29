@@ -75,7 +75,7 @@ body {
 
 .fill {
   box-sizing: border-box;
-  max-height: 87vh;
+  max-height: 84vh;
 }
 .dropdown-item {
   cursor:pointer;
