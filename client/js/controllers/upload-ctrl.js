@@ -20,6 +20,7 @@ angular.module('menChat')
         }
 
         $scope.uploadProgress = true;
+        $rootScope.$broadcast('uploadProgress', true);
 
         for (var i = 0; i < files.length; i++) {
           var file = files[i];
@@ -45,6 +46,7 @@ angular.module('menChat')
                     toastr.success(response);
                   }
                   $scope.uploadProgress = false;
+                  $rootScope.$broadcast('uploadProgress', false);
                   $scope.$apply();
                 });
             };

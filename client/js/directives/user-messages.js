@@ -10,11 +10,11 @@ angular.module('menChat')
         $scope.msgs = [];
         var stop;
 
-        // $scope.loading = true;
-        // if (stop !== 'undefined') {
-        //   //remove previous subscriptions 
-        //   $scope.stopInterval();
-        // }
+        $scope.$on('uploadProgress', function(ev, newVal){
+
+          console.log('user messages $on upload progress ', newVal);
+          $scope.uploadProgress = newVal;
+        });
 
         $scope.stopInterval = function () {
           if (angular.isDefined(stop)) {

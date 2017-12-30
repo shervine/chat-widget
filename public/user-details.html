@@ -14,10 +14,26 @@
               <img ng-if="userDetails.u_image_url" class="chat-avatar" style="width: 12vw;height:auto" src="{{userDetails.u_image_url}}">
               <i ng-if="!userDetails.u_image_url" class="fa fa-5x fa-user-o" style="margin-left: -7px; margin-top: 3px;"></i>
             </center>
-            <p>E-Mail: {{userDetails.u_email}}</p>
-            <p>Country: {{userDetails.u_country_code}}</p>
-            <p>Timezone: {{userDetails.u_timezone}}</p>
-      
+            <div class="row">
+                <div class="col-sm-12">
+                  <p>{{userDetails.u_email}}</p>
+                </div>  
+                <div class="col-sm-12">
+                    <p>Country: {{userDetails.u_country_code}}</p>
+                </div>
+                <div class="col-sm-12">
+                    <p>Timezone: {{userDetails.u_timezone}}</p>
+                </div>
+            </div>
+            <div class="row" ng-show="userDetails.ru_status == 4 || userDetails.ru_status == 2">
+                <div class="col-sm-12">
+                  <label>Student message</label>
+                </div>
+                <div class="col-sm-12">
+                  <textarea class="change-note" ng-model="changeNote"></textarea>
+                </div>
+              </div>
+
             <div class="row">
               <div class="col-sm-3">
                 <label style="margin-top: 8px;">Status:</label>
@@ -34,15 +50,6 @@
                 </div>
               </div>
             </div>
-            <div class="row" ng-show="userDetails.ru_status == 4 || userDetails.ru_status == 2">
-              <div class="col-sm-12">
-                <label style="margin-top: 8px;">Status change note (min 50 chars):</label>
-              </div>
-              <div class="col-sm-12">
-                <textarea class="change-note" ng-model="changeNote"></textarea>
-              </div>
-            </div>
-      
           </div>
         </div>
   </div>
