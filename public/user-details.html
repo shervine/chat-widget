@@ -14,7 +14,7 @@
               <img ng-if="userDetails.u_image_url" class="chat-avatar" style="width: 12vw;height:auto" src="{{userDetails.u_image_url}}">
               <i ng-if="!userDetails.u_image_url" class="fa fa-5x fa-user-o" style="margin-left: -7px; margin-top: 3px;"></i>
             </center>
-            <div class="row">
+            <div class="row" style="line-height: 16px;">
                 <div class="col-sm-12">
                   <p>{{userDetails.u_email}}</p>
                 </div>  
@@ -25,7 +25,7 @@
                     <p>Timezone: {{userDetails.u_timezone}}</p>
                 </div>
             </div>
-            <div class="row" ng-show="userDetails.ru_status == 4 || userDetails.ru_status == 2">
+            <div class="row" ng-show="userDetails.ru_status == 4 || userDetails.ru_status == 2" style="line-height: 19px;">
                 <div class="col-sm-12">
                   <label>Student message</label>
                 </div>
