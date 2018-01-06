@@ -1,5 +1,5 @@
 angular.module('menChat')
-  .directive('userDetails', function ($rootScope, $timeout, toastr) {
+  .directive('userDetails', function ($rootScope, $timeout, toastr, ngDialog) {
     return {
       restrict: 'E',
       scope: {
@@ -70,6 +70,26 @@ angular.module('menChat')
           console.log('New filter obj: ', filterObj);
         });
 
+        $scope.getStudentApplicationAnswers = function (student) {
+          Meteor.call('getStudentApplicationAnswers',
+            student, window.authObj,
+            function (err, success) {
+              console.log(err, success);
+              if (err) {
+                var msg = typeof err.reason !== 'undefined' ? err.reason : 'Error changing status';
+                toastr.error(msg);
+                return;
+              }
+
+              ngDialog.open({
+                template: 'application-answers.html',
+                // plain: true,
+                scope: $scope,
+                width: '70%'
+              });
+
+            });
+        }
 
         $scope.changeStudentStatus = function (newStatus) {
 
@@ -80,7 +100,7 @@ angular.module('menChat')
           }
 
           //studentId, classId, currentStatus, newStatus, authObj, cb
-          Meteor.call('changeStudentStatus', $scope.userDetails, newStatus.id, 
+          Meteor.call('changeStudentStatus', $scope.userDetails, newStatus.id,
             window.authObj, $scope.changeNote,
             function (err, success) {
               console.log('Response status: ', err, success);
@@ -94,7 +114,7 @@ angular.module('menChat')
                 $scope.studentStatus = newStatus;
                 $scope.changeNote = '';
 
-                if(newStatus.id == 4) {
+                if (newStatus.id == 4) {
                   console.log('Should enable chat ');
                   $('.dimmed').hide();
                 }

@@ -215,7 +215,13 @@ Meteor.methods({
     logger.log('checkToken passedToken, generatedToken:', token, authToken);
     return authToken == token;
   },
-  'sendChatMessage': sendChatMessage
+  'sendChatMessage': sendChatMessage,
+  'getStudentApplicationAnswers': function(student, authObj){
+    if (!checkAuth(authObj)) {
+      logger.log('Authentication failed ', authObj);
+      throw new Meteor.Error(500, 'General Error');
+    }
+  }
 });
 
 /**

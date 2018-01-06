@@ -51,7 +51,7 @@ Meteor.publish('allUsers', function (filterObj, authObj) {
   
     logger.log('Meteor publish all users with filter ', filterObj);
   
-    var res = liveDb.select('select ru.ru_status, u.*, \
+    var res = liveDb.select('select ru.ru_status, ru.ru_application_survey, u.*, \
                             (select e.e_message from v5_engagements e \
                             left join v5_engagement_types a on a_id = e_type_id \
                             where e_type_id in (6,7) and (e_initiator_u_id = u_id or \
@@ -60,9 +60,9 @@ Meteor.publish('allUsers', function (filterObj, authObj) {
                             limit 1) as e_message \
                             from v5_classes r \
                             inner join v5_class_students ru on r.r_id = ru.ru_r_id \
-                            inner join v5_users u on u_id = ru.ru_u_id and u_status > 0 ' +
-      ' where r.r_b_id = $1 ' +
-      classFilter + statusFilter, [bootcampId]);
+                            inner join v5_users u on u_id = ru.ru_u_id ' +
+                            ' where r.r_b_id = $1 ' +
+                            classFilter + statusFilter, [bootcampId]);
     return res;
   });
   

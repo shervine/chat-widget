@@ -1,6 +1,6 @@
 queryDict = {};
 angular.module('menChat', ['ui.bootstrap', 'ui.bootstrap.tpls',
-    'ui.bootstrap.tooltip', 'ui.router', 'toastr', 'ngFileUpload'
+    'ui.bootstrap.tooltip', 'ui.router', 'toastr', 'ngFileUpload', 'ngDialog'
   ])
   .config(['$stateProvider', '$urlRouterProvider', 'toastrConfig',
     function ($stateProvider, $urlRouterProvider, toastrConfig) {
