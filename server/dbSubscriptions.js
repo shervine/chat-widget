@@ -143,10 +143,9 @@ Meteor.publish('allUsers', function (filterObj, authObj) {
     var res = liveDb.select('select distinct b.*, r.* from v5_bootcamps b \
                             inner join v5_classes r on b.b_id = r.r_b_id and r.r_status >= 1\
                             inner join v5_bootcamp_instructors ba on ba.ba_b_id  = b.b_creator_id \
-                            and ba.ba_u_id = $2 \
                             where \
-                            b.b_id = $1 ', [bootcampId, instructorId]);
+                            b.b_id = $1 ', [bootcampId]);
     return res;
-  
-    //ba.ba_u_id  = ' + instructorId +
+
+    // and ba.ba_u_id = $2
   });

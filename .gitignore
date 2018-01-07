@@ -3,3 +3,4 @@ node_modules/
 .idea/
 uploads/
 .*
+client/lib/version.js
