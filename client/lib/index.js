@@ -1,4 +1,5 @@
 queryDict = {};
+version='1.12';
 angular.module('menChat', ['ui.bootstrap', 'ui.bootstrap.tpls',
     'ui.bootstrap.tooltip', 'ui.router', 'toastr', 'ngFileUpload', 'ngDialog'
   ])

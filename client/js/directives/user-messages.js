@@ -124,7 +124,7 @@ angular.module('menChat')
           };
         });
       },
-      templateUrl: 'user-messages.html',
+      templateUrl: 'user-messages.html?cbv=' + document.cbv,
     };
   })
   .filter("regexReplace", function() {

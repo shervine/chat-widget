@@ -79,6 +79,6 @@ angular.module('menChat')
           }, 50);
         };
       },
-      templateUrl: 'filter.html',
+      templateUrl: 'filter.html?cbv=' + document.cbv,
     };
   });

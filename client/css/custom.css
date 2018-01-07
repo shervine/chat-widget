@@ -13,6 +13,15 @@ body {
   color: green;
 }
 
+a {
+  color: blue;
+}
+
+a:visited {
+  color: darkblue;
+}
+
+
 .red {
   color: red;
 }

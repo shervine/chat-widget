@@ -84,6 +84,6 @@ angular.module('menChat')
           }, 60);
         });
       },
-      templateUrl: 'users-list.html',
+      templateUrl: 'users-list.html?cbv=' + document.cbv,
     };
   });

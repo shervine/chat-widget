@@ -92,29 +92,15 @@ angular.module('menChat')
             scope: $scope,
             width: '80%'
           });
-
-          // Meteor.call('getStudentApplicationAnswers',
-          //   student, window.authObj,
-          //   function (err, success) {
-          //     console.log(err, success);
-          //     if (err) {
-          //       var msg = typeof err.reason !== 'undefined' ? err.reason : 'Error changing status';
-          //       toastr.error(msg);
-          //       return;
-          //     }
-
-              
-
-          //   });
         }
 
         $scope.changeStudentStatus = function (newStatus) {
 
-          if (($scope.userDetails.ru_status == 4 || $scope.userDetails.ru_status == 2) &&
-            (!$scope.changeNote || $scope.changeNote.length < 50)) {
-            toastr.error('Change note must have at least 50 characters');
-            return;
-          }
+          // if (($scope.userDetails.ru_status == 4 || $scope.userDetails.ru_status == 2) &&
+          //   (!$scope.changeNote || $scope.changeNote.length < 50)) {
+          //   toastr.error('Change note must have at least 50 characters');
+          //   return;
+          // }
 
           //studentId, classId, currentStatus, newStatus, authObj, cb
           Meteor.call('changeStudentStatus', $scope.userDetails, newStatus.id,
@@ -139,6 +125,6 @@ angular.module('menChat')
             });
         };
       },
-      templateUrl: 'user-details.html',
+      templateUrl: 'user-details.html?cbv=' + document.cbv,
     };
   });

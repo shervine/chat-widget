@@ -11,7 +11,7 @@
     <div class="row user-details" ng-show="userDetails.u_email">
       <div class="col-sm-12">
         <center>
-          <img ng-if="userDetails.u_image_url" class="chat-avatar" style="width: 12vw;height:auto; max-height: 10vw;" src="{{userDetails.u_image_url}}">
+          <img ng-if="userDetails.u_image_url" class="chat-avatar" style="width: 12vw;height:auto; max-height: 12vw;" src="{{userDetails.u_image_url}}">
           <i ng-if="!userDetails.u_image_url" class="fa fa-5x fa-user-o" style="margin-left: -7px; margin-top: 3px;"></i>
         </center>
         <div class="row" style="line-height: 16px;">
@@ -51,15 +51,14 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-sm-12">
-            <a style="cursor:pointer" ng-show="userDetails.ru_application_survey" 
-            ng-click="getStudentApplicationAnswers(userDetails)">Application Answers</a>
+          <div class="col-sm-12" style="margin-top:7px">
+            <center>
+              <button class="btn btn-secondary" ng-show="userDetails.ru_application_survey" ng-click="getStudentApplicationAnswers(userDetails)">Application Answers</button>
+            </center>
           </div>
           <div class="col-sm-12" ng-show="!userDetails.ru_application_survey">
             <span class="red">Application Not Completed Yet</span>
           </div>
-
-
         </div>
       </div>
     </div>

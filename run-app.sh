@@ -13,6 +13,9 @@ set | grep POSTGRESQL_URL;
 export CHANNEL="usnetwork"
 export MONGO_URL="nope"
 
+#generate a random number version for cache busting
+echo "document.cbv='$RANDOM';" > ./client/lib/version.js 
+
 bower install
 npm install
 
