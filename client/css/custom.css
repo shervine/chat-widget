@@ -17,6 +17,11 @@ body {
   color: red;
 }
 
+/*showing ngdialog close to top inside the iframe*/
+.ngdialog {
+  padding-top: 10px !important;
+}    
+
 .clearfix:before, .clearfix:after {
     content: "";
     display: table;
