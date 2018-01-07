@@ -9,11 +9,12 @@
             aria-expanded="false"
             ng-model="class.r_start_date"
             >
-            {{class.r_start_date | date}}
+           {{class.r_start_date | date : 'MMM d, y' : 'UTC'}}
         </button>
         <div class="dropdown-menu">
           <a class="dropdown-item" ng-click="selectClass()">All Classes</a>
-          <a class="dropdown-item" ng-click="selectClass(cls)" ng-repeat="cls in classes">{{cls.r_start_date | date}}</a>
+          <a class="dropdown-item" ng-click="selectClass(cls)" 
+          ng-repeat="cls in classes">{{cls.r_start_date | date : 'MMM d, y' : 'UTC'}}</a>
         </div>
       </div>
     </div>
