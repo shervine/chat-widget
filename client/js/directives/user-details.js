@@ -71,24 +71,41 @@ angular.module('menChat')
         });
 
         $scope.getStudentApplicationAnswers = function (student) {
-          Meteor.call('getStudentApplicationAnswers',
-            student, window.authObj,
-            function (err, success) {
-              console.log(err, success);
-              if (err) {
-                var msg = typeof err.reason !== 'undefined' ? err.reason : 'Error changing status';
-                toastr.error(msg);
-                return;
-              }
+          $scope.applicationAnswers = null;
+          
+          try {
+            $scope.applicationAnwers = JSON.parse(student.ru_application_survey);
+            console.log($scope.applicationAnwers);
+          } catch (err){
+            console.log(err);
+            toastr.error('Cannot show Application Answers');
+            return;
+          }
+          if($scope.applicationAnwers === null){
+            toastr.error('No Application Answers');
+            return;
+          }
 
-              ngDialog.open({
-                template: 'application-answers.html',
-                // plain: true,
-                scope: $scope,
-                width: '70%'
-              });
+          ngDialog.open({
+            template: 'application-answers.html',
+            // plain: true,
+            scope: $scope,
+            width: '80%'
+          });
 
-            });
+          // Meteor.call('getStudentApplicationAnswers',
+          //   student, window.authObj,
+          //   function (err, success) {
+          //     console.log(err, success);
+          //     if (err) {
+          //       var msg = typeof err.reason !== 'undefined' ? err.reason : 'Error changing status';
+          //       toastr.error(msg);
+          //       return;
+          //     }
+
+              
+
+          //   });
         }
 
         $scope.changeStudentStatus = function (newStatus) {

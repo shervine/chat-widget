@@ -9,6 +9,14 @@ body {
   zoom: 1;
 }
 
+.green {
+  color: green;
+}
+
+.red {
+  color: red;
+}
+
 .clearfix:before, .clearfix:after {
     content: "";
     display: table;

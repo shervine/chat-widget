@@ -1,10 +1,27 @@
-<div class="row">
-    <div class="col-sm-12">
-        <h3>Application Answers</h3>
-    </div>
-    <div class="col-sm-12">
-        <ul>
-            <li>N/A</li>
-        </ul>
+<div class="container" style="color: rgb(127, 127, 127)">
+    <div class="row">
+        <div class="col-sm-12">
+            <h2>Application Answers</h2>
+            <br>
+        </div>
+        <div class="col-sm-12">
+            <h4>Prerequisites</h4>
+            <ul>
+                <li ng-repeat="item in applicationAnwers.prerequisites">
+                    {{item.item}}
+                    <br><label ng-class="item.answer == 'Yes' ? 'green': 'red'" 
+                    style="font-weight: bold">{{item.answer}}</label>
+                </li>
+            </ul>
+        </div>
+        <div class="col-sm-12">
+            <h4>Application Questionnaire</h4>
+            <ul>
+                <li ng-repeat="item in applicationAnwers.questions">
+                    {{item.item}}
+                    <br><label style="font-weight: bold">{{item.answer}}</label>
+                </li>
+            </ul>
+        </div>
     </div>
 </div>
