@@ -34,17 +34,20 @@ Meteor.publish('allUsers', function (filterObj, authObj) {
   
       if (typeof filterObj.status.val !== 'undefined' && filterObj.status.val != -10) {
   
-        if (filterObj.status.txt == 'Rejected') {
-          statusFilter = ' and  ru.ru_status < 0 ';
-        }
+        // if (filterObj.status.txt == 'Rejected') {
+        //   statusFilter = ' and  ru.ru_status < 0 ';
+        // }
   
-        if (filterObj.status.txt == 'Pending') {
-          statusFilter = ' and  ru_status >= 0 AND ru_status < 4 ';
-        }
+        // if (filterObj.status.txt == 'Pending') {
+        //   statusFilter = ' and  ru_status >= 0 AND ru_status < 4 ';
+        // }
   
-        if (filterObj.status.txt == 'Active') {
-          statusFilter = ' and  ru_status >= 4 ';
-        }
+        // if (filterObj.status.txt == 'Active') {
+        //   statusFilter = ' and  ru_status >= 4 ';
+        // }
+        
+        // check(filterObj.status.val, Integer)
+        statusFilter = " and  ru_status = '"  + filterObj.status.val + "' ";
   
       }
     }

@@ -14,17 +14,34 @@ angular.module('menChat')
           txt: 'All Statuses',
         },
         {
+          val: -3,
+          txt: 'Student Dispelled',
+        },
+        {
           val: -2,
-          txt: 'Rejected',
+          txt: 'Student Withdrew',
+        },
+        {
+          val: -1,
+          txt: 'Application Rejected',
+        },
+        {
+          val: 0,
+          txt: 'Application Started',
         },
         {
           val: 2,
-          txt: 'Pending',
+          txt: 'Application Pending Admission',
         },
         {
           val: 4,
-          txt: 'Active',
-        }];
+          txt: 'Bootcamp Student',
+        },
+        {
+          val: 4,
+          txt: 'Bootcamp Graduate',
+        }
+        ];
         $scope.status = $scope.statuses[0];
 
         $timeout(function () {

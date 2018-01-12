@@ -49,7 +49,7 @@ angular.module('menChat')
               { id: '-3', status: 'STUDENT DISPELLED' },
               { id: '-2', status: 'STUDENT WITHDREW' },
               { id: '-1', status: 'ADMISSION REJECTED' },
-              { id: '0', status: 'ADMISSION INITIATED' },
+              { id: '0', status: 'APPLICATION STARTED' },
               { id: '2', status: 'PENDING ADMISSION' },
               { id: '4', status: 'BOOTCAMP STUDENT' },
               { id: '7', status: 'BOOTCAMP GRADUATE' },
