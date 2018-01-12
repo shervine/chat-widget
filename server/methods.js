@@ -120,7 +120,7 @@ Meteor.methods({
       recipient_u_ids: [studentId],
       ru_status: newStatus,
       auth_hash: md5(authObj.instructorId.toString() + newStatus.toString() + saltSendMsg),
-      status_change_note: currentStatus == 4 || currentStatus == 2 ? note : null
+      // status_change_note: currentStatus == 4 || currentStatus == 2 ? note : null
     }
 
     var responsePromise = new Promise((resolve, reject) => {

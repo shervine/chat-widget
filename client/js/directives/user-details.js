@@ -8,6 +8,7 @@ angular.module('menChat')
       link: function ($scope, iElem, iAttr) {
         $scope.userDetails = {};
         $scope.changeNote = '';
+        $scope.updating = false;
 
         $scope.userStatuses = [
           { id: '-3', status: 'STUDENT DISPELLED' },
@@ -96,6 +97,8 @@ angular.module('menChat')
 
         $scope.changeStudentStatus = function (newStatus) {
 
+          $scope.updating = true;
+
           // if (($scope.userDetails.ru_status == 4 || $scope.userDetails.ru_status == 2) &&
           //   (!$scope.changeNote || $scope.changeNote.length < 50)) {
           //   toastr.error('Change note must have at least 50 characters');
@@ -107,20 +110,19 @@ angular.module('menChat')
             window.authObj, $scope.changeNote,
             function (err, success) {
               console.log('Response status: ', err, success);
-
               if (err) {
                 var msg = typeof err.reason !== 'undefined' ? err.reason : 'Error changing status';
-                toastr.error(msg);
-                return;
+                $scope.updating = false;
+                toastr.error(msg);      
               } else {
-                toastr.success(success);
                 $scope.studentStatus = newStatus;
-                $scope.changeNote = '';
-
+                // $scope.changeNote = '';
+                $scope.updating = false;
                 if (newStatus.id == 4) {
                   console.log('Should enable chat ');
                   $('.dimmed').hide();
                 }
+                toastr.success(success);
               }
             });
         };
