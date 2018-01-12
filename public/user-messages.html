@@ -61,8 +61,10 @@
           title="{{renderTooltip(message)}}"
           >
 
+          <!-- System message -->
           <span ng-if="message.e_type_id != 6 && message.e_type_id != 7">
-            {{message.a_name}}{{message.e_message.length > 0 ? ':' : ''}} {{message.e_message}}</span>
+            {{message.a_name}}{{message.e_message.length > 0 ? ':' : ''}} {{message.e_message}} on {{message.e_timestamp | date : 'MMM d, y' : 'UTC'}}</span>
+          
           <span 
             ng-if="message.e_type_id == 6 || message.e_type_id == 7"
             ng-bind-html="message.e_message | formatMsg"></span>
