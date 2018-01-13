@@ -38,7 +38,7 @@ angular.module('menChat')
           txt: 'Bootcamp Student',
         },
         {
-          val: 4,
+          val: 7,
           txt: 'Bootcamp Graduate',
         }
         ];
