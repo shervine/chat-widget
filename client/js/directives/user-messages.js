@@ -112,14 +112,20 @@ angular.module('menChat')
 
 
 
-          $scope.renderTooltip = function (message) {
+          $scope.renderTooltip = function (message, noInitiator) {
             if (!$rootScope.selectedUser || !$scope.instructorData) {
               return;
             }
-            let userName = message.e_type_id == 6 ?
+
+            userName = '';  
+            if(noInitiator){
+              userName = 'MenchBot';
+            }
+            else { userName = message.e_type_id == 6 ?
               $rootScope.selectedUser.u_fname + ' ' + $rootScope.selectedUser.u_lname :
               $scope.instructorData.u_fname + ' ' + $scope.instructorData.u_lname;
-            let msg = userName + ' on ' + $filter('date')(message.e_timestamp);
+            }
+              var msg = userName + ' on ' + $filter('date')(message.e_timestamp);
             return msg;
           };
         });
