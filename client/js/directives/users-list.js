@@ -13,6 +13,7 @@ angular.module('menChat')
         });
 
         $scope.searchTerm = '';
+        $scope.readRecipients = [];
 
         if ($scope.allUsers && typeof $scope.allUsers.stop == 'function') {
           $scope.allUsers.stop();
@@ -29,6 +30,7 @@ angular.module('menChat')
         $scope.userSelected = function(user) {
           $rootScope.selectedUser = user;
           $scope.selectedUser = user;
+          $scope.readRecipients[user.u_id] = true;
         };
 
         $scope.search = function(searchTerm) {
@@ -79,10 +81,36 @@ angular.module('menChat')
               return;
             }
             $scope.users = $scope.allUsers;
+
+            //when a new message comes bold the student for message unread behaviour  
+            $scope.users.addEventListener('updated', function (diff, data) {
+              console.log('$scope.users Subscription updated ', diff, data);
+              
+              try {
+                for (var i in diff.added){
+                  var student = diff.added[i];
+                  if($scope.selectedUser.u_id == student.u_id){
+                     continue;
+                  }
+                  $scope.readRecipients[student.u_id] = false;
+                }
+              } catch (err){
+                  console.log('Something went wrong : ', err);
+              }
+            });
+
             console.log('allUsers populated ', $scope.users);
             $scope.stopInterval();
           }, 60);
         });
+
+        $scope.checkUnread = function(user){
+            if(user.e_type_id != 6 || $scope.readRecipients[user.u_id]){
+              return;
+            }
+
+            return true;
+        }
       },
       templateUrl: 'users-list.html?cbv=' + document.cbv,
     };

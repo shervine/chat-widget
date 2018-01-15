@@ -32,40 +32,42 @@ Meteor.publish('allUsers', function (filterObj, authObj) {
         classFilter = ' and  ru.ru_r_id = ' + filterObj.class.r_id.toString();
       }
   
-      if (typeof filterObj.status.val !== 'undefined' && filterObj.status.val != -10) {
-  
-        // if (filterObj.status.txt == 'Rejected') {
-        //   statusFilter = ' and  ru.ru_status < 0 ';
-        // }
-  
-        // if (filterObj.status.txt == 'Pending') {
-        //   statusFilter = ' and  ru_status >= 0 AND ru_status < 4 ';
-        // }
-  
-        // if (filterObj.status.txt == 'Active') {
-        //   statusFilter = ' and  ru_status >= 4 ';
-        // }
-        
+      if (typeof filterObj.status.val !== 'undefined' && filterObj.status.val != -10) {  
         // check(filterObj.status.val, Integer)
         statusFilter = " and  ru_status = '"  + filterObj.status.val + "' ";
-  
       }
     }
   
     logger.log('Meteor publish all users with filter ', filterObj);
   
-    var res = liveDb.select('select ru.ru_status, ru.ru_application_survey, u.*, \
-                            (select e.e_message from v5_engagements e \
-                            left join v5_engagement_types a on a_id = e_type_id \
-                            where e_type_id in (6,7) and (e_initiator_u_id = u_id or \
-                            e_recipient_u_id = u_id)\
-                            order by e_timestamp DESC \
-                            limit 1) as e_message \
-                            from v5_classes r \
-                            inner join v5_class_students ru on r.r_id = ru.ru_r_id \
-                            inner join v5_users u on u_id = ru.ru_u_id ' +
+    var res = liveDb.select(`select ru.ru_status, ru.ru_application_survey, u.*, 
+                            (select e.e_message from v5_engagements e 
+                            left join v5_engagement_types a on a_id = e_type_id 
+                            where e_type_id in (6,7) and (e_initiator_u_id = u_id or 
+                            e_recipient_u_id = u_id)
+                            order by e_timestamp DESC 
+                            limit 1) as e_message,
+
+                            (select e.e_timestamp from v5_engagements e 
+                              left join v5_engagement_types a on a_id = e_type_id 
+                              where e_type_id in (6,7) and (e_initiator_u_id = u_id or 
+                              e_recipient_u_id = u_id)
+                              order by e_timestamp DESC 
+                              limit 1) as e_timestamp,
+                            
+                              (select e.e_type_id from v5_engagements e 
+                                left join v5_engagement_types a on a_id = e_type_id 
+                                where e_type_id in (6,7) and (e_initiator_u_id = u_id or 
+                                e_recipient_u_id = u_id)
+                                order by e_timestamp DESC 
+                                limit 1) as e_type_id
+                              
+                            from v5_classes r 
+                            inner join v5_class_students ru on r.r_id = ru.ru_r_id `
+                            +' inner join v5_users u on u_id = ru.ru_u_id ' +
                             ' where r.r_b_id = $1 ' +
-                            classFilter + statusFilter, [bootcampId]);
+                            classFilter + statusFilter +
+                            ' order by e_timestamp DESC', [bootcampId]);
     return res;
   });
   

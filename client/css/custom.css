@@ -117,6 +117,10 @@ a:visited {
   overflow-x: hidden;
 }
 
+.unread {
+  font-weight: bold;
+}
+
 .users-list {
   margin-top: 1px;
   margin-right: -8px;
