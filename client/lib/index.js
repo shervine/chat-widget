@@ -1,7 +1,7 @@
 queryDict = {};
 version='1.12';
 angular.module('menChat', ['ui.bootstrap', 'ui.bootstrap.tpls',
-    'ui.bootstrap.tooltip', 'ui.router', 'toastr', 'ngFileUpload', 'ngDialog'
+    'ui.bootstrap.tooltip', 'ui.router', 'toastr', 'ngFileUpload', 'ngDialog', 'ngStorage',
   ])
   .config(['$stateProvider', '$urlRouterProvider', 'toastrConfig',
     function ($stateProvider, $urlRouterProvider, toastrConfig) {
@@ -82,8 +82,8 @@ angular.module('menChat', ['ui.bootstrap', 'ui.bootstrap.tpls',
     }, 50);
     $rootScope.lostConnection = false;
     $interval(function() {
-      toastr.clear();
       if (!Meteor.connection.status().connected) {
+        toastr.clear();
         toastr.error('Lost server connection', 'Error');
         $rootScope.lostConnection = true;
       }
