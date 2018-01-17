@@ -2,6 +2,7 @@ queryDict = {};
 version='1.12';
 angular.module('menChat', ['ui.bootstrap', 'ui.bootstrap.tpls',
     'ui.bootstrap.tooltip', 'ui.router', 'toastr', 'ngFileUpload', 'ngDialog', 'ngStorage',
+    'hl.sticky'
   ])
   .config(['$stateProvider', '$urlRouterProvider', 'toastrConfig',
     function ($stateProvider, $urlRouterProvider, toastrConfig) {
@@ -74,7 +75,8 @@ angular.module('menChat', ['ui.bootstrap', 'ui.bootstrap.tpls',
       $rootScope.authToken = window.authToken;
       $rootScope.bootcampId = window.bootcampId;
       $rootScope.instructorId = window.instructorId;
-      console.log('Auth token ', window.authToken);
+     
+      $rootScope.totalStudents = 0;
       
       $rootScope.instructorData = new PgSubscription('instructorData',
         queryDict.instructorId, window.authObj).reactive();
