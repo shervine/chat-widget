@@ -87,7 +87,7 @@ Meteor.publish('allUsers', function (filterObj, authObj) {
                             left join v5_engagement_types a on a_id = e_type_id \
                             where e_type_id in (6,7,12,26,27,29,30,31,32,33,38,41,43,44) and (e_initiator_u_id = $1 or \
                             e_recipient_u_id = $1)\
-                            order by e_timestamp DESC \
+                            order by e.e_id \
                             limit 100', [userId]);
   
     // Subscription has been stopped, also stop supporting query
