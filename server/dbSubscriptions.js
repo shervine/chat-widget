@@ -83,12 +83,14 @@ Meteor.publish('allUsers', function (filterObj, authObj) {
   
     check(userId, Number);
   
-    var mSubscription = liveDb.select('select e.*, a.a_name from v5_engagements e \
-                            left join v5_engagement_types a on a_id = e_type_id \
-                            where e_type_id in (6,7,12,26,27,28,29,30,31,32,33,41,54,55) and (e_initiator_u_id = $1 or \
-                            e_recipient_u_id = $1)\
-                            order by e.e_id \
-                            limit 100', [userId]);
+    var mSubscription = liveDb.select(`select e.*, a.a_name from v5_engagements e 
+                            left join v5_engagement_types a on a_id = e_type_id 
+                            where e_type_id in (6,7,12,26,27,28,29,30,31,32,33,41,54,55) 
+                            and (e_initiator_u_id = $1 or 
+                            e_recipient_u_id = $1)
+                            order by e.e_id DESC 
+                            limit 100 `
+                            , [userId]);
   
     // Subscription has been stopped, also stop supporting query
     this.onStop(function () {

@@ -25,7 +25,7 @@
            ngf-select-disabled="true"
      >
       <ul>
-        <li ng-repeat="message in messages" class="{{message.e_type_id == 6 ? 'him' : 'me'}}" 
+        <li ng-repeat="message in messages | reverse" class="{{message.e_type_id == 6 ? 'him' : 'me'}}" 
           ng-class="{'system-message' : message.e_type_id != 6 && message.e_type_id != 7}"
         >
 
