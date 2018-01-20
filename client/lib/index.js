@@ -23,7 +23,7 @@ angular.module('menChat', ['ui.bootstrap', 'ui.bootstrap.tpls',
                 forEach(function(item) {
                   queryDict[item.split('=')[0]] = item.split('=')[1];
                 });
-                console.log('QueryDict:', queryDict);
+                
                 return Meteor.call('checkToken', queryDict.token, queryDict.instructorId,
                 queryDict.bootcampId, function(err, success) {
                     console.log('checkToken response ', err, success);

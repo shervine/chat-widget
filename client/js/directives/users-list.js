@@ -36,7 +36,7 @@ angular.module('menChat')
         $scope.userSelected = function(user) {
           $rootScope.selectedUser = user;
           $scope.selectedUser = user;
-          $scope.readRecipients[user.u_id] = true;
+          // $scope.readRecipients[user.u_id] = true;
         };
 
         $scope.search = function(searchTerm) {
@@ -144,7 +144,8 @@ angular.module('menChat')
         });
 
         $scope.checkUnread = function(user){
-            if(user.e_type_id != 6 || $scope.readRecipients[user.u_id]){
+            if(user.e_type_id != 6 || $scope.readRecipients[user.u_id] 
+              || (typeof user.e_i_id !== 'undefined' && user.e_i_id == 0)){
               return;
             }
 
