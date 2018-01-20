@@ -47,9 +47,11 @@ angular.module('menChat')
 
           $scope.users = [];
           searchTerm = searchTerm.toLowerCase();
-          for (let i in $scope.allUsers) {
-            let fname = $scope.allUsers[i].u_fname.toLowerCase();
-            let lname = $scope.allUsers[i].u_lname.toLowerCase();
+          for (var i in $scope.allUsers) {
+            var fname = typeof $scope.allUsers[i].u_fname !== 'undefined' ? 
+                    $scope.allUsers[i].u_fname.toLowerCase() : '';
+            var lname = typeof $scope.allUsers[i].u_lname !== 'undefined' ? 
+                $scope.allUsers[i].u_lname.toLowerCase() : '';
             if (fname.indexOf(searchTerm) >= 0 || lname.indexOf(searchTerm) >= 0) {
               $scope.users.push($scope.allUsers[i]);
             }
