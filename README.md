@@ -7,7 +7,7 @@ http://chat.mench.co:3000/
 
 ## Student Chat Widget Project
 
-This is a JS-based responsive web application for Mench instructors to chat with their bootcamp students, live.
+This is a JS-based responsive web application for Mench instructors to chat with their Bootcamp students, live.
 
 ## Relevant Technologies
 
