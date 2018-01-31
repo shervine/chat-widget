@@ -83,7 +83,8 @@ Meteor.publish('allUsers', function (filterObj, authObj) {
   
     check(userId, Number);
   
-    var mSubscription = liveDb.select(`select e.*, a.a_name from v5_engagements e 
+    var mSubscription = liveDb.select(`select e.e_id, e.e_initiator_u_id, e.e_message, 
+                            e.e_r_id, e. e_timestamp, e.e_type_id, a.a_name from v5_engagements e 
                             left join v5_engagement_types a on a_id = e_type_id 
                             where e_type_id in (6,7,12,26,27,28,29,30,31,32,33,41,54,55) 
                             and (e_initiator_u_id = $1 or 
