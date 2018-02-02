@@ -5,6 +5,12 @@ angular.module('menChat')
       scope: {},
       link: function($scope, iElem, iAttr) {
 
+        function isInt(value) {
+          return !isNaN(value) && 
+                 parseInt(Number(value)) == value && 
+                 !isNaN(parseInt(value, 10));
+        }
+
         $rootScope.$watch('authToken', function(newVal) {
           if (!newVal) {
             return;
@@ -30,7 +36,7 @@ angular.module('menChat')
         $scope.userSelected = function(user) {
           $rootScope.selectedUser = user;
           $scope.selectedUser = user;
-          $scope.readRecipients[user.u_id] = true;
+          // $scope.readRecipients[user.u_id] = true;
         };
 
         $scope.search = function(searchTerm) {
@@ -41,9 +47,11 @@ angular.module('menChat')
 
           $scope.users = [];
           searchTerm = searchTerm.toLowerCase();
-          for (let i in $scope.allUsers) {
-            let fname = $scope.allUsers[i].u_fname.toLowerCase();
-            let lname = $scope.allUsers[i].u_lname.toLowerCase();
+          for (var i in $scope.allUsers) {
+            var fname = typeof $scope.allUsers[i].u_fname !== 'undefined' ? 
+                    $scope.allUsers[i].u_fname.toLowerCase() : '';
+            var lname = typeof $scope.allUsers[i].u_lname !== 'undefined' ? 
+                $scope.allUsers[i].u_lname.toLowerCase() : '';
             if (fname.indexOf(searchTerm) >= 0 || lname.indexOf(searchTerm) >= 0) {
               $scope.users.push($scope.allUsers[i]);
             }
@@ -70,6 +78,31 @@ angular.module('menChat')
           return message;
         };
 
+        $scope.sortStudents = function(allUsers){
+             var tmpInput2 = [];
+            var tmpInput = angular.copy(allUsers);
+            for (var i in tmpInput){
+              if (!isInt(i)){
+                continue;
+              }
+              tmpInput2.push(tmpInput[i]);
+            }  
+
+            return tmpInput2.sort(function(a,b){
+              if (moment(a.e_timestamp) == moment(b.e_timestamp)){
+                return 0;
+              }
+              if (moment(a.e_timestamp) > moment(b.e_timestamp)){
+                 return -1;
+              } else {
+                return 1;
+              }
+
+            });
+            
+            // $scope.users = tmpInput2;
+        }
+
         $scope.$on('new-filter', function(ev, filterObj) {
           $scope.loading = true;
           $scope.allUsers = new PgSubscription('allUsers', filterObj,  window.authObj).reactive();
@@ -80,16 +113,22 @@ angular.module('menChat')
             if (!$scope.allUsers.ready()) {
               return;
             }
-            $scope.users = $scope.allUsers;
+            
+            // $scope.users = $scope.allUsers;
+
+            $scope.users = $scope.sortStudents($scope.allUsers);
+            
+            $rootScope.totalStudents = $scope.users.length;
 
             //when a new message comes bold the student for message unread behaviour  
-            $scope.users.addEventListener('updated', function (diff, data) {
+            $scope.allUsers.addEventListener('updated', function (diff, data) {
               console.log('$scope.users Subscription updated ', diff, data);
-              
+              $scope.users = $scope.sortStudents($scope.allUsers);
+              $rootScope.totalStudents = $scope.users.length;
               try {
                 for (var i in diff.added){
                   var student = diff.added[i];
-                  if($scope.selectedUser.u_id == student.u_id){
+                  if($scope.selectedUser && $scope.selectedUser.u_id == student.u_id){
                      continue;
                   }
                   $scope.readRecipients[student.u_id] = false;
@@ -105,7 +144,8 @@ angular.module('menChat')
         });
 
         $scope.checkUnread = function(user){
-            if(user.e_type_id != 6 || $scope.readRecipients[user.u_id]){
+            if(user.e_type_id != 6 || $scope.readRecipients[user.u_id] 
+              || (typeof user.e_i_id !== 'undefined' && user.e_i_id == 0)){
               return;
             }
 

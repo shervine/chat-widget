@@ -42,7 +42,7 @@ a:visited {
 }
 
 .user-details p, .user-details label {
-  font-size: 15px;
+  font-size: 13px;
   padding: 0;
   margin: 0;
   max-width: 210px;
@@ -52,8 +52,8 @@ a:visited {
   text-overflow: ellipsis;
 }
 
-#dropdownMenuButton {
-  font-size: 15px;
+.dropdownMenuButton {
+  font-size: 13px;
   max-width: 100%;
   display: inline-block;
   white-space: nowrap;
@@ -119,6 +119,7 @@ a:visited {
 
 .unread {
   font-weight: bold;
+  color: #000;
 }
 
 .users-list {

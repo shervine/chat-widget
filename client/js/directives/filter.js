@@ -1,5 +1,5 @@
 angular.module('menChat')
-  .directive('filter', function ($timeout, $rootScope, $window) {
+  .directive('filter', function ($timeout, $rootScope, $window, $localStorage) {
     return {
       restrict: 'E',
       scope: {},
@@ -48,10 +48,17 @@ angular.module('menChat')
           $scope.classes = $scope.bootcampClasses;
         }, 1000);
 
-        $scope.filterObj = {
-          'class': $scope.class,
-          'status': $scope.status,
-        };
+        if($localStorage.filterObj){
+          $scope.filterObj = $localStorage.filterObj;
+          $scope.status = $scope.filterObj.status;
+          $scope.class = $scope.filterObj.class;
+        } else {
+          $scope.filterObj = {
+            'class': $scope.class,
+            'status': $scope.status,
+          };
+          $localStorage.filterObj = $scope.filterObj;
+        }
 
         // broadcast the initial filters
         $timeout(function () {
@@ -77,7 +84,7 @@ angular.module('menChat')
             'class': $scope.class,
             'status': $scope.status,
           };
-
+          $localStorage.filterObj = $scope.filterObj;
           console.log('New Filter  ', $scope.filterObj);
           $timeout(function () {
             $scope.$emit('new-filter', $scope.filterObj);
@@ -90,6 +97,7 @@ angular.module('menChat')
             'class': $scope.class,
             'status': $scope.status,
           };
+          $localStorage.filterObj = $scope.filterObj;
           $timeout(function () {
             $scope.$emit('new-filter', $scope.filterObj);
             $scope.$broadcast('new-filter', $scope.filterObj);
