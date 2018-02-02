@@ -1,60 +1,45 @@
-<div class="container" id="main-div" >
-    <div class="row filter border border-info">
-      <div class="col-sm-12">
-      </div>
+<div class="container" id="main-div">
+  <div class="row filter border border-info">
+    <div class="col-sm-12">
     </div>
-    <div class="row main-row">
-      <div class="col-sm-3 border border-info border-right-0 border-top-0">
-        <users-list></users-list>
-      </div>
-      <div class="col-sm-6 border border-info border-top-0 chat-section">
-        <user-messages selected-user="selectedUser"></user-messages>
-      </div>
-      <div class="col-sm-3 border border-info border-left-0 border-top-0 border-bottom-0">
-        <user-details selected-user="selectedUser"></user-details>
-      </div>
+  </div>
+  <div class="row main-row">
+    <div class="col-sm-3 border border-info border-right-0 border-top-0">
+      <users-list></users-list>
     </div>
-    <div class="row chat-send" ng-controller="chatCtrl">
-      <div class="col-sm-3 border border-info border-right-0 border-top-0">
-        <p>&nbsp;</p>
-      </div>
-      <div class="col-sm-6 border border-info border-top-0">
-        <div class="dimmed" ng-show="!selectedUser || selectedUser.ru_status < 4 " title="No user selected"></div>
-        <div class="row mt-2">
-          <div class="col-sm-9" style="margin-top: -1px;">
-            <textarea  class="form-control chat-input" ng-model="chatInput"
-            ></textarea>
-          </div>
-          <div class="col-sm-3">
-            <div class="row">
-                <div class="col-sm-6">
-                    <span class="fa fa-paperclip send-file pull-right"  
-                      ng-controller="uploadCtrl"
-                      ng-model="files"
-                      aria-hidden="true"
-                      data-toggle="tooltip" 
-                      title="Send file"
-                      ngf-drop ngf-select
-                      ngf-drag-over-class="'dragover'"
-                      ngf-multiple="true"
-                      ngf-allow-dir="true"
-                      accept="image/*,video/*,audio/*,application/pdf"
-                      ngf-max-size="30MB"
-                      ngf-pattern="'image/*,video/*,audio/*,application/pdf'"
-                    ></span> &nbsp;
-                </div>
-                <div class="col-sm-6">
-                    <button type="button" 
-                    class="btn btn-secondary pull-right" 
-                    style="cursor:pointer;margin-right: -4px;"
-                    ng-click="sendMessage()">Send</button>
-                </div>
+    <div class="col-sm-6 border border-info border-top-0 chat-section">
+      <user-messages selected-user="selectedUser"></user-messages>
+    </div>
+    <div class="col-sm-3 border border-info border-left-0 border-top-0 border-bottom-0">
+      <user-details selected-user="selectedUser"></user-details>
+    </div>
+  </div>
+  <div class="row chat-send" ng-controller="chatCtrl">
+    <div class="col-sm-3 border border-info border-right-0 border-top-0">
+      <p>&nbsp;</p>
+    </div>
+    <div class="col-sm-6 border border-info border-top-0">
+      <div class="dimmed" ng-show="!selectedUser || selectedUser.ru_status < 0 " title="No user selected"></div>
+      <div class="row mt-2">
+        <div class="col-sm-9" style="margin-top: -1px;">
+          <textarea class="form-control chat-input" ng-model="chatInput"></textarea>
+        </div>
+        <div class="col-sm-3">
+          <div class="row">
+            <div class="col-sm-6">
+              <span class="fa fa-paperclip send-file pull-right" ng-controller="uploadCtrl" ng-model="files" aria-hidden="true" data-toggle="tooltip"
+                title="Send file" ngf-drop ngf-select ngf-drag-over-class="'dragover'" ngf-multiple="true" ngf-allow-dir="true"
+                accept="image/*,video/*,audio/*,application/pdf" ngf-max-size="30MB" ngf-pattern="'image/*,video/*,audio/*,application/pdf'"></span> &nbsp;
+            </div>
+            <div class="col-sm-6">
+              <button type="button" class="btn btn-secondary pull-right" style="cursor:pointer;margin-right: -4px;" ng-click="sendMessage()">Send</button>
             </div>
           </div>
         </div>
       </div>
-      <div class="col-sm-3 border border-info border-left-0 border-top-0">
-          <p></p>
-      </div>
+    </div>
+    <div class="col-sm-3 border border-info border-left-0 border-top-0">
+      <p></p>
     </div>
   </div>
+</div>
