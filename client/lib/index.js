@@ -58,7 +58,14 @@ angular.module('menChat', ['ui.bootstrap', 'ui.bootstrap.tpls',
         });
     }
   ])
-  .run(function($location, $rootScope, $interval, $state, $window, $timeout, toastr) {
+  .run(function($location, $rootScope, $interval, $state, $window, $timeout, toastr, $localStorage) {
+
+    //clear localstorage on execution 
+    if($localStorage.filterObj) {
+      $localStorage.filterObj.class = {
+        'r_start_date': 'All Classes',
+      };
+    }
 
     $timeout(function() {
       if(!window.authObj) {

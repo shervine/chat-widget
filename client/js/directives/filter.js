@@ -5,7 +5,8 @@ angular.module('menChat')
       scope: {},
       link: function ($scope, $rootScope) {
         $scope.bootcampClasses = new PgSubscription('bootcampClasses', window.authObj).reactive();
-
+        $scope.classes = $scope.bootcampClasses;
+        
         $scope.class = {
           'r_start_date': 'All Classes',
         };
@@ -46,7 +47,7 @@ angular.module('menChat')
 
         $timeout(function () {
           $scope.classes = $scope.bootcampClasses;
-        }, 1000);
+        }, 1500);
 
         if($localStorage.filterObj){
           $scope.filterObj = $localStorage.filterObj;
