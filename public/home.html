@@ -22,7 +22,10 @@
         <div class="dimmed" ng-show="!selectedUser || selectedUser.ru_status < 0 " title="No user selected"></div>
         <div class="row mt-2">
           <div class="col-sm-9" style="margin-top: -1px;">
-            <textarea  class="form-control chat-input" ng-model="chatInput"
+            <textarea  class="form-control chat-input" 
+            placeholder="Type a message, Ctrl + Enter or click 'Send' to send it" 
+            ng-model="chatInput" 
+            ng-keyup="checkSend()"
             ></textarea>
           </div>
           <div class="col-sm-3">

@@ -7,6 +7,13 @@
         $scope.selectedUser = newVal;
       });
 
+      $scope.checkSend = function(){
+        //send the message on Ctrl + Enter
+        if ((event.keyCode == 10 || event.keyCode == 13) && event.ctrlKey){
+          $scope.sendMessage();
+        }
+      }
+
       $scope.sendMessage = function () {
         if ($scope.chatInput === '') {
           alert('Please type the message you want to send');
