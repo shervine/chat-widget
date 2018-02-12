@@ -29,8 +29,8 @@
 } */
 
 .user-messages .system-message {
-  background: #f1f10078 !important;
-  color: rgb(127,127,127) !important;
+  background: #FEDD12 !important;
+  color: #000000 !important;
   text-align: center !important;
   float: none !important;
   margin: 0 auto !important;

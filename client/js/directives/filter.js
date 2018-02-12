@@ -43,6 +43,12 @@ angular.module('menChat')
           txt: 'Bootcamp Graduate',
         }
         ];
+
+        //under implementation #79
+        // Meteor.call('getStatusDropdownData', function(err, result){
+        //   console.log('Mench global config dropdown status : ', err, result);
+        // });
+
         $scope.status = $scope.statuses[0];
 
         $timeout(function () {

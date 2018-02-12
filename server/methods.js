@@ -1,3 +1,5 @@
+var needle = Npm.require('needle');
+var uuid = Npm.require('node-uuid');
 
 function checkAuth(authObj) {
   if (!authObj) {
@@ -5,8 +7,6 @@ function checkAuth(authObj) {
   }
   return authObj.authToken == md5(authObj.bootcampId + salt + authObj.instructorId);
 }
-
-var needle = Npm.require('needle');
 
 function postMench(url, data, cb) {
   logger.log('postMench data: ', data, ' to ', url);
@@ -83,12 +83,20 @@ function sendChatMessage(formData, authObj) {
   return responsePromise.await();
 }
 
+
 //var fs = Npm.require('fs');
 // var meteor_root = fs.realpathSync(process.cwd() + '/../../../../../');
 // var temPath = meteor_root + '/uploads/';
-var uuid = Npm.require('node-uuid');
 
 Meteor.methods({
+  getStatusDropdownData(){
+
+    if (typeof globalMenchConfig.object_statuses.ru === 'undefined'){
+      throw new Meteor.Error(500, 'Missing globalMenchConfig data');
+    }
+
+    return globalMenchConfig.object_statuses.ru;
+  },
   changeStudentStatus(student, newStatus, authObj, note) {
     if (!checkAuth(authObj)) {
       logger.log('ChangeStatus authentication failed ', authObj);
